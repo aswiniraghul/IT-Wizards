@@ -1,10 +1,17 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+
+@Entity
 public class Item extends AbstractEntity{
 
     //Fields
     private String name;
     private String description;
+    @ManyToOne(cascade = CascadeType.ALL)
     private ItemCategory itemCategory;
     private Double price;
     private int currentInventory;
