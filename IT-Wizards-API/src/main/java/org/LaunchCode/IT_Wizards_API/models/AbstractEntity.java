@@ -1,6 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
@@ -21,8 +22,8 @@ public abstract class AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractEntity entity = (AbstractEntity) o;
-        return id == entity.id;
+        AbstractEntity that = (AbstractEntity) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

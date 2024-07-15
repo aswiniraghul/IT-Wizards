@@ -1,7 +1,9 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
+import org.LaunchCode.IT_Wizards_API.data.ItemCategoryRepository;
 import org.LaunchCode.IT_Wizards_API.data.ItemRepository;
 import org.LaunchCode.IT_Wizards_API.models.Item;
+import org.LaunchCode.IT_Wizards_API.models.ItemCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,14 +11,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ItemController {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private ItemCategoryRepository itemCategoryRepository;
+
     @PostMapping("/items")
     public Item createItem(@RequestBody Item newItem){
+        Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(newItem.getItemCategory().getName());
+        if (checkCategory.isPresent()){
+            newItem.setItemCategory(checkCategory.get());
+        }
         return itemRepository.save(newItem);
     }
 

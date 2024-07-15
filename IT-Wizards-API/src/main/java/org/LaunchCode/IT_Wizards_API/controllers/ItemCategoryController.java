@@ -17,6 +17,7 @@ public class ItemCategoryController {
 
     @PostMapping("/itemCategory")
     public ItemCategory createItem(@RequestBody ItemCategory newItemCategory){
+
         return itemCategoryRepository.save(newItemCategory);
     }
 
