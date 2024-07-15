@@ -1,7 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 

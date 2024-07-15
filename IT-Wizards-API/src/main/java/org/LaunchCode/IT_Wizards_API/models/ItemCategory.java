@@ -2,7 +2,6 @@ package org.LaunchCode.IT_Wizards_API.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
