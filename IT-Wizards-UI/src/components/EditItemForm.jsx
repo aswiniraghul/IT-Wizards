@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getItemCategoryList } from '../services/viewItemsService';
 
-const AddItemForm = () => {
-
+const EditItemForm = () => {
+  const { id } = useParams();
+  // const [itemCategoryList, setItemCategoryList] = useState([]);
   const [item, setItem] = useState({
     name: '',
     description: '',
@@ -17,21 +19,44 @@ const AddItemForm = () => {
     setItem({ ...item, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    loadItem();
+  }, []);
+
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   fetchItemCategoryList();
+  // }, []);
+
+  // const fetchItemCategoryList = async () => {
+  //   try {
+  //     const data = await getItemCategoryList();
+  //     setItemCategoryList(data);
+  //   } catch (error) {
+  //     console.error('Failed to fetch data', error);
+  //   }
+  // };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:8080/items',item);
+    console.log(item);
+    await axios.put(`http://localhost:8080/items/editItem/${id}`, item);
     return navigate('/items');
+  };
+
+  const loadItem = async () => {
+    const result = await axios.get(`http://localhost:8080/items/${id}`);
+    setItem(result.data);
   };
 
   return (
     <section className="bg-purple-400">
-      <div className="container m-auto max-w-3xl py-24">
+      <div className="container m-auto max-w-2xl py-24">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <form onSubmit={(e) => onSubmit(e)}>
             <h2 className="text-3xl text-center font-semibold mb-6">
-              Add Item
+              Edit Item
             </h2>
 
             <div className="mb-4">
@@ -75,6 +100,23 @@ const AddItemForm = () => {
               >
                 Item Category
               </label>
+              {/* <select
+                id="itemCategory"
+                name="itemCategory"
+                className="border rounded
+                w-full py-2 px-3"
+                rows="1"
+                placeholder="A category for the item"
+                required
+                value={itemCategory}
+                defaultValue="default"
+                onChange={(e) => onInputChange(e)}
+              >
+                <option value="default">Choose an option</option>
+                {itemCategoryList.map((category) => {
+                  return <option key={category.id}>{category.name}</option>;
+                })}
+              </select> */}
               <textarea
                 id="itemCategory"
                 name="itemCategory"
@@ -82,7 +124,7 @@ const AddItemForm = () => {
                 rows="1"
                 placeholder="A category for the item"
                 required
-                value={itemCategory}
+                value={itemCategory.name}
                 onChange={(e) => onInputChange(e)}
               ></textarea>
             </div>
@@ -126,7 +168,7 @@ const AddItemForm = () => {
                 className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full hover:text-green-600 focus:outline-none focus:shadow-outline"
                 type="submit"
               >
-                Add Item
+                Submit Edits
               </button>
             </div>
           </form>
@@ -136,4 +178,4 @@ const AddItemForm = () => {
   );
 };
 
-export default AddItemForm;
+export default EditItemForm;
