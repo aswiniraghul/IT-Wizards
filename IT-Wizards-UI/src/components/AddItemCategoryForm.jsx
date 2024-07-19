@@ -33,7 +33,7 @@ const AddItemCategoryForm = () => {
               >
                 Item Category
               </label>
-              <textarea
+              <input
                 id="itemCategory"
                 name="itemCategory"
                 className="border rounded w-full py-2 px-3"
@@ -42,7 +42,7 @@ const AddItemCategoryForm = () => {
                 required
                 value={itemCategory}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div>

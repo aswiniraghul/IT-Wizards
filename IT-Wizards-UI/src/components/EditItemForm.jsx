@@ -63,7 +63,7 @@ const EditItemForm = () => {
               <label className="block text-gray-700 font-bold mb-2">
                 Item Name
               </label>
-              <textarea
+              <input 
                 id="name"
                 name="name"
                 className="border rounded w-full py-2 px-3"
@@ -72,7 +72,7 @@ const EditItemForm = () => {
                 required
                 value={name}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div className="mb-4">
@@ -82,7 +82,7 @@ const EditItemForm = () => {
               >
                 Description
               </label>
-              <textarea
+              <input
                 id="description"
                 name="description"
                 className="border rounded w-full py-2 px-3"
@@ -90,7 +90,7 @@ const EditItemForm = () => {
                 placeholder="A brief description of the item, any possible adverse side effects, etc."
                 value={description}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div className="mb-4">
@@ -117,7 +117,7 @@ const EditItemForm = () => {
                   return <option key={category.id}>{category.name}</option>;
                 })}
               </select> */}
-              <textarea
+              <input
                 id="itemCategory"
                 name="itemCategory"
                 className="border rounded w-full py-2 px-3"
@@ -126,7 +126,7 @@ const EditItemForm = () => {
                 required
                 value={itemCategory.name}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div className="mb-4">

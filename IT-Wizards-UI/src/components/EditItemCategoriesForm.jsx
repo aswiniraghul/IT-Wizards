@@ -48,7 +48,7 @@ const EditItemCategoriesForm = () => {
               <label className="block text-gray-700 font-bold mb-2">
                 Item Category Name
               </label>
-              <textarea
+              <input
                 id="name"
                 name="name"
                 className="border rounded w-full py-2 px-3"
@@ -57,7 +57,7 @@ const EditItemCategoriesForm = () => {
                 required
                 value={name}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div>

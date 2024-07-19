@@ -38,7 +38,7 @@ const AddItemForm = () => {
               <label className="block text-gray-700 font-bold mb-2">
                 Item Name
               </label>
-              <textarea
+              <input
                 id="name"
                 name="name"
                 className="border rounded w-full py-2 px-3"
@@ -47,7 +47,7 @@ const AddItemForm = () => {
                 required
                 value={name}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div className="mb-4">
@@ -57,7 +57,7 @@ const AddItemForm = () => {
               >
                 Description
               </label>
-              <textarea
+              <input
                 id="description"
                 name="description"
                 className="border rounded w-full py-2 px-3"
@@ -65,7 +65,7 @@ const AddItemForm = () => {
                 placeholder="A brief description of the item, any possible adverse side effects, etc."
                 value={description}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div className="mb-4">
@@ -75,7 +75,7 @@ const AddItemForm = () => {
               >
                 Item Category
               </label>
-              <textarea
+              <input
                 id="itemCategory"
                 name="itemCategory"
                 className="border rounded w-full py-2 px-3"
@@ -84,7 +84,7 @@ const AddItemForm = () => {
                 required
                 value={itemCategory}
                 onChange={(e) => onInputChange(e)}
-              ></textarea>
+              ></input>
             </div>
 
             <div className="mb-4">
