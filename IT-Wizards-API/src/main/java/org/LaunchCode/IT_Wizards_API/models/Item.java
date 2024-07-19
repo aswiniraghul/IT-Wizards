@@ -10,7 +10,7 @@ public class Item extends AbstractEntity{
     //Fields
     private String name;
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private ItemCategory itemCategory;
     private Double price;
     private Double currentInventory;

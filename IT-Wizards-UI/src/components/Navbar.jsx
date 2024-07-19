@@ -25,7 +25,13 @@ const Navbar = () => {
                   Items
                 </NavLink>
                 <NavLink to="/addItems" className={linkClass}>
-                  Add Items
+                  Add an Item
+                </NavLink>
+                <NavLink to="/itemCategories" className={linkClass}>
+                  Item Categories
+                </NavLink>
+                <NavLink to="/AddItemCategories" className={linkClass}>
+                  Add an Item Category
                 </NavLink>
               </div>
             </div>
