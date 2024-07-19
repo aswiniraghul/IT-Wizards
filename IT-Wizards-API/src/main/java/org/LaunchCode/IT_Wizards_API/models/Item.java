@@ -1,16 +1,22 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class Item extends AbstractEntity{
 
     //Fields
     private String name;
     private String description;
+    @ManyToOne(cascade = CascadeType.ALL)
     private ItemCategory itemCategory;
     private Double price;
-    private int currentInventory;
+    private Double currentInventory;
 
     //Constructors;
-    public Item(String name, String description, ItemCategory itemCategory, Double price, int currentInventory) {
+    public Item(String name, String description, ItemCategory itemCategory, Double price, Double currentInventory) {
         this.name = name;
         this.description = description;
         this.itemCategory = itemCategory;
@@ -53,11 +59,11 @@ public class Item extends AbstractEntity{
         this.price = price;
     }
 
-    public int getCurrentInventory() {
+    public Double getCurrentInventory() {
         return currentInventory;
     }
 
-    public void setCurrentInventory(int currentInventory) {
+    public void setCurrentInventory(Double currentInventory) {
         this.currentInventory = currentInventory;
     }
 

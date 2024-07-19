@@ -1,9 +1,20 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@Entity
 public class ItemCategory extends AbstractEntity{
 
     //Fields
     private String name;
+
+    @OneToMany(mappedBy = "itemCategory")
+    private final List<Item> items = new ArrayList<>();
 
     //Constructors
     public ItemCategory(String name){
@@ -22,6 +33,21 @@ public class ItemCategory extends AbstractEntity{
     }
 
     //Methods
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ItemCategory that = (ItemCategory) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
+
     @Override
     public String toString() {
         return name;

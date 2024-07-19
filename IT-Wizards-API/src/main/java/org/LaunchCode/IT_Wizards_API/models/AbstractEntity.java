@@ -11,9 +11,9 @@ public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -21,8 +21,8 @@ public abstract class AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractEntity entity = (AbstractEntity) o;
-        return id == entity.id;
+        AbstractEntity that = (AbstractEntity) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
