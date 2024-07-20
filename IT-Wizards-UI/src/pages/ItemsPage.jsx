@@ -52,7 +52,7 @@ const ItemsPage = () => {
                       <th>{item.name}</th>
                       <th>{item.description}</th>
                       <th>{item.itemCategory.name}</th>
-                      <th>{item.price}</th>
+                      <th>${item.price}</th>
                       <th>{item.currentInventory}</th>
                       <th>
                         <Link
