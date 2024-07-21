@@ -3,16 +3,26 @@ package org.LaunchCode.IT_Wizards_API.models;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Item extends AbstractEntity{
 
     //Fields
+    @Size(max=30)
+    @NotNull
     private String name;
+    @Size(max=240)
+    @NotNull
     private String description;
+    @NotNull
     @ManyToOne(cascade = CascadeType.MERGE)
     private ItemCategory itemCategory;
+    @NotNull
     private Double price;
+    @NotNull
     private Double currentInventory;
 
     //Constructors;

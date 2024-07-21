@@ -2,6 +2,8 @@ package org.LaunchCode.IT_Wizards_API.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.Objects;
 public class ItemCategory extends AbstractEntity{
 
     //Fields
+    @NotNull
+    @Size(max=20)
     private String name;
 
     @OneToMany(mappedBy = "itemCategory")
