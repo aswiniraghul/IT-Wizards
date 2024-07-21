@@ -24,8 +24,14 @@ const Navbar = () => {
                 <NavLink to="/items" className={linkClass}>
                   Items
                 </NavLink>
-                <NavLink to="/add-items" className={linkClass}>
-                  Add Items
+                <NavLink to="/addItems" className={linkClass}>
+                  Add an Item
+                </NavLink>
+                <NavLink to="/itemCategories" className={linkClass}>
+                  Item Categories
+                </NavLink>
+                <NavLink to="/AddItemCategories" className={linkClass}>
+                  Add an Item Category
                 </NavLink>
               </div>
             </div>
