@@ -1,7 +1,10 @@
-import React from 'react';
+import {useState} from 'react';
 import { NavLink } from 'react-router-dom';
+import { ShoppingCart } from 'phosphor-react';
+import Modal from './Modal';
 
 const Navbar = () => {
+  const [open, setOpen]= useState(false)
   const linkClass = ({ isActive }) =>
     isActive
       ? 'bg-black text-white hover:text-green-600 rounded-md px-3 py-2'
@@ -27,6 +30,12 @@ const Navbar = () => {
                 <NavLink to="/itemCategories" className={linkClass}>
                   Item Categories
                 </NavLink>
+                <button onClick={() => setOpen(true)}>
+                  <ShoppingCart size={22} />
+                </button>
+                <Modal open={open} onClose={()=> setOpen(false)}>
+                  <div className='text-center w-56'></div>
+                </Modal>
               </div>
             </div>
           </div>
