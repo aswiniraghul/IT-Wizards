@@ -12,6 +12,7 @@ import EditItemForm from './components/EditItemForm';
 import ItemCategoriesPage from './pages/ItemCategoriesPage';
 import EditItemCategoriesForm from './components/EditItemCategoriesForm';
 import AddItemCategoryForm from './components/AddItemCategoryForm';
+import ItemDetailsPage from './pages/ItemDetailsPage';
 
 const App = () => {
 
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/itemCategories" element={<ItemCategoriesPage />} />
         <Route path="/addItemCategories" element={<AddItemCategoryForm />} />
         <Route path="/itemCategories/:id" element={<EditItemCategoriesForm />} />
+        <Route path="/items/:id" element={<ItemDetailsPage/>}/>
       </Route>
     )
   );

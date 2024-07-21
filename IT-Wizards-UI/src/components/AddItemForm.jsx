@@ -96,7 +96,7 @@ const AddItemForm = () => {
                 id="price"
                 name="price"
                 className="border rounded w-full py-2 px-3 mb-2"
-                placeholder="Enter a price (to the nearest penny)"
+                placeholder="Enter a price"
                 required
                 value={price}
                 onChange={(e) => onInputChange(e)}
