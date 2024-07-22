@@ -47,6 +47,14 @@ const ItemDisplay = () => {
                       <div className="flex items-center justify-center">
                         ${(Math.round(item.price * 100) / 100).toFixed(2)}
                       </div>
+                      <p className="text-center">
+                        <button
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-auto mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
+                          type="submit"
+                        >
+                          Add to Cart
+                        </button>
+                      </p>
                     </div>
                   );
                 })}

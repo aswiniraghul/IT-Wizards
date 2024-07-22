@@ -15,7 +15,7 @@ const Navbar = () => {
         <div className="flex h-20 items-center justify-between">
           <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
             <NavLink className="flex flex-shrink-0 items-center mr-4" to="/">
-              <span className="hidden md:block text-white text-2xl font-bold ml-2 hover:text-green-600">
+              <span className="hidden md:block text-white text-2xl font-bold ml-2  hover:text-green-600">
                 B.R.E.W.S.
               </span>
             </NavLink>
@@ -30,11 +30,14 @@ const Navbar = () => {
                 <NavLink to="/itemCategories" className={linkClass}>
                   Item Categories
                 </NavLink>
-                <button onClick={() => setOpen(true)}>
-                  <ShoppingCart size={22} />
+                <button
+                  className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
+                  onClick={() => setOpen(true)}
+                >
+                  <ShoppingCart width={40} />
                 </button>
-                <Modal open={open} onClose={()=> setOpen(false)}>
-                  <div className='text-center w-56'></div>
+                <Modal open={open} onClose={() => setOpen(false)}>
+                  <div className="text-left w-56">Your Cart:</div>
                 </Modal>
               </div>
             </div>
