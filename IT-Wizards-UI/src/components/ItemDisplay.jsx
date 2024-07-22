@@ -26,12 +26,12 @@ const ItemDisplay = () => {
           <h2 className="text-3xl text-center font-semibold mb-2">Shop</h2>
 
           <div className="container m-auto max-w-5xl py-12">
-            <table className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
+            <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {items.map((item) => {
                   return (
                     <div
-                      classname="flex items-center justify-center"
+                      className='mb-6'
                       key={item.id}
                     >
                       <Link to={`/items/${item.id}`}>
@@ -59,7 +59,7 @@ const ItemDisplay = () => {
                   );
                 })}
               </div>
-            </table>
+            </div>
           </div>
         </div>
       </div>

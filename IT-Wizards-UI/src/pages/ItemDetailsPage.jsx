@@ -1,17 +1,21 @@
 import { useParams } from 'react-router-dom';
 import { getItemDetails } from '../services/viewItemsService';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import cauldron from '../assets/images/cauldron.png';
+import { CartContext } from '../components/CartContext';
+
 
 const ItemDetailsPage = () => {
+  const cart = useContext(CartContext);
   const { id } = useParams();
-  const [itemDetails, setItemDetails] = useState({
+  const [item, setItemDetails] = useState({
     name: '',
     description: '',
     // itemCategory: '',
     price: '',
   });
-  const { name, description, price } = itemDetails;
+  const { name, description, price } = item;
+  // const itemQuantity = cart.getItemQuantity(item.id);
 
   useEffect(() => {
     fetchItemDetails();
@@ -35,7 +39,7 @@ const ItemDetailsPage = () => {
           </h2>
 
           <div className="container m-auto max-w-5xl py-12 flex items-center justify-center">
-            <table className="table-fixed border-separate border-spacing-6 m-auto border text-left border-purple-600">
+            <div className="table-fixed border-separate border-spacing-6 m-auto border text-left border-purple-600">
               <div className="grid grid-cols-2 gap-6 ">
                 <div classname="flex items-center justify-center">
                   <img
@@ -49,13 +53,13 @@ const ItemDetailsPage = () => {
                     className="flex items-center  mr-1 font-bold text-3xl mb-10 mt-4"
                     value={name}
                   >
-                    {itemDetails.name}
+                    {item.name}
                   </div>
                   <div
                     className="flex items-center ml-1 font-bold text-xl mb-10 mt-4"
                     value={price}
                   >
-                    ${(Math.round(itemDetails.price * 100) / 100).toFixed(2)}
+                    ${(Math.round(item.price * 100) / 100).toFixed(2)}
                   </div>
                   <div>
                     <div className="flex items-center text-xl mb-4 font-bold">
@@ -65,11 +69,12 @@ const ItemDetailsPage = () => {
                       className="flex items-center mb-4 text-lg"
                       value={description}
                     >
-                      {itemDetails.description}
+                      {item.description}
                     </div>
                   </div>
                   <div></div>
                   <button
+                    onClick={() => cart.addOneToCart(item.id)}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
                     type="submit"
                   >
@@ -77,7 +82,7 @@ const ItemDetailsPage = () => {
                   </button>
                 </div>
               </div>
-            </table>
+            </div>
           </div>
         </div>
       </div>
