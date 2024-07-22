@@ -33,7 +33,8 @@ public class ItemCategory extends AbstractEntity{
         this.name = name;
     }
 
-    public List<Item> getItems() {return items;}
+//    public List<Item> getItems() {return items;}
+
 //Methods
 
     @Override
