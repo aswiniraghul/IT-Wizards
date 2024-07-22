@@ -33,4 +33,22 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> signIn(@RequestBody User userDetails) {
+        String username = userDetails.getUserName();
+        String password = userDetails.getUserPassword();
+
+        User user = userRepository.findByUserNameAndUserPassword(username, password);
+        User usercheck = userRepository.findByUserName(username);
+        if (user != null) {
+            user.setUserPassword(null);
+            return ResponseEntity.ok(user);
+        } else {
+            if(usercheck!=null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("Invalid credentials. Please try again."));
+            else
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("User doesn't exist"));
+        }
+    }
 }
