@@ -4,7 +4,6 @@ import { useEffect, useState, useContext } from 'react';
 import cauldron from '../assets/images/cauldron.png';
 import { CartContext } from '../components/CartContext';
 
-
 const ItemDetailsPage = () => {
   const cart = useContext(CartContext);
   const { id } = useParams();
@@ -15,7 +14,7 @@ const ItemDetailsPage = () => {
     price: '',
   });
   const { name, description, price } = item;
-  // const itemQuantity = cart.getItemQuantity(item.id);
+  const itemQuantity = cart.getItemQuantity(item.id);
 
   useEffect(() => {
     fetchItemDetails();
@@ -73,13 +72,33 @@ const ItemDetailsPage = () => {
                     </div>
                   </div>
                   <div></div>
-                  <button
-                    onClick={() => cart.addOneToCart(item.id)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                    type="submit"
-                  >
-                    Add to Cart
-                  </button>
+                  {itemQuantity > 0 ? (
+                    <>
+                      <div className="flex bg-indigo-600  text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6  focus:outline-none focus:shadow-outline">
+                        In Cart: {itemQuantity}
+                        <button
+                          onClick={() => cart.addOneToCart(item.id)}
+                          className="size-20 mx-2 align-bottom bg-green-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
+                        >
+                          +
+                        </button>
+                        <button
+                          onClick={() => cart.removeOneFromCart(item.id)}
+                          className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
+                        >
+                          -
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => cart.addOneToCart(item.id)}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
+                      type="submit"
+                    >
+                      Add to Cart
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

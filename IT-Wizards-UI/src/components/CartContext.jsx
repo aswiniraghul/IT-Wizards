@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
-  getItemQuantity: () => {},
-  addOneToCart: () => {},
-  removeOneFromCart: () => {},
-  deleteFromCart: () => {},
-  getTotalCost: () => {},
+  getItemQuantity: (id) => {},
+  addOneToCart: (id) => {},
+  removeOneFromCart: (id) => {},
+  deleteFromCart: (id) => {},
+  getTotalCost: (id) => {},
 });
 export const ItemDetails = () => {
   const { id } = useParams();
@@ -33,9 +33,14 @@ export function CartProvider({ children }) {
 
   //[{id: 1, quantity: 2}, {id: 2, quantity:1}]
 
+  function itemsHeldInCart() {
+    totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    console.log(totalItems);
+    return totalItems;
+  }
+
   function getItemQuantity(id) {
-    cartItems.find((item) => item.id === id)?.quantity;
-    undefined.quantity;
+    const quantity = cartItems.find((item) => item.id === id)?.quantity;
 
     if (quantity === undefined) {
       return 0;
@@ -64,6 +69,7 @@ export function CartProvider({ children }) {
         )
       );
     }
+    console.log(cartItems);
   }
 
   function removeOneFromCart(id) {
@@ -98,7 +104,7 @@ export function CartProvider({ children }) {
   }
 
   const contextValue = {
-    itemsHeldInCart: [],
+    itemsHeldInCart,
     getItemQuantity,
     addOneToCart,
     removeOneFromCart,

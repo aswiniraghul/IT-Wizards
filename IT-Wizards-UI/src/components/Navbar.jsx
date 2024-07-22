@@ -1,10 +1,13 @@
-import {useState} from 'react';
+import { useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ShoppingCart } from 'phosphor-react';
 import Modal from './Modal';
+import { CartContext } from './CartContext';
 
 const Navbar = () => {
-  const [open, setOpen]= useState(false)
+  const [open, setOpen] = useState(false);
+  const cart = useContext(CartContext);
+
   const linkClass = ({ isActive }) =>
     isActive
       ? 'bg-black text-white hover:text-green-600 rounded-md px-3 py-2'
@@ -34,7 +37,7 @@ const Navbar = () => {
                   className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
                   onClick={() => setOpen(true)}
                 >
-                  <ShoppingCart width={40} />
+                  <ShoppingCart width={40}/>Cart({cart.itemsHeldInCart})
                 </button>
                 <Modal open={open} onClose={() => setOpen(false)}>
                   <div className="text-left w-56">Your Cart:</div>
