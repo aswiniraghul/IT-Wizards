@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,4 +38,10 @@ public class User {
 
     @Column(name = "login_role", nullable = false)
     private String loginRole;
+
+    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
+    private final List<Cart> cart = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private final List<Orders> orders = new ArrayList<>();
 }

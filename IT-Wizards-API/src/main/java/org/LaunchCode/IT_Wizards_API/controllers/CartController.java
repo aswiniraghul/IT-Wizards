@@ -1,6 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
-import org.LaunchCode.IT_Wizards_API.data.CartRepository;
+import org.LaunchCode.IT_Wizards_API.repository.CartRepository;
 import org.LaunchCode.IT_Wizards_API.exceptions.CartNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
