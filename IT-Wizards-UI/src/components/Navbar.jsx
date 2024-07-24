@@ -44,39 +44,68 @@ const Navbar = () => {
                 <div className="text-green-600 font-bold text-sm">
                   {cart.totalItemsInCart()}
                 </div>
-                <Modal open={open} onClose={() => setOpen(false)}>
-                  <div className="text-left w-56">Your Cart:</div>
+                <Modal
+                  className="grid grid-cols-2 gap-6"
+                  open={open}
+                  onClose={() => setOpen(false)}
+                >
+                  <div className="text-3xl font-bold underline text-indigo-700">Your Cart:</div>
                   {cart.totalItemsInCart() > 0 ? (
-                    <div>
-                      <p>Items in cart</p>
-                      {cart.itemsHeldInCart.map((item, index) => (
-                        <div>
-                          <img src={cauldron} className="size-20"></img>
-                          <h1 key={index}>{item.name}</h1>
-                          <h2 key={index}>{item.quantity} in cart</h2>
-                          <button
-                            onClick={() => cart.addOneToCart(item)}
-                            className=" mx-2 align-bottom bg-green-500 text-slate-700 text-sm font-bold rounded-full w-8 h-min"
-                          >
-                            +
-                          </button>
-                          <button
-                            onClick={() => cart.removeOneFromCart(item)}
-                            className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-sm font-bold rounded-full w-8 h-min"
-                          >
-                            -
-                          </button>
-                          <button
-                            className="flex bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
-                            onClick={() => cart.deleteFromCart(item)}
-                          >
-                            Remove all from cart
-                          </button>
+                    <>
+                      <div className="">
+                        <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
+                          {cart.itemsHeldInCart.map((item, index) => (
+                            <>
+                              <div>
+                                <img
+                                  className="items-center justify-center "
+                                  src={cauldron}
+                                />
+                              </div>
+                              <div className="items-center justify-center mb-10 mt-10">
+                                <h1
+                                  className="text-xl underline font-extrabold"
+                                  key={index}
+                                >
+                                  {item.name}
+                                </h1>
+                                <h2
+                                  className="text-base font-semibold mt-2 mb-3"
+                                  key={index}
+                                >
+                                  {item.quantity} in cart
+                                </h2>
+                                <button
+                                  onClick={() => cart.addOneToCart(item)}
+                                  className=" mx-2 align-bottom bg-green-500 text-slate-700 text-base font-bold rounded-full w-8 h-min"
+                                >
+                                  +
+                                </button>
+                                <button
+                                  onClick={() => cart.removeOneFromCart(item)}
+                                  className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-base font-bold rounded-full w-8 h-min"
+                                >
+                                  -
+                                </button>
+                                <button
+                                  className="flex bg-red-600 hover:bg-red-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
+                                  onClick={() => cart.deleteFromCart(item)}
+                                >
+                                  Remove all from cart
+                                </button>
+                              </div>
+                            </>
+                          ))}
                         </div>
-                      ))}
-                      <h1>Total: {cart.getTotalCost().toFixed(2)}</h1>
-                      <button>Checkout</button>
-                    </div>
+
+                        <h1 className="text-xl text-green-700 text-center border-8 border-indigo-500 mt-6 mb-6 font-extrabold">
+                          Total: ${cart.getTotalCost().toFixed(2)}
+                        </h1>
+                        <button className="flex bg-indigo-600 hover:bg-indigo-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline">
+                          Checkout
+                        </button>
+                      </div>
+                    </>
                   ) : (
                     <h1>Your cart is empty!</h1>
                   )}

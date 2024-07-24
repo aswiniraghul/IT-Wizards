@@ -48,7 +48,7 @@ const ItemDetailsPage = () => {
                   ></img>
                 </div>
 
-                <div className="items-center  grid grid-flow-row auto-rows-min grid-cols-2 ">
+                <div className="items-center grid grid-flow-row auto-rows-min grid-cols-2 ">
                   <div
                     className="flex items-center  mr-1 font-bold text-3xl mb-10 mt-4"
                     value={name}
