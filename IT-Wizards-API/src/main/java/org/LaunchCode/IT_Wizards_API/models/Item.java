@@ -1,8 +1,9 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Item extends AbstractEntity{
@@ -10,10 +11,16 @@ public class Item extends AbstractEntity{
     //Fields
     private String name;
     private String description;
-    @ManyToOne(cascade = CascadeType.MERGE)
+
+    @ManyToOne
+    @JoinColumn(name="item_category_id")
     private ItemCategory itemCategory;
+
     private Double price;
     private Double currentInventory;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private final List<CartItem> cartItems = new ArrayList<>();
 
     //Constructors;
     public Item(String name, String description, ItemCategory itemCategory, Double price, Double currentInventory) {
