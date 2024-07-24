@@ -8,10 +8,11 @@ import java.util.List;
 @Entity
 public class Cart extends AbstractEntity{
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private final List<CartItem> cartItems = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
 
     //Constructors
@@ -24,6 +25,7 @@ public class Cart extends AbstractEntity{
     }
 
     //Getters and Setters
+
 
     public List<CartItem> getCartItems() {return cartItems;}
 

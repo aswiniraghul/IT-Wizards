@@ -14,39 +14,55 @@ public class User extends AbstractEntity{
     private String firstName;
     private String lastName;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Cart cart;
+    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
+    private final List<Cart> cart = new ArrayList<>();
+//    @JoinColumn(name="cart_id")
+//    referencedColumnName = "id"
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<Orders> orders = new ArrayList<>();
     //Constructors
 
-    public User(String username, String firstName, String lastName, Cart cart) {
+    public User(String username, String firstName, String lastName) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.cart = cart;
     }
 
     public User() {}
 
     //Getters and Setters
 
-    public List<Orders> getOrders() {return orders;}
 
-    public String getUsername() {return username;}
+    public String getUsername() {
+        return username;
+    }
 
-    public void setUsername(String username) {this.username = username;}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    public String getFirstName() {return firstName;}
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public void setFirstName(String firstName) {this.firstName = firstName;}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public String getLastName() {return lastName;}
+    public String getLastName() {
+        return lastName;
+    }
 
-    public void setLastName(String lastName) {this.lastName = lastName;}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-    public Cart getCarts() {return cart;}
+    public List<Cart> getCart() {
+        return cart;
+    }
 
-    public void setCarts(Cart cart) {this.cart = cart;}
+    public List<Orders> getOrders() {
+        return orders;
+    }
 }

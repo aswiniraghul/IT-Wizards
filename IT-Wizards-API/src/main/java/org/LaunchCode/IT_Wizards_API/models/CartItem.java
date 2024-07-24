@@ -13,14 +13,16 @@ public class CartItem extends AbstractEntity{
     //Fields
     private Integer quantity;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
+    @JoinColumn(name="cart_id")
     private Cart cart;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name="order_id")
     private Orders order;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
+    @JoinColumn(name="item_id")
     private Item item;
 
     //Constructors
