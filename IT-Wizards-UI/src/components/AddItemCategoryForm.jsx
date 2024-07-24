@@ -7,7 +7,6 @@ const AddItemCategoryForm = () => {
 
   const onInputChange = (e) => {
       setItemCategory(e.target.value);
-      console.log(e.target.value)
   };
 
   const navigate = useNavigate();

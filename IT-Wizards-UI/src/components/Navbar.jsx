@@ -1,8 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ShoppingCart } from 'phosphor-react';
 import Modal from './Modal';
-import { CartContext } from './CartContext';
+import { CartContext, ItemDetails } from './CartContext';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -37,10 +37,25 @@ const Navbar = () => {
                   className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
                   onClick={() => setOpen(true)}
                 >
-                  <ShoppingCart width={40}/>Cart({cart.itemsHeldInCart})
+                  <ShoppingCart width={40} />
                 </button>
+                <div className="text-green-600 font-bold text-sm">
+                  {cart.totalItemsInCart()}
+                </div>
                 <Modal open={open} onClose={() => setOpen(false)}>
                   <div className="text-left w-56">Your Cart:</div>
+                  {cart.totalItemsInCart() > 0 ? (
+                    <>
+                      <p>Items in cart</p>
+                      {cart.itemsHeldInCart.map((currentItem, index) => (
+                        <h1 key={index}>{currentItem.name}</h1>
+                      ))}
+                      <h1>Total: {cart.getTotalCost().toFixed(2)}</h1>
+                      <button>Checkout</button>
+                    </>
+                  ) : (
+                    <h1>Your cart is empty!</h1>
+                  )}
                 </Modal>
               </div>
             </div>

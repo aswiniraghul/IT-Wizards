@@ -23,6 +23,7 @@ const ItemDetailsPage = () => {
   const fetchItemDetails = async () => {
     try {
       const data = await getItemDetails(id);
+      console.log(`getItemDetails ${JSON.stringify(data)}`);
       setItemDetails(data);
     } catch (error) {
       console.error('Failed to fetch data', error);
@@ -77,13 +78,13 @@ const ItemDetailsPage = () => {
                       <div className="flex bg-indigo-600  text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6  focus:outline-none focus:shadow-outline">
                         In Cart: {itemQuantity}
                         <button
-                          onClick={() => cart.addOneToCart(item.id)}
+                          onClick={() => cart.addOneToCart(item)}
                           className="size-20 mx-2 align-bottom bg-green-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
                           +
                         </button>
                         <button
-                          onClick={() => cart.removeOneFromCart(item.id)}
+                          onClick={() => cart.removeOneFromCart(item)}
                           className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
                           -
@@ -92,7 +93,7 @@ const ItemDetailsPage = () => {
                     </>
                   ) : (
                     <button
-                      onClick={() => cart.addOneToCart(item.id)}
+                      onClick={() => cart.addOneToCart(item)}
                       className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
                       type="submit"
                     >
