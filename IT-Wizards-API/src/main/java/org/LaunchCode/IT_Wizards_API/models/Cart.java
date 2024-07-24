@@ -13,7 +13,7 @@ public class Cart extends AbstractEntity{
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    private User user;
+      private User user;
 
     //Constructors
 
@@ -25,7 +25,6 @@ public class Cart extends AbstractEntity{
     }
 
     //Getters and Setters
-
 
     public List<CartItem> getCartItems() {return cartItems;}
 

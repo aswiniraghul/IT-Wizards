@@ -29,4 +29,5 @@ public class CartController {
         return cartRepository.findById(id)
                 .orElseThrow(() -> new CartNotFoundException(id));
     }
+
 }

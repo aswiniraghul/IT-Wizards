@@ -23,9 +23,11 @@ public class OrdersController {
     List<Orders> getAllOrders() {
         return ordersRepository.findAll();
     }
+
     @GetMapping("/orders/{id}")
     Orders getOrderById(@PathVariable Long id) {
         return ordersRepository.findById(id)
                 .orElseThrow(() -> new OrdersNotFoundException(id));
     }
+
 }

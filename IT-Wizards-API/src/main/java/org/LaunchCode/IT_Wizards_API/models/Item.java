@@ -18,6 +18,8 @@ public class Item extends AbstractEntity{
 
     private Double price;
     private Double currentInventory;
+    @OneToMany(mappedBy = "item")
+    private final List<CartItem> cartItems = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private final List<CartItem> cartItems = new ArrayList<>();

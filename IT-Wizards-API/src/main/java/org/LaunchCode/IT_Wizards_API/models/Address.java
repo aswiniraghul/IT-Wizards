@@ -1,5 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -14,6 +15,7 @@ public class Address extends AbstractEntity {
     private String city;
     private String state;
     private Integer zipcode;
+
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
     private final List<Orders> orders = new ArrayList<>();
