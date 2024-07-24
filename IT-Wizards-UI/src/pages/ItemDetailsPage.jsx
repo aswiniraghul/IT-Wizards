@@ -10,10 +10,10 @@ const ItemDetailsPage = () => {
   const [item, setItemDetails] = useState({
     name: '',
     description: '',
-    // itemCategory: '',
+    itemCategory: '',
     price: '',
   });
-  const { name, description, price } = item;
+  const { name, description, itemCategory, price } = item;
   const itemQuantity = cart.getItemQuantity(item.id);
 
   useEffect(() => {
@@ -88,6 +88,15 @@ const ItemDetailsPage = () => {
                           className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
                           -
+                        </button>
+                      </div>
+                      <div></div>
+                      <div>
+                        <button
+                          className="flex bg-red-600 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6 mb-6 focus:outline-none focus:shadow-outline"
+                          onClick={() => cart.deleteFromCart(item)}
+                        >
+                          Remove all from cart
                         </button>
                       </div>
                     </>

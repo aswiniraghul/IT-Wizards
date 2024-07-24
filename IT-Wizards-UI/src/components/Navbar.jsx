@@ -2,7 +2,9 @@ import { useState, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ShoppingCart } from 'phosphor-react';
 import Modal from './Modal';
-import { CartContext, ItemDetails } from './CartContext';
+import { CartContext } from './CartContext';
+import cauldron from '../assets/images/cauldron.png';
+
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -25,7 +27,7 @@ const Navbar = () => {
             <div className="md:ml-auto">
               <div className="flex space-x-2">
                 <NavLink to="/" className={linkClass}>
-                  Home
+                  Shop
                 </NavLink>
                 <NavLink to="/items" className={linkClass}>
                   Items
@@ -45,14 +47,36 @@ const Navbar = () => {
                 <Modal open={open} onClose={() => setOpen(false)}>
                   <div className="text-left w-56">Your Cart:</div>
                   {cart.totalItemsInCart() > 0 ? (
-                    <>
+                    <div>
                       <p>Items in cart</p>
-                      {cart.itemsHeldInCart.map((currentItem, index) => (
-                        <h1 key={index}>{currentItem.name}</h1>
+                      {cart.itemsHeldInCart.map((item, index) => (
+                        <div>
+                          <img src={cauldron} className="size-20"></img>
+                          <h1 key={index}>{item.name}</h1>
+                          <h2 key={index}>{item.quantity} in cart</h2>
+                          <button
+                            onClick={() => cart.addOneToCart(item)}
+                            className=" mx-2 align-bottom bg-green-500 text-slate-700 text-sm font-bold rounded-full w-8 h-min"
+                          >
+                            +
+                          </button>
+                          <button
+                            onClick={() => cart.removeOneFromCart(item)}
+                            className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-sm font-bold rounded-full w-8 h-min"
+                          >
+                            -
+                          </button>
+                          <button
+                            className="flex bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
+                            onClick={() => cart.deleteFromCart(item)}
+                          >
+                            Remove all from cart
+                          </button>
+                        </div>
                       ))}
                       <h1>Total: {cart.getTotalCost().toFixed(2)}</h1>
                       <button>Checkout</button>
-                    </>
+                    </div>
                   ) : (
                     <h1>Your cart is empty!</h1>
                   )}

@@ -84,7 +84,7 @@ export function CartProvider({ children }) {
     } else {
       setCartItems(
         cartItems.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : item
+          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
         )
       );
     }
