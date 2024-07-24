@@ -11,11 +11,15 @@ public class Item extends AbstractEntity{
     //Fields
     private String name;
     private String description;
-    @ManyToOne(cascade = CascadeType.MERGE)
+
+    @ManyToOne
+    @JoinColumn(name="item_category_id")
     private ItemCategory itemCategory;
+
     private Double price;
     private Double currentInventory;
-    @OneToMany(mappedBy = "item")
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private final List<CartItem> cartItems = new ArrayList<>();
 
     //Constructors;

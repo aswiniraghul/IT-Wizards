@@ -2,8 +2,10 @@ package org.LaunchCode.IT_Wizards_API.controllers;
 
 
 import org.LaunchCode.IT_Wizards_API.data.UserRepository;
+import org.LaunchCode.IT_Wizards_API.exceptions.UserNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,4 +28,11 @@ public class UserController {
     List<User>getAllUsers() {
         return userRepository.findAll();
     }
+
+    @GetMapping("/user/{id}")
+    User getUserById(@PathVariable Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
 }

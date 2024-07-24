@@ -11,10 +11,12 @@ public class Orders extends AbstractEntity{
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private final List<CartItem> cartItems = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
+    @JoinColumn(name = "address_id")
     private Address address;
 
     //Constructors
