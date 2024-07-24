@@ -1,6 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -36,7 +37,9 @@ public class ItemCategory extends AbstractEntity{
         this.name = name;
     }
 
-    //Methods
+//    public List<Item> getItems() {return items;}
+
+//Methods
 
     @Override
     public boolean equals(Object o) {
