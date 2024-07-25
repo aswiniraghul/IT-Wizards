@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ShoppingCart } from 'phosphor-react';
 import Modal from './Modal';

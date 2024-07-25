@@ -32,6 +32,12 @@ const ItemDisplay = () => {
             <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {items.map((item) => {
+                  const searchTerm = "wand";
+                  if(searchTerm.trim() && !item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    console.log('should filter by ', searchTerm);
+                    console.log('checking ', item.name);
+                    return;
+                  }
                   return (
                     <div className="mb-2 ml-2 mr-2" key={item.id}>
                       <Link to={`/items/${item.id}`}>
