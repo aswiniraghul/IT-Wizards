@@ -25,6 +25,13 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'com.plaid:plaid-java:20.0.0' // Replace with the latest version
+	implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
+	implementation 'org.glassfish.jersey.core:jersey-server:2.35' // Jersey core server
+	implementation 'org.glassfish.jersey.containers:jersey-container-servlet:2.35' // Jersey Servlet container support
+	implementation 'io.dropwizard:dropwizard-core:2.0.0' // Replace with the latest version
+	implementation 'io.dropwizard:dropwizard-jersey:2.0.0' // Dropwizard Jersey integration
+	implementation 'com.google.guava:guava:31.0.1-jre' // Replace with your desired Guava version
 }
 
 tasks.named('test') {
