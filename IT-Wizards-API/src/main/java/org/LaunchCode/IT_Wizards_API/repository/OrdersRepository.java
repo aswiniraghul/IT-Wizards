@@ -1,4 +1,4 @@
-package org.LaunchCode.IT_Wizards_API.data;
+package org.LaunchCode.IT_Wizards_API.repository;
 
 import org.LaunchCode.IT_Wizards_API.models.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
