@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { ShoppingCart } from 'phosphor-react';
 import Modal from './Modal';
 import { CartContext } from './CartContext';
+import PlaidLinkButton from './PlaidLinkButton';
 import cauldron from '../assets/images/cauldron.png';
 
 
@@ -104,6 +105,7 @@ const Navbar = () => {
                         <button className="flex bg-indigo-600 hover:bg-indigo-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline">
                           Checkout
                         </button>
+                        <PlaidLinkButton />
                       </div>
                     </>
                   ) : (
