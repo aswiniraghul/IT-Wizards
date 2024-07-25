@@ -47,6 +47,7 @@ public class ItemController {
     }
     @PutMapping("/editItem/{id}")
     Item editItem(@RequestBody Item editedItem, @PathVariable Long id){
+
         Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(editedItem.getItemCategory().getName());
         if (checkCategory.isPresent()){
             editedItem.setItemCategory(checkCategory.get());
