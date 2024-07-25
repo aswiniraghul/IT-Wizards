@@ -1,7 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
 
-import org.LaunchCode.IT_Wizards_API.data.AddressRepository;
+import org.LaunchCode.IT_Wizards_API.repository.AddressRepository;
 import org.LaunchCode.IT_Wizards_API.exceptions.AddressNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.LaunchCode.IT_Wizards_API.models.Address;

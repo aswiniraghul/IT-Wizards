@@ -1,6 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
-import org.LaunchCode.IT_Wizards_API.data.ItemCategoryRepository;
+import org.LaunchCode.IT_Wizards_API.repository.ItemCategoryRepository;
 import org.LaunchCode.IT_Wizards_API.exceptions.ItemCategoryNotFoundException;
 import org.LaunchCode.IT_Wizards_API.exceptions.ItemNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Item;
