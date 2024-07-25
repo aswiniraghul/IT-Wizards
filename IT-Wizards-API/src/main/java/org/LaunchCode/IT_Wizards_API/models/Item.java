@@ -1,5 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
+
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -11,10 +12,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+
 @Entity
 public class Item extends AbstractEntity{
 
     //Fields
+
     @Size(max=30)
     @NotNull
     private String name;

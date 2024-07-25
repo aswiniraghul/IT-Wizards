@@ -16,6 +16,7 @@ import ItemDetailsPage from './pages/ItemDetailsPage';
 import CartProvider from './components/CartContext';
 
 const App = () => {
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
@@ -38,6 +39,7 @@ const App = () => {
       <RouterProvider router={router} />
     </CartProvider>
   );
+
 };
 
 export default App;
