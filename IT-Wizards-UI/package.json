@@ -11,11 +11,19 @@
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "classnames": "^2.2.6",
+    "plaid": "^17.0.0",
+    "plaid-threads": "^11.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.25.1"
+    "react-router-dom": "^6.25.1",
+    "react-plaid-link": "^3.2.1",
+    "sass": "^1.32.8",
+    "sass-loader": "^10.1.1",
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.11",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -26,7 +34,6 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.5.4",
     "vite": "^5.3.1"
   }
 }
