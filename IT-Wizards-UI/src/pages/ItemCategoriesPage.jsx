@@ -1,6 +1,6 @@
 import { getItemCategoryList } from '../services/viewItemsService';
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 const ItemCategoriesPage = () => {
@@ -27,11 +27,11 @@ const ItemCategoriesPage = () => {
   };
 
   return (
-    <>
-      <div className="container m-auto max-w-xl py-24">
+    <section className="bg-purple-400">
+      <div className="container m-auto max-w-xl py-24 flex items-center justify-center">
         <div className="bg-white px-24 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="content-center text-3xl text-center font-semibold mb-2">
-            Items
+            Item Categories
           </h2>
 
           <div className="container content-center m-auto max-w-2xl py-12">
@@ -70,9 +70,18 @@ const ItemCategoriesPage = () => {
               </tbody>
             </table>
           </div>
+          <div className="flex items-center justify-center">
+            <NavLink
+              to="/AddItemCategories"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-auto hover:text-green-600 focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Add an Item Category
+            </NavLink>
+          </div>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 

@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getItemCategoryList } from '../services/viewItemsService';
 
 const EditItemForm = () => {
   const { id } = useParams();
-  // const [itemCategoryList, setItemCategoryList] = useState([]);
   const [item, setItem] = useState({
     name: '',
     description: '',
@@ -25,19 +23,6 @@ const EditItemForm = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   fetchItemCategoryList();
-  // }, []);
-
-  // const fetchItemCategoryList = async () => {
-  //   try {
-  //     const data = await getItemCategoryList();
-  //     setItemCategoryList(data);
-  //   } catch (error) {
-  //     console.error('Failed to fetch data', error);
-  //   }
-  // };
-
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(item);
@@ -51,9 +36,9 @@ const EditItemForm = () => {
   };
 
   return (
-    <section className="bg-purple-400">
-      <div className="container m-auto max-w-2xl py-24">
-        <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
+    <section className="bg-purple-400 ">
+      <div className="container m-auto max-w-2xl py-24 ">
+        <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4  md:m-0">
           <form onSubmit={(e) => onSubmit(e)}>
             <h2 className="text-3xl text-center font-semibold mb-6">
               Edit Item
@@ -63,7 +48,7 @@ const EditItemForm = () => {
               <label className="block text-gray-700 font-bold mb-2">
                 Item Name
               </label>
-              <input 
+              <input
                 id="name"
                 name="name"
                 className="border rounded w-full py-2 px-3"

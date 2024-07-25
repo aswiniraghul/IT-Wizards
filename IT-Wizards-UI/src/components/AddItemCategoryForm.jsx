@@ -7,7 +7,6 @@ const AddItemCategoryForm = () => {
 
   const onInputChange = (e) => {
       setItemCategory(e.target.value);
-      console.log(e.target.value)
   };
 
   const navigate = useNavigate();
@@ -50,7 +49,7 @@ const AddItemCategoryForm = () => {
                 className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full hover:text-green-600 focus:outline-none focus:shadow-outline"
                 type="submit"
               >
-                Add Item
+                Add Item Category
               </button>
             </div>
           </form>

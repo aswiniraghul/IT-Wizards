@@ -4,12 +4,22 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Item extends AbstractEntity{
 
     //Fields
+    @Size(max=30)
+    @NotNull
     private String name;
+    @Size(max=240)
+    @NotNull
     private String description;
 
     @ManyToOne
@@ -17,10 +27,11 @@ public class Item extends AbstractEntity{
     private ItemCategory itemCategory;
 
     private Double price;
+    @NotNull
     private Double currentInventory;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-    private final List<CartItem> cartItems = new ArrayList<>();
+//    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+//    private final List<CartItem> cartItems = new ArrayList<>();
 
     //Constructors;
     public Item(String name, String description, ItemCategory itemCategory, Double price, Double currentInventory) {

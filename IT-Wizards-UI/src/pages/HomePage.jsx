@@ -1,6 +1,10 @@
+import ItemDisplay from "../components/ItemDisplay";
+
 const HomePage = () => {
   return (
-    <div>Home</div>
+    <div>
+      <ItemDisplay />
+    </div>
   );
 };
 

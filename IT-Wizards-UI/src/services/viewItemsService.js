@@ -14,10 +14,20 @@ export const getItems = async () => {
     }
 };
 
+export const getItemDetails = async (id) => {
+  try {
+    const response = await axios.get(`${BASEAPIURL}/items/${id}`);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('There was an error fetching the item Details.', error);
+    throw error;
+  }
+};
+
 export const getItemCategoryList = async () => {
   try {
     const response = await axios.get(`${BASEAPIURL}/itemCategories`);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('There was an error fetching the items.', error);
