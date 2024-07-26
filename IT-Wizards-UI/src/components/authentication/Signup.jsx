@@ -1,17 +1,19 @@
-import axios from "axios";
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { SIGNUP_API } from "../../env/config";
+import axios from 'axios';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { SIGNUP_API } from '../../env/config';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = ({ register }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userName, setUsername] = useState("");
-  const [mailId, setMailId] = useState("");
-  const [userPassword, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUsername] = useState('');
+  const [mailId, setMailId] = useState('');
+  const [userPassword, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -25,11 +27,11 @@ const Signup = ({ register }) => {
       !userPassword ||
       !confirmPassword
     ) {
-      setError("Please fill in all fields.");
+      setError('Please fill in all fields.');
       return;
     }
     if (userPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
     setLoading(true);
@@ -40,36 +42,37 @@ const Signup = ({ register }) => {
         userName,
         mailId,
         userPassword,
-        loginRole: (register === 'admin') ? "admin" : "user",
+        loginRole: register === 'admin' ? 'admin' : 'user',
       });
       setLoading(false);
-      setFirstName("");
-      setLastName("");
-      setUsername("");
-      setMailId("");
-      setPassword("");
-      setConfirmPassword("");
-      setError("");
-      if(register === "admin"){
-        setSuccess("Admin signed up successfully");
-      } else{
-        setSuccess("User signed up successfully");
+      setFirstName('');
+      setLastName('');
+      setUsername('');
+      setMailId('');
+      setPassword('');
+      setConfirmPassword('');
+      setError('');
+      if (register === 'admin') {
+        setSuccess('Admin signed up successfully');
+      } else {
+        setSuccess('User signed up successfully');
       }
     } catch (err) {
       setLoading(false);
       setError(err.response.data.message);
     }
+    navigate('/api/users/signin');
   };
 
   return (
     <div
       className="container d-flex justify-content-center align-items-center"
-      style={{ height: "100vh" }}
+      style={{ height: '100vh' }}
     >
-      <div className="card shadow-sm" style={{ width: "600px" }}>
+      <div className="card shadow-sm" style={{ width: '600px' }}>
         <div className="card-body">
           <h2 className="text-center mb-4 fw-bold">Sign Up</h2>
-          {error !== "" ? (
+          {error !== '' ? (
             <div className="alert alert-danger">{error}</div>
           ) : success ? (
             <div className="alert alert-success">{success}</div>
@@ -165,13 +168,16 @@ const Signup = ({ register }) => {
                   aria-hidden="true"
                 ></span>
               ) : (
-                "Sign Up"
+                'Sign Up'
               )}
             </button>
           </form>
           <div className="text-center mt-3">
             <p>
-              Already have an account? <a href="/" className="link-primary text-decoration-underline">Login</a>
+              Already have an account?{' '}
+              <a href="/api/users/signin" className="link-primary text-decoration-underline">
+                Login
+              </a>
             </p>
           </div>
         </div>
