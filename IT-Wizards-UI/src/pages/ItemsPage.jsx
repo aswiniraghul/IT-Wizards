@@ -1,5 +1,5 @@
-import { useEffect, useState, useNavigate } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams, NavLink } from 'react-router-dom';
 import { getItems } from '../services/viewItemsService';
 import axios from 'axios';
 
@@ -27,8 +27,8 @@ const ItemsPage = () => {
   };
 
   return (
-    <>
-      <div className="container m-auto max-w-6xl py-24">
+    <section className="bg-purple-400">
+      <div className="container bg-purple-400 m-auto max-w-6xl py-24 flex items-center justify-center">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">Items</h2>
 
@@ -38,9 +38,9 @@ const ItemsPage = () => {
                 <tr className="text-green-600">
                   <th>Name</th>
                   <th>Description</th>
-                  <th>Item Category</th>
+                  <th>Category</th>
                   <th>Price</th>
-                  <th>Current Inventory</th>
+                  <th>Inventory</th>
                   <th>Edit Item</th>
                   <th>Delete Item</th>
                 </tr>
@@ -52,8 +52,12 @@ const ItemsPage = () => {
                       <th>{item.name}</th>
                       <th>{item.description}</th>
                       <th>{item.itemCategory.name}</th>
-                      <th>{item.price}</th>
-                      <th>{item.currentInventory}</th>
+                      <th>
+                        ${(Math.round(item.price * 100) / 100).toFixed(2)}
+                      </th>
+                      <th className="flex items-center justify-center">
+                        {item.currentInventory}
+                      </th>
                       <th>
                         <Link
                           to={`editItem/${item.id}`}
@@ -76,9 +80,18 @@ const ItemsPage = () => {
               </tbody>
             </table>
           </div>
+          <div className="flex items-center justify-center">
+            <NavLink
+              to="/addItems"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-auto hover:text-green-600 focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Add an Item
+            </NavLink>
+          </div>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 

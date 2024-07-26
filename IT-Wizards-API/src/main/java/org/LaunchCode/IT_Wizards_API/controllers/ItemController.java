@@ -1,7 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
-import org.LaunchCode.IT_Wizards_API.data.ItemCategoryRepository;
-import org.LaunchCode.IT_Wizards_API.data.ItemRepository;
+import org.LaunchCode.IT_Wizards_API.repository.ItemCategoryRepository;
+import org.LaunchCode.IT_Wizards_API.repository.ItemRepository;
 import org.LaunchCode.IT_Wizards_API.exceptions.ItemNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Item;
 import org.LaunchCode.IT_Wizards_API.models.ItemCategory;
@@ -47,6 +47,11 @@ public class ItemController {
     }
     @PutMapping("/editItem/{id}")
     Item editItem(@RequestBody Item editedItem, @PathVariable Long id){
+
+        Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(editedItem.getItemCategory().getName());
+        if (checkCategory.isPresent()){
+            editedItem.setItemCategory(checkCategory.get());
+        }
         return itemRepository.findById(id)
                 .map(item->{
                     item.setName(editedItem.getName());

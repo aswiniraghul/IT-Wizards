@@ -12,6 +12,8 @@ import EditItemForm from './components/EditItemForm';
 import ItemCategoriesPage from './pages/ItemCategoriesPage';
 import EditItemCategoriesForm from './components/EditItemCategoriesForm';
 import AddItemCategoryForm from './components/AddItemCategoryForm';
+import ItemDetailsPage from './pages/ItemDetailsPage';
+import CartProvider from './components/CartContext';
 
 const App = () => {
 
@@ -24,11 +26,20 @@ const App = () => {
         <Route path="/items/editItem/:id" element={<EditItemForm />} />
         <Route path="/itemCategories" element={<ItemCategoriesPage />} />
         <Route path="/addItemCategories" element={<AddItemCategoryForm />} />
-        <Route path="/itemCategories/:id" element={<EditItemCategoriesForm />} />
+        <Route
+          path="/itemCategories/:id"
+          element={<EditItemCategoriesForm />}
+        />
+        <Route path="/items/:id" element={<ItemDetailsPage />} />
       </Route>
     )
   );
-  return <RouterProvider router={router} />;
+  return (
+    <CartProvider>
+      <RouterProvider router={router} />
+    </CartProvider>
+  );
+
 };
 
 export default App;
