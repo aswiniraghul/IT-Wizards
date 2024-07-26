@@ -14,6 +14,7 @@ import EditItemCategoriesForm from './components/EditItemCategoriesForm';
 import AddItemCategoryForm from './components/AddItemCategoryForm';
 import ItemDetailsPage from './pages/ItemDetailsPage';
 import CartProvider from './components/CartContext';
+import EditProfile from './components/profile/EditProfile';
 
 const App = () => {
 
@@ -31,6 +32,7 @@ const App = () => {
           element={<EditItemCategoriesForm />}
         />
         <Route path="/items/:id" element={<ItemDetailsPage />} />
+        <Route path="edit-profile" element={<EditProfile />} />
       </Route>
     )
   );
