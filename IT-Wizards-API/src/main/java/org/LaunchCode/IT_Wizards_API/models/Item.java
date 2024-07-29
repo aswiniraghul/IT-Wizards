@@ -34,7 +34,7 @@ public class Item extends AbstractEntity{
     private Double currentInventory;
 
     @OneToMany(mappedBy ="item", cascade = CascadeType.ALL)
-    private Item item;
+    private final List<Wishlist> wishlists = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
 //    private final List<CartItem> cartItems = new ArrayList<>();

@@ -1,6 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
 import org.LaunchCode.IT_Wizards_API.exceptions.WishlistNotFoundException;
+import org.LaunchCode.IT_Wizards_API.models.Wishlist;
 import org.LaunchCode.IT_Wizards_API.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
