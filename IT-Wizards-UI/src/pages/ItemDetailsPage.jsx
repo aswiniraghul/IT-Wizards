@@ -12,8 +12,9 @@ const ItemDetailsPage = () => {
     description: '',
     itemCategory: '',
     price: '',
+    currentInventory: '',
   });
-  const { name, description, itemCategory, price } = item;
+  const { name, description, itemCategory, price, currentInventory } = item;
   const itemQuantity = cart.getItemQuantity(item.id);
 
   useEffect(() => {
@@ -29,6 +30,10 @@ const ItemDetailsPage = () => {
       console.error('Failed to fetch data', error);
     }
   };
+
+  function removeItemFromInventory(item) {
+    setItemDetails(...item, item.currentInventory = currentInventory - 1);
+  }
 
   return (
     <section className="bg-purple-400">
@@ -94,7 +99,7 @@ const ItemDetailsPage = () => {
                       <div>
                         <button
                           className="flex bg-red-600 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6 mb-6 focus:outline-none focus:shadow-outline"
-                          onClick={() => cart.deleteFromCart(item)}
+                          onClick={() => { cart.deleteFromCart(item); removeItemFromInventory(item); }}
                         >
                           Remove all from cart
                         </button>

@@ -19,7 +19,6 @@ public class ItemCategory extends AbstractEntity{
 
     @NotNull
     @Size(max=20)
-
     private String name;
 
     @OneToMany(mappedBy = "itemCategory")
@@ -33,6 +32,7 @@ public class ItemCategory extends AbstractEntity{
     public ItemCategory(){}
 
     //Getters and Setters
+
     public String getName() {
         return name;
     }
