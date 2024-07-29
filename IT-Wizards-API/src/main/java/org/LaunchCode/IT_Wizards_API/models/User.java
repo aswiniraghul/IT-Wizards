@@ -44,4 +44,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<Orders> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
+    private final List<Wishlist> wishlist = new ArrayList<>();
 }
