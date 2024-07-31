@@ -3,6 +3,7 @@ import { getItemDetails } from '../services/viewItemsService';
 import { useEffect, useState, useContext } from 'react';
 import cauldron from '../assets/images/cauldron.png';
 import { CartContext } from '../components/CartContext';
+import axios from 'axios';
 
 const ItemDetailsPage = () => {
   const cart = useContext(CartContext);
@@ -31,9 +32,33 @@ const ItemDetailsPage = () => {
     }
   };
 
-  function removeItemFromInventory(item) {
-    setItemDetails(...item, item.currentInventory = currentInventory - 1);
-  }
+  const removeItemFromInventory = async (item) => {
+    console.log(item);
+    const newInventory = item.currentInventory - 1;
+    setItemDetails({ ...item, currentInventory: newInventory });
+    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, item);
+    console.log(item);
+  };
+
+  const remItemFromInv = async (item) => {
+    const newItem = { ...item, currentInventory: item.currentInventory - 1 };
+    console.log(
+      `newItem: ${JSON.stringify(newItem)} vs. existingItem: ${JSON.stringify(item)}`
+    );
+    setItemDetails((newItem) => newItem);
+    await axios.put(
+      `http://localhost:8080/items/editItem/${newItem.id}`,
+      newItem
+    );
+  };
+
+  const addItemBackToInventory = async (item) => {
+    console.log(item);
+    const newInventory = item.currentInventory + 1;
+    setItemDetails({ ...item, currentInventory: newInventory });
+    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, item);
+    console.log(item);
+  };
 
   return (
     <section className="bg-purple-400">
@@ -83,13 +108,19 @@ const ItemDetailsPage = () => {
                       <div className="flex bg-indigo-600  text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6  focus:outline-none focus:shadow-outline">
                         In Cart: {itemQuantity}
                         <button
-                          onClick={() => cart.addOneToCart(item)}
+                          onClick={() => {
+                            cart.addOneToCart(item);
+                            removeItemFromInventory(item);
+                          }}
                           className="size-20 mx-2 align-bottom bg-green-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
                           +
                         </button>
                         <button
-                          onClick={() => cart.removeOneFromCart(item)}
+                          onClick={() => {
+                            cart.removeOneFromCart(item);
+                            addItemBackToInventory(item);
+                          }}
                           className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
                           -
@@ -99,7 +130,9 @@ const ItemDetailsPage = () => {
                       <div>
                         <button
                           className="flex bg-red-600 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6 mb-6 focus:outline-none focus:shadow-outline"
-                          onClick={() => { cart.deleteFromCart(item); removeItemFromInventory(item); }}
+                          onClick={() => {
+                            cart.deleteFromCart(item);
+                          }}
                         >
                           Remove all from cart
                         </button>
@@ -107,7 +140,17 @@ const ItemDetailsPage = () => {
                     </>
                   ) : (
                     <button
-                      onClick={() => cart.addOneToCart(item)}
+                      onClick={() => {
+                        cart.addOneToCart(item);
+                        // setItemDetails((item) => {
+                        //   return item.currentInventory - 1;
+                        // });
+                        // axios.put(
+                        //   `http://localhost:8080/items/editItem/${item.id}`,
+                        //   item
+                        // );
+                          removeItemFromInventory(item);
+                      }}
                       className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
                       type="submit"
                     >
