@@ -40,16 +40,18 @@ public class UserController {
         String username = userDetails.getUserName();
         String password = userDetails.getUserPassword();
 
-        User user = userRepository.findByUserNameAndUserPassword(username, password);
-        User usercheck = userRepository.findByUserName(username);
+        User user = userRepository.findByUserName(username);
         if (user != null) {
-            user.setUserPassword(null);
-            return ResponseEntity.ok(user);
+            if (user.getUserPassword().equals(password)) {
+                user.setUserPassword(null);
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new Response("Invalid credentials. Please try again."));
+            }
         } else {
-            if(usercheck!=null)
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("Invalid credentials. Please try again."));
-            else
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("User doesn't exist"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new Response("User doesn't exist"));
         }
     }
 
