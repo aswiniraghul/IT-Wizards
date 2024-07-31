@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/addresses")
 public class AddressController {
 
     @Autowired
@@ -30,7 +31,7 @@ public class AddressController {
         return addressRepository.findAll();
     }
   
-    @GetMapping("/address/{id}")
+    @GetMapping("/{id}")
     Address getAddressById(@PathVariable Long id) {
         return addressRepository.findById(id)
                 .orElseThrow(() -> new AddressNotFoundException(id));
