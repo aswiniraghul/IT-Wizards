@@ -89,7 +89,9 @@ const ItemDetailsPage = () => {
                           +
                         </button>
                         <button
-                          onClick={() => cart.removeOneFromCart(item)}
+                          onClick={() => {
+                            cart.removeOneFromCart(item);
+                          }}
                           className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
                           -
