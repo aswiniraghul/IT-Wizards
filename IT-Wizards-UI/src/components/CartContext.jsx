@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { getItems } from '../services/viewItemsService';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
@@ -13,7 +14,7 @@ export const CartContext = createContext({
 });
 export const ItemDetails = () => {
   const { id } = useParams(id);
-  const [item, setItemDetails] = useState([]);
+  const [item, setItems] = useState([]);
 
   useEffect(() => {
     fetchItems();
@@ -22,7 +23,7 @@ export const ItemDetails = () => {
   const fetchItems = async () => {
     try {
       const data = await getItems(id);
-      setItemDetails(data);
+      setItems(data);
     } catch (error) {
       console.error('Failed to fetch data', error);
     }
@@ -31,8 +32,57 @@ export const ItemDetails = () => {
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
+  const [itemDetails, setItemDetails] = useState({
+    name: '',
+    description: '',
+    itemCategory: '',
+    price: '',
+    currentInventory: '',
+  });
 
-  //[{id: 1, quantity: 2}, {id: 2, quantity:1}]
+  const removeItemFromInventory = async (item) => {
+    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const itemDetails = response.data;
+    if (itemDetails.currentInventory <= 0) {
+      console.log('Insufficient Inventory');
+      return;
+    } else {
+      setItemDetails((prevItemDetails) => ({
+        ...prevItemDetails,
+        currentInventory: itemDetails.currentInventory - 1,
+      }));
+      await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+        ...itemDetails,
+        currentInventory: itemDetails.currentInventory - 1,
+      });
+    }
+  };
+
+  const addItemBackToInventory = async (item) => {
+    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const itemDetails = response.data;
+    setItemDetails((prevItemDetails) => ({
+      ...prevItemDetails,
+      currentInventory: itemDetails.currentInventory + 1,
+    }));
+    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+      ...itemDetails,
+      currentInventory: itemDetails.currentInventory + 1,
+    });
+  };
+
+  const addAllBackToInventory = async (item) => {
+    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const itemDetails = response.data;
+    setItemDetails((prevItemDetails) => ({
+      ...prevItemDetails,
+      currentInventory: itemDetails.currentInventory + getItemQuantity(item.id),
+    }));
+    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+      ...itemDetails,
+      currentInventory: itemDetails.currentInventory + getItemQuantity(item.id),
+    });
+  };
 
   function totalItemsInCart() {
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -49,13 +99,16 @@ export function CartProvider({ children }) {
     return quantity;
   }
 
-  function addOneToCart(item) {
+  async function addOneToCart(item) {
     const quantity = getItemQuantity(item.id);
-    if (item.currentInventory <= 0) {
-      console.log("Insufficient Inventory");
+    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const itemDetails = response.data;
+    console.log('$' + quantity);
+    console.log('$$' + itemDetails.currentInventory);
+    if (itemDetails.currentInventory <= 0) {
+      console.log('Insufficient Inventory');
       return;
     } else {
-
       if (quantity === 0) {
         //item is not yet in cart
         setCartItems([
@@ -63,11 +116,13 @@ export function CartProvider({ children }) {
           {
             id: item.id,
             name: item.name,
+            description: item.description,
             price: item.price,
             currentInventory: item.currentInventory,
             quantity: 1,
           },
         ]);
+        removeItemFromInventory(item);
       } else {
         //item is in cart
         setCartItems(
@@ -77,6 +132,7 @@ export function CartProvider({ children }) {
               : cartItem
           )
         );
+        removeItemFromInventory(item);
       }
       console.log('$' + JSON.stringify(cartItems));
     }
@@ -87,12 +143,16 @@ export function CartProvider({ children }) {
 
     if (quantity == 1) {
       deleteFromCart(item);
+      addItemBackToInventory(item);
     } else {
       setCartItems(
         cartItems.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            : cartItem
         )
       );
+      addItemBackToInventory(item);
     }
   }
 
@@ -102,6 +162,7 @@ export function CartProvider({ children }) {
         return currentItem.id != item.id;
       })
     );
+    addAllBackToInventory(item);
   }
 
   function getTotalCost() {

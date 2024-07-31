@@ -32,43 +32,6 @@ const ItemDetailsPage = () => {
     }
   };
 
-  const removeItemFromInventory = async (item) => {
-    if (item.currentInventory <= 0) {
-      console.log("Insufficient Inventory");
-      return;
-    } else {
-      setItemDetails((prevItem) => ({
-        ...prevItem,
-        currentInventory: item.currentInventory - 1,
-      }));
-      await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
-        ...item,
-        currentInventory: item.currentInventory - 1,
-      });
-    };
-  }
-
-  const addItemBackToInventory = async (item) => {
-    console.log(item);
-    setItemDetails((prevItem) => ({
-      ...prevItem,
-      currentInventory: item.currentInventory + 1,
-    }));
-    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
-      ...item,
-      currentInventory: item.currentInventory + 1,
-    });
-    console.log(item);
-  };
-
-  const addAllBackToInventory = async (item) => {
-    setItemDetails((prevItem) => ({ ...prevItem, currentInventory: item.currentInventory + item.itemQuantity }));
-    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
-      ...item,
-      currentInventory: item.currentInventory + itemQuantity,
-    });
-  }
-
   return (
     <section className="bg-purple-400">
       <div className="container bg-purple-400 m-auto max-w-6xl py-24">
@@ -119,7 +82,6 @@ const ItemDetailsPage = () => {
                         <button
                           onClick={() => {
                             cart.addOneToCart(item);
-                            removeItemFromInventory(item);
                           }}
                           className="size-20 mx-2 align-bottom bg-green-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
@@ -128,7 +90,6 @@ const ItemDetailsPage = () => {
                         <button
                           onClick={() => {
                             cart.removeOneFromCart(item);
-                            addItemBackToInventory(item);
                           }}
                           className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
@@ -141,7 +102,6 @@ const ItemDetailsPage = () => {
                           className="flex bg-red-600 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6 mb-6 focus:outline-none focus:shadow-outline"
                           onClick={() => {
                             cart.deleteFromCart(item);
-                            addAllBackToInventory(item);
                           }}
                         >
                           Remove all from cart
@@ -152,7 +112,6 @@ const ItemDetailsPage = () => {
                     <button
                       onClick={() => {
                         cart.addOneToCart(item);
-                        removeItemFromInventory(item);
                       }}
                       className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
                       type="submit"
