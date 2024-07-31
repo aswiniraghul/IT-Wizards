@@ -25,17 +25,6 @@ export const getItemDetails = async (id) => {
   }
 };
 
-export const getItemDetailsToEdit = async (id) => {
-  try {
-    const response = await axios.get(`${BASEAPIURL}/items/editItem/${id}`);
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.error('There was an error fetching the item Details.', error);
-    throw error;
-  }
-};
-
 export const getItemCategoryList = async () => {
   try {
     const response = await axios.get(`${BASEAPIURL}/itemCategories`);

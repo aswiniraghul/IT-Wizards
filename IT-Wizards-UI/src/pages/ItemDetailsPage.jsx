@@ -33,32 +33,41 @@ const ItemDetailsPage = () => {
   };
 
   const removeItemFromInventory = async (item) => {
-    console.log(item);
-    const newInventory = item.currentInventory - 1;
-    setItemDetails({ ...item, currentInventory: newInventory });
-    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, item);
-    console.log(item);
-  };
-
-  const remItemFromInv = async (item) => {
-    const newItem = { ...item, currentInventory: item.currentInventory - 1 };
-    console.log(
-      `newItem: ${JSON.stringify(newItem)} vs. existingItem: ${JSON.stringify(item)}`
-    );
-    setItemDetails((newItem) => newItem);
-    await axios.put(
-      `http://localhost:8080/items/editItem/${newItem.id}`,
-      newItem
-    );
-  };
+    if (item.currentInventory <= 0) {
+      console.log("Insufficient Inventory");
+      return;
+    } else {
+      setItemDetails((prevItem) => ({
+        ...prevItem,
+        currentInventory: item.currentInventory - 1,
+      }));
+      await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+        ...item,
+        currentInventory: item.currentInventory - 1,
+      });
+    };
+  }
 
   const addItemBackToInventory = async (item) => {
     console.log(item);
-    const newInventory = item.currentInventory + 1;
-    setItemDetails({ ...item, currentInventory: newInventory });
-    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, item);
+    setItemDetails((prevItem) => ({
+      ...prevItem,
+      currentInventory: item.currentInventory + 1,
+    }));
+    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+      ...item,
+      currentInventory: item.currentInventory + 1,
+    });
     console.log(item);
   };
+
+  const addAllBackToInventory = async (item) => {
+    setItemDetails((prevItem) => ({ ...prevItem, currentInventory: item.currentInventory + item.itemQuantity }));
+    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+      ...item,
+      currentInventory: item.currentInventory + itemQuantity,
+    });
+  }
 
   return (
     <section className="bg-purple-400">
@@ -132,6 +141,7 @@ const ItemDetailsPage = () => {
                           className="flex bg-red-600 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6 mb-6 focus:outline-none focus:shadow-outline"
                           onClick={() => {
                             cart.deleteFromCart(item);
+                            addAllBackToInventory(item);
                           }}
                         >
                           Remove all from cart
@@ -142,14 +152,7 @@ const ItemDetailsPage = () => {
                     <button
                       onClick={() => {
                         cart.addOneToCart(item);
-                        // setItemDetails((item) => {
-                        //   return item.currentInventory - 1;
-                        // });
-                        // axios.put(
-                        //   `http://localhost:8080/items/editItem/${item.id}`,
-                        //   item
-                        // );
-                          removeItemFromInventory(item);
+                        removeItemFromInventory(item);
                       }}
                       className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
                       type="submit"

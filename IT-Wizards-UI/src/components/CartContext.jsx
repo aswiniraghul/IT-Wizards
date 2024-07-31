@@ -51,29 +51,35 @@ export function CartProvider({ children }) {
 
   function addOneToCart(item) {
     const quantity = getItemQuantity(item.id);
-
-    if (quantity === 0) {
-      //item is not yet in cart
-      setCartItems([
-        ...cartItems,
-        {
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: 1,
-        },
-      ]);
+    if (item.currentInventory <= 0) {
+      console.log("Insufficient Inventory");
+      return;
     } else {
-      //item is in cart
-      setCartItems(
-        cartItems.map((cartItem) =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        )
-      );
+
+      if (quantity === 0) {
+        //item is not yet in cart
+        setCartItems([
+          ...cartItems,
+          {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            currentInventory: item.currentInventory,
+            quantity: 1,
+          },
+        ]);
+      } else {
+        //item is in cart
+        setCartItems(
+          cartItems.map((cartItem) =>
+            cartItem.id === item.id
+              ? { ...cartItem, quantity: cartItem.quantity + 1 }
+              : cartItem
+          )
+        );
+      }
+      console.log('$' + JSON.stringify(cartItems));
     }
-    console.log('$' + JSON.stringify(cartItems));
   }
 
   function removeOneFromCart(item) {
