@@ -6,6 +6,7 @@ import org.LaunchCode.IT_Wizards_API.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -17,8 +18,12 @@ public class UserController {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/signup")
@@ -28,6 +33,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new Response("Username already exists"));
             }
+            user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
             userRepository.save(user);
             return new ResponseEntity<>(new Response("User signed up successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -41,17 +47,17 @@ public class UserController {
         String password = userDetails.getUserPassword();
 
         User user = userRepository.findByUserName(username);
-        if (user != null) {
-            if (user.getUserPassword().equals(password)) {
-                user.setUserPassword(null);
-                return ResponseEntity.ok(user);
-            } else {
+        if (user != null && passwordEncoder.matches(password, user.getUserPassword())) {
+            user.setUserPassword(null);
+            return ResponseEntity.ok(user);
+        } else {
+            if (user != null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new Response("Invalid credentials. Please try again."));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new Response("User doesn't exist"));
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new Response("User doesn't exist"));
         }
     }
 
@@ -77,7 +83,11 @@ public class UserController {
 
                 existingUser.setFirstName(updatedUser.getFirstName());
                 existingUser.setLastName(updatedUser.getLastName());
-                existingUser.setUserPassword(updatedUser.getUserPassword());
+
+                if (updatedUser.getUserPassword() != null && !updatedUser.getUserPassword().isEmpty()) {
+                    existingUser.setUserPassword(passwordEncoder.encode(updatedUser.getUserPassword()));
+                }
+
                 existingUser.setMailId(updatedUser.getMailId());
                 existingUser.setLoginRole(updatedUser.getLoginRole());
 
