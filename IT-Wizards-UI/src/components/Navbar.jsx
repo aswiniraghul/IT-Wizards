@@ -107,29 +107,20 @@ const Navbar = () => {
                                   {item.quantity} in cart
                                 </h2>
                                 <button
-                                  onClick={() => {
-                                    cart.addOneToCart(item);
-                                    notify();
-                                  }}
+                                  onClick={() => cart.addOneToCart(item)}
                                   className=" mx-2 align-bottom bg-green-500 text-slate-700 text-base font-bold rounded-full w-8 h-min"
                                 >
                                   +
                                 </button>
                                 <button
-                                  onClick={() => {
-                                    cart.removeOneFromCart(item);
-                                    notify();
-                                  }}
+                                  onClick={() => cart.removeOneFromCart(item)}
                                   className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-base font-bold rounded-full w-8 h-min"
                                 >
                                   -
                                 </button>
                                 <button
                                   className="flex bg-red-600 hover:bg-red-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
-                                  onClick={() => {
-                                    cart.deleteFromCart(item);
-                                    notify();
-                                  }}
+                                  onClick={() => cart.deleteFromCart(item)}
                                 >
                                   Remove all from cart
                                 </button>

@@ -44,19 +44,15 @@ export function CartProvider({ children }) {
   });
 
   const notifyAdd = () => toast.success('Item added to cart');
-  const notifyRemove = () => toast.info('Decreased amount in cart');
+  const notifyIncrease = () => toast.info('Increased amount in cart');
+  const notifyDecrease = () => toast.info('Decreased amount in cart');
   const notifyRemoveAll = () => toast.info('Removed item from cart');
-  const notifyOutOfStock = () => toast.warning('Insufficient inventory, item out of stock!');
-
+  const notifyOutOfStock = () => toast.error('Insufficient inventory, item out of stock!');
 
   const removeItemFromInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
-    if (itemDetails.currentInventory <= 0) {
-      notifyOutOfStock();
-      console.log('Insufficient Inventory');
-      return;
-    } else {
+    if (itemDetails.currentInventory > 0) {
       setItemDetails((prevItemDetails) => ({
         ...prevItemDetails,
         currentInventory: itemDetails.currentInventory - 1,
@@ -65,9 +61,12 @@ export function CartProvider({ children }) {
         ...itemDetails,
         currentInventory: itemDetails.currentInventory - 1,
       });
-      notifyAdd();
+    } else {
+      console.log("Insufficient Inventory")
+      notifyOutOfStock();
     }
   };
+
 
   const addItemBackToInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
@@ -80,7 +79,7 @@ export function CartProvider({ children }) {
       ...itemDetails,
       currentInventory: itemDetails.currentInventory + 1,
     });
-    notifyRemove();
+    notifyDecrease();
   };
 
   const addAllBackToInventory = async (item) => {
@@ -117,6 +116,7 @@ export function CartProvider({ children }) {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
     if (itemDetails.currentInventory <= 0) {
+      notifyOutOfStock();
       console.log('Insufficient Inventory');
       return;
     } else {
@@ -134,6 +134,7 @@ export function CartProvider({ children }) {
           },
         ]);
         removeItemFromInventory(item);
+        notifyAdd();
       } else {
         //item is in cart
         setCartItems(
@@ -144,6 +145,7 @@ export function CartProvider({ children }) {
           )
         );
         removeItemFromInventory(item);
+        notifyIncrease();
       }
       console.log('$' + JSON.stringify(cartItems));
     }
