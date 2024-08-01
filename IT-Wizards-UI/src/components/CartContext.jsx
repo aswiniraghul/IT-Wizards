@@ -2,6 +2,9 @@ import { createContext, useEffect, useState } from 'react';
 import { getItems } from '../services/viewItemsService';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { HOST_NAME } from '../env/config';
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
@@ -40,10 +43,17 @@ export function CartProvider({ children }) {
     currentInventory: '',
   });
 
+  const notifyAdd = () => toast.success('Item added to cart');
+  const notifyRemove = () => toast.info('Decreased amount in cart');
+  const notifyRemoveAll = () => toast.info('Removed item from cart');
+  const notifyOutOfStock = () => toast.warning('Insufficient inventory, item out of stock!');
+
+
   const removeItemFromInventory = async (item) => {
-    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
     if (itemDetails.currentInventory <= 0) {
+      notifyOutOfStock();
       console.log('Insufficient Inventory');
       return;
     } else {
@@ -51,37 +61,40 @@ export function CartProvider({ children }) {
         ...prevItemDetails,
         currentInventory: itemDetails.currentInventory - 1,
       }));
-      await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+      await axios.put(`${HOST_NAME}/items/editItem/${item.id}`, {
         ...itemDetails,
         currentInventory: itemDetails.currentInventory - 1,
       });
+      notifyAdd();
     }
   };
 
   const addItemBackToInventory = async (item) => {
-    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
     setItemDetails((prevItemDetails) => ({
       ...prevItemDetails,
       currentInventory: itemDetails.currentInventory + 1,
     }));
-    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+    await axios.put(`${HOST_NAME}/items/editItem/${item.id}`, {
       ...itemDetails,
       currentInventory: itemDetails.currentInventory + 1,
     });
+    notifyRemove();
   };
 
   const addAllBackToInventory = async (item) => {
-    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
     setItemDetails((prevItemDetails) => ({
       ...prevItemDetails,
       currentInventory: itemDetails.currentInventory + getItemQuantity(item.id),
     }));
-    await axios.put(`http://localhost:8080/items/editItem/${item.id}`, {
+    await axios.put(`${HOST_NAME}/items/editItem/${item.id}`, {
       ...itemDetails,
       currentInventory: itemDetails.currentInventory + getItemQuantity(item.id),
     });
+    notifyRemoveAll();
   };
 
   function totalItemsInCart() {
@@ -101,10 +114,8 @@ export function CartProvider({ children }) {
 
   async function addOneToCart(item) {
     const quantity = getItemQuantity(item.id);
-    const response = await axios.get(`http://localhost:8080/items/${item.id}`);
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
-    console.log('$' + quantity);
-    console.log('$$' + itemDetails.currentInventory);
     if (itemDetails.currentInventory <= 0) {
       console.log('Insufficient Inventory');
       return;
@@ -143,7 +154,6 @@ export function CartProvider({ children }) {
 
     if (quantity == 1) {
       deleteFromCart(item);
-      addItemBackToInventory(item);
     } else {
       setCartItems(
         cartItems.map((cartItem) =>
