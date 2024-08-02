@@ -1,5 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
+import org.LaunchCode.IT_Wizards_API.exceptions.DuplicateItemException;
 import org.LaunchCode.IT_Wizards_API.repository.ItemCategoryRepository;
 import org.LaunchCode.IT_Wizards_API.repository.ItemRepository;
 import org.LaunchCode.IT_Wizards_API.exceptions.ItemNotFoundException;
@@ -22,10 +23,14 @@ public class ItemController {
 
     @PostMapping()
     public Item createItem(@RequestBody Item newItem){
+        Optional<Item> checkItem = itemRepository.findByName(newItem.getName());
+        if (checkItem.isPresent()){
+            throw new DuplicateItemException(newItem.getName());
+        } else {
         Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(newItem.getItemCategory().getName());
         if (checkCategory.isPresent()){
             newItem.setItemCategory(checkCategory.get());
-        }
+        }}
         return itemRepository.save(newItem);
     }
 

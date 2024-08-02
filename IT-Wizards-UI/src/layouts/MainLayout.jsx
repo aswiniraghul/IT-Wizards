@@ -8,7 +8,7 @@ const MainLayout = () => {
     <div>
       <Navbar />
       <Outlet />
-      <ToastContainer position='bottom-right' autoClose={1800} />
+      <ToastContainer position='bottom-right' autoClose={2800} />
     </div>
   );
 };
