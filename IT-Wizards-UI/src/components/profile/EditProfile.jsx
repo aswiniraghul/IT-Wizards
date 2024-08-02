@@ -42,6 +42,15 @@ const EditProfile = () => {
     }));
   };
 
+  const handleFocus = (e) => {
+    if (e.target.name === "userPassword") {
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        userPassword: "",
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -151,6 +160,7 @@ const EditProfile = () => {
               name="userPassword"
               value={userData.userPassword}
               onChange={handleChange}
+              onFocus={handleFocus}
               required
             />
           </div>
