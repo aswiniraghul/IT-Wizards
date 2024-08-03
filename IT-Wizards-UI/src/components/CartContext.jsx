@@ -5,12 +5,13 @@ import axios from 'axios';
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
-  totalItemsInCart: (id) => {},
-  getItemQuantity: (id) => {},
-  addOneToCart: (item) => {},
-  removeOneFromCart: (item) => {},
-  deleteFromCart: (item) => {},
-  getTotalCost: (id) => {},
+  totalItemsInCart: () => {},
+  getItemQuantity: () => {},
+  addOneToCart: () => {},
+  removeOneFromCart: () => {},
+  deleteFromCart: () => {},
+  getTotalCost: () => { },
+  clearCart: () => { },
 });
 export const ItemDetails = () => {
   const { id } = useParams(id);
@@ -173,6 +174,10 @@ export function CartProvider({ children }) {
     return totalCost;
   }
 
+  function clearCart() {
+    setCartItems([]);
+  }
+
   const contextValue = {
     itemsHeldInCart: cartItems,
     totalItemsInCart,
@@ -181,6 +186,7 @@ export function CartProvider({ children }) {
     removeOneFromCart,
     deleteFromCart,
     getTotalCost,
+    clearCart,
   };
 
   return (

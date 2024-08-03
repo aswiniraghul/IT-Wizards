@@ -132,6 +132,7 @@ const Navbar = () => {
                           Checkout
                         </button>
                         <PlaidLinkButton />
+                        <button onClick={() =>cart.clearCart()}>Empty Cart</button>
                       </div>
                     </>
                   ) : (

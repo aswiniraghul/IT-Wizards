@@ -46,6 +46,7 @@ const ItemDetailsPage = () => {
                     src={cauldron}
                     className="max-w-xs flex items-center justify-center"
                   ></img>
+                  {item.currentInventory < 1 ? <div className='text-lg ml-10 text-red-600'>Out of stock, check back soon!</div> : <div></div>}
                 </div>
 
                 <div className="items-center grid grid-flow-row auto-rows-min grid-cols-2 ">

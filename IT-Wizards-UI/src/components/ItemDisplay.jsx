@@ -35,10 +35,7 @@ const ItemDisplay = () => {
                   return (
                     <div className="mb-2 ml-2 mr-2" key={item.id}>
                       <Link to={`/items/${item.id}`}>
-                        <img
-                          src={cauldron}
-                          className="size-80"
-                        ></img>
+                        <img src={cauldron} className="size-80"></img>
                       </Link>
 
                       <div className="flex items-center justify-center">
@@ -47,10 +44,20 @@ const ItemDisplay = () => {
                       <div className="flex items-center justify-center">
                         ${(Math.round(item.price * 100) / 100).toFixed(2)}
                       </div>
+                      <div>
+                        {' '}
+                        {item.currentInventory < 1 ? (
+                          <div className="text-sm text-center text-red-600">
+                            Out of stock, check back soon!
+                          </div>
+                        ) : (
+                          <div></div>
+                        )}
+                      </div>
 
                       {cart.getItemQuantity(item.id) > 0 ? (
-                        <div className="">
-                          <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
+                        <div className="grid grid-cols-1 md:grid-cols-1">
+                          <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-10 mr-6 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
                             In Cart: {cart.getItemQuantity(item.id)}
                             <button
                               onClick={() => cart.addOneToCart(item)}
@@ -68,7 +75,7 @@ const ItemDisplay = () => {
                           <div></div>
                           <div>
                             <button
-                              className="flex bg-red-600 hover:bg-red-700 ml-3 mr-3  text-white text-sm font-bold py-2 px-4 rounded-full w-fit mt-3 mb-3 focus:outline-none focus:shadow-outline"
+                              className="items-center bg-red-600 hover:bg-red-700 ml-12 mr-6 text-white text-sm font-bold py-2 px-4 rounded-full w-fit mt-3 mb-3 focus:outline-none focus:shadow-outline"
                               onClick={() => cart.deleteFromCart(item)}
                             >
                               Remove all from cart
@@ -84,14 +91,6 @@ const ItemDisplay = () => {
                           Add to Cart
                         </button>
                       )}
-                      {/* <p className="text-center">
-                        <button
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-auto mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                          type="submit"
-                        >
-                          Add to Cart
-                        </button>
-                      </p> */}
                     </div>
                   );
                 })}
