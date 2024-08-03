@@ -22,58 +22,60 @@ public class ItemController {
     private ItemCategoryRepository itemCategoryRepository;
 
     @PostMapping()
-    public Item createItem(@RequestBody Item newItem){
+    public Item createItem(@RequestBody Item newItem) {
         Optional<Item> checkItem = itemRepository.findByName(newItem.getName());
-        if (checkItem.isPresent()){
+        if (checkItem.isPresent()) {
             throw new DuplicateItemException(newItem.getName());
         } else {
-        Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(newItem.getItemCategory().getName());
-        if (checkCategory.isPresent()){
-            newItem.setItemCategory(checkCategory.get());
-        }}
+            Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(newItem.getItemCategory().getName());
+            if (checkCategory.isPresent()) {
+                newItem.setItemCategory(checkCategory.get());
+            }
+        }
         return itemRepository.save(newItem);
     }
 
     @GetMapping()
-    public Iterable<Item> getAllItems(){
+    public Iterable<Item> getAllItems() {
         return itemRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Item getItemByID(@PathVariable Long id){
+    public Item getItemByID(@PathVariable Long id) {
         return itemRepository.findById(id)
-                .orElseThrow(()->new ItemNotFoundException(id));
+                .orElseThrow(() -> new ItemNotFoundException(id));
     }
 
     @GetMapping("/editItem/{id}")
-    public Item getItemToEdit(@PathVariable Long id){
+    public Item getItemToEdit(@PathVariable Long id) {
         return itemRepository.findById(id)
-                .orElseThrow(()->new ItemNotFoundException(id));
+                .orElseThrow(() -> new ItemNotFoundException(id));
     }
-    @PutMapping("/editItem/{id}")
-    Item editItem(@RequestBody Item editedItem, @PathVariable Long id){
 
+    @PutMapping("/editItem/{id}")
+    Item editItem(@RequestBody Item editedItem, @PathVariable Long id) {
         Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(editedItem.getItemCategory().getName());
-        if (checkCategory.isPresent()){
+        if (checkCategory.isPresent()) {
             editedItem.setItemCategory(checkCategory.get());
         }
         return itemRepository.findById(id)
-                .map(item->{
+                .map(item -> {
                     item.setName(editedItem.getName());
                     item.setDescription(editedItem.getDescription());
                     item.setItemCategory(editedItem.getItemCategory());
                     item.setPrice(editedItem.getPrice());
                     item.setCurrentInventory(editedItem.getCurrentInventory());
                     return itemRepository.save(item);
-        }).orElseThrow(()->new ItemNotFoundException(id));
+                }).orElseThrow(() -> new ItemNotFoundException(id));
     }
+
     @DeleteMapping("/{id}")
-    String deleteItem(@PathVariable Long id){
-        if(!itemRepository.existsById(id)){
+    String deleteItem(@PathVariable Long id) {
+        if (!itemRepository.existsById(id)) {
             throw new ItemNotFoundException(id);
         }
         itemRepository.deleteById(id);
-        return "Item with id " +id+ " has been successfully deleted.";
+        return "Item with id " + id + " has been successfully deleted.";
     }
 
 }
