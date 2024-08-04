@@ -3,6 +3,7 @@ import { getItemDetails } from '../services/viewItemsService';
 import { useEffect, useState, useContext } from 'react';
 import cauldron from '../assets/images/cauldron.png';
 import { CartContext } from '../components/CartContext';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ItemDetailsPage = () => {
   const cart = useContext(CartContext);
@@ -12,8 +13,9 @@ const ItemDetailsPage = () => {
     description: '',
     itemCategory: '',
     price: '',
+    currentInventory: '',
   });
-  const { name, description, itemCategory, price } = item;
+  const { name, description, itemCategory, price, currentInventory } = item;
   const itemQuantity = cart.getItemQuantity(item.id);
 
   useEffect(() => {
@@ -78,7 +80,9 @@ const ItemDetailsPage = () => {
                       <div className="flex bg-indigo-600  text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6  focus:outline-none focus:shadow-outline">
                         In Cart: {itemQuantity}
                         <button
-                          onClick={() => cart.addOneToCart(item)}
+                          onClick={() => {
+                            cart.addOneToCart(item);
+                          }}
                           className="size-20 mx-2 align-bottom bg-green-500 text-slate-700 text-xl font-bold rounded-full w-8 h-min"
                         >
                           +
@@ -96,20 +100,24 @@ const ItemDetailsPage = () => {
                       <div>
                         <button
                           className="flex bg-red-600 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded-full w-fit mt-6 mb-6 focus:outline-none focus:shadow-outline"
-                          onClick={() => cart.deleteFromCart(item)}
+                          onClick={() => {
+                            cart.deleteFromCart(item);
+                          }}
                         >
                           Remove all from cart
                         </button>
                       </div>
                     </>
                   ) : (
-                    <button
-                      onClick={() => cart.addOneToCart(item)}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                      type="submit"
-                    >
-                      Add to Cart
-                    </button>
+                      <button
+                        onClick={() => {
+                          cart.addOneToCart(item);
+                        }}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
+                        type="submit"
+                      >
+                        Add to Cart
+                        </button>
                   )}
                 </div>
               </div>
