@@ -8,6 +8,8 @@ import cauldron from '../assets/images/cauldron.png';
 import profileImage from '../assets/images/profile.jpg';
 import '../dropdown.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -34,6 +36,8 @@ const Navbar = () => {
     navigate('/');
     // location.reload();
   };
+
+  const notify = () => toast('This is a toast notification !');
 
   const linkClass = ({ isActive }) =>
     isActive
