@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditItemForm = () => {
   const { id } = useParams();
@@ -23,11 +25,43 @@ const EditItemForm = () => {
 
   const navigate = useNavigate();
 
+  const notifyCategoryAdded = () =>
+    toast.success('Item Category added. You may now add this item.');
+  
+  const notifyItemEdited = () =>
+    toast.success('Item successfully edited.');
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(item);
-    await axios.put(`http://localhost:8080/items/editItem/${id}`, item);
-    return navigate('/items');
+    try {
+      await axios.put(`http://localhost:8080/items/editItem/${id}`, item);
+      console.log('item was edited');
+      notifyItemEdited();
+      return navigate('/items');
+    } catch (error) {
+      console.log('error.response', error.response);
+      if (error.response) {
+        if (error.response.status === 500 && error.response.data) {
+          const responseErrors = error.response.data.message;
+          if (responseErrors) {
+            console.log(responseErrors);
+            console.log(item.name);
+          }
+          if (
+            window.confirm(
+              `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
+            )
+          ) {
+            await axios.post('http://localhost:8080/itemCategories', {
+              name: itemCategory,
+            });
+            notifyCategoryAdded();
+          } else {
+            console.log('ItemCategory not added');
+          }
+        }
+      }
+    }
   };
 
   const loadItem = async () => {
@@ -51,12 +85,12 @@ const EditItemForm = () => {
               <input
                 id="name"
                 name="name"
-                className="border rounded w-full py-2 px-3"
+                className="border rounded bg-gray-300 w-full py-2 px-3"
                 rows="1"
                 placeholder="The name of the item"
                 required
+                disabled
                 value={name}
-                onChange={(e) => onInputChange(e)}
               ></input>
             </div>
 
@@ -85,23 +119,6 @@ const EditItemForm = () => {
               >
                 Item Category
               </label>
-              {/* <select
-                id="itemCategory"
-                name="itemCategory"
-                className="border rounded
-                w-full py-2 px-3"
-                rows="1"
-                placeholder="A category for the item"
-                required
-                value={itemCategory}
-                defaultValue="default"
-                onChange={(e) => onInputChange(e)}
-              >
-                <option value="default">Choose an option</option>
-                {itemCategoryList.map((category) => {
-                  return <option key={category.id}>{category.name}</option>;
-                })}
-              </select> */}
               <input
                 id="itemCategory"
                 name="itemCategory"

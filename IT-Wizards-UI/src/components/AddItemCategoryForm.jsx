@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddItemCategoryForm = () => {
   const [itemCategory, setItemCategory] = useState();
@@ -11,10 +13,33 @@ const AddItemCategoryForm = () => {
 
   const navigate = useNavigate();
 
+    const notifyDuplicateItemCat = () =>
+      toast.warning(`An item category with the name "${itemCategory}" already exists!`);
+
   const onSubmit = async (e) => {
     e.preventDefault();
-      await axios.post('http://localhost:8080/itemCategories', { name: itemCategory });
-    return navigate('/itemCategories');
+    try {
+      await axios.post('http://localhost:8080/itemCategories', {
+        name: itemCategory,
+      });
+      return navigate('/itemCategories');
+    } catch (error) {
+      console.log('error.response', error.response);
+      if (error.response) {
+        if (error.response.status === 500 && error.response.data) {
+          const responseErrors = error.response.data.message;
+          if (responseErrors) {
+            console.log(responseErrors);
+            console.log(itemCategory.name);
+          }
+          if (responseErrors ==`An item category with the name ${itemCategory} already exists!`) {
+            notifyDuplicateItemCat();
+            return;
+          } 
+        }
+      }
+    }
+    
   };
   return (
     <section className="bg-purple-400">
