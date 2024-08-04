@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { getItems } from '../services/viewItemsService';
 import axios from 'axios';
 
 const ItemsPage = () => {
   const [items, setItems] = useState([]);
-
-  const { id } = useParams();
 
   useEffect(() => {
     fetchItems();
@@ -22,8 +20,12 @@ const ItemsPage = () => {
   };
 
   const deleteItem = async (id) => {
-    await axios.delete(`http://localhost:8080/items/${id}`);
-    fetchItems();
+    if (window.confirm('Are you sure you want to delete this item')) {
+      await axios.delete(`http://localhost:8080/items/${id}`);
+      fetchItems();
+    } else {
+      console.log(`Item ${id} was not deleted.`);
+    }
   };
 
   return (

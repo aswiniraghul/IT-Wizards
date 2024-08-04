@@ -2,17 +2,18 @@ import { getItemCategoryList } from '../services/viewItemsService';
 import { useState, useEffect } from 'react';
 import { Link, useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ItemCategoriesPage = () => {
   const [itemCategories, setItemCategories] = useState([]);
 
   const { id } = useParams();
-  
+
   useEffect(() => {
     fetchItemCategories();
   }, []);
 
-  
   const fetchItemCategories = async () => {
     try {
       const data = await getItemCategoryList();
@@ -21,9 +22,20 @@ const ItemCategoriesPage = () => {
       console.error('Failed to fetch data', error);
     }
   };
+
+  const notifyCannotDel = () =>
+    toast.warning('Item Category cannnot be deleted while there are associated items.');
+
   const deleteItemCategory = async (id) => {
-    await axios.delete(`http://localhost:8080/itemCategories/${id}`);
-    fetchItemCategories();
+    if (window.confirm('Are you sure you want to delete this item')) {
+      try {
+        await axios.delete(`http://localhost:8080/itemCategories/${id}`);
+        fetchItemCategories();
+      } catch (error) {
+        console.log('error.response', error.response);
+        notifyCannotDel();
+      }
+    }
   };
 
   return (
