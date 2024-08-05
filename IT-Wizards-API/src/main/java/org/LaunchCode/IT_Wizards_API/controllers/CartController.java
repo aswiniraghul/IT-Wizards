@@ -15,7 +15,7 @@ public class CartController {
     @Autowired
     private CartRepository cartRepository;
 
-    @PostMapping("/newCart")
+    @PostMapping()
     Cart newCart(@RequestBody Cart newCart) {
         return cartRepository.save(newCart);
     }
@@ -24,7 +24,7 @@ public class CartController {
         return cartRepository.findAll();
     }
 
-    @GetMapping("/cart/{id}")
+    @GetMapping("/{id}")
     Cart getCartById(@PathVariable Long id) {
         return cartRepository.findById(id)
                 .orElseThrow(() -> new CartNotFoundException(id));

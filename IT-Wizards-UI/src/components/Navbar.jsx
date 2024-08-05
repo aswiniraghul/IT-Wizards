@@ -1,15 +1,43 @@
-import { useState, useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart } from 'phosphor-react';
 import Modal from './Modal';
 import { CartContext } from './CartContext';
 import PlaidLinkButton from './PlaidLinkButton';
 import cauldron from '../assets/images/cauldron.png';
-
+import profileImage from '../assets/images/profile.jpg';
+import '../dropdown.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const cart = useContext(CartContext);
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [username, setUsername] = useState('');
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    const storedUsername = JSON.parse(localStorage.getItem('user'));
+    const storedRole = JSON.parse(localStorage.getItem('userRole'));
+    setUsername(storedUsername);
+    setUserRole(storedRole || '');
+  }, []);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('userRole');
+    navigate('/');
+    // location.reload();
+  };
+
+  const notify = () => toast('This is a toast notification !');
 
   const linkClass = ({ isActive }) =>
     isActive
@@ -50,7 +78,9 @@ const Navbar = () => {
                   open={open}
                   onClose={() => setOpen(false)}
                 >
-                  <div className="text-3xl font-bold underline text-indigo-700">Your Cart:</div>
+                  <div className="text-3xl font-bold underline text-indigo-700">
+                    Your Cart:
+                  </div>
                   {cart.totalItemsInCart() > 0 ? (
                     <>
                       <div className="">
@@ -112,6 +142,55 @@ const Navbar = () => {
                     <h1>Your cart is empty!</h1>
                   )}
                 </Modal>
+                <div className="relative">
+                  <button
+                    className="flex items-center text-white bg-gray-800 rounded-full px-4 py-2"
+                    onClick={toggleDropdown}
+                  >
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      className="rounded-full w-8 h-8"
+                    />
+                    <span className="ml-2">{username}</span>
+                  </button>
+                  {dropdownOpen && (
+                    <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                      <li>
+                        <Link
+                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                          to="/api/users/signin"
+                        >
+                          Log In
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                          to="/api/users/signup"
+                        >
+                          Register
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                          to="/edit-profile"
+                        >
+                          Edit Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  )}
+                </div>
               </div>
             </div>
           </div>

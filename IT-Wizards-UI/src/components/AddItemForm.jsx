@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddItemForm = () => {
-
   const [item, setItem] = useState({
     name: '',
     description: '',
@@ -19,10 +20,50 @@ const AddItemForm = () => {
 
   const navigate = useNavigate();
 
+  const notifyCategoryAdded = () =>
+    toast.success('Item Category added. You may now add this item.');
+
+  const notifyDuplicateItem = () =>
+    toast.warning(`An item with the name "${item.name}" already exists!`);
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:8080/items',item);
-    return navigate('/items');
+    try {
+      await axios.post('http://localhost:8080/items', item);
+      return navigate('/items');
+    } catch (error) {
+      console.log('error.response', error.response);
+      if (error.response) {
+        if (error.response.status === 500 && error.response.data) {
+          const responseErrors = error.response.data.message;
+          if (responseErrors) {
+            console.log(responseErrors);
+            console.log(item.name);
+          }
+          if (
+            responseErrors ==
+            `An item with the name ${item.name} already exists!`
+          ) {
+            notifyDuplicateItem();
+            return;
+          } else {
+            if (
+              window.confirm(
+                `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
+              )
+            ) {
+              await axios.post('http://localhost:8080/itemCategories', {
+                name: itemCategory,
+              });
+              notifyCategoryAdded();
+              console.log('ItemCategory added');
+            } else {
+              console.log('ItemCategory not added');
+            }
+          }
+        }
+      }
+    }
   };
 
   return (

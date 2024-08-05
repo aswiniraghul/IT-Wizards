@@ -15,7 +15,7 @@ public class OrdersController {
     @Autowired
     private OrdersRepository ordersRepository;
 
-    @PostMapping("/newOrder")
+    @PostMapping()
     Orders newOrder(@RequestBody Orders newOrder) {
         return ordersRepository.save(newOrder);
     }
@@ -24,7 +24,7 @@ public class OrdersController {
         return ordersRepository.findAll();
     }
 
-    @GetMapping("/orders/{id}")
+    @GetMapping("/{id}")
     Orders getOrderById(@PathVariable Long id) {
         return ordersRepository.findById(id)
                 .orElseThrow(() -> new OrdersNotFoundException(id));

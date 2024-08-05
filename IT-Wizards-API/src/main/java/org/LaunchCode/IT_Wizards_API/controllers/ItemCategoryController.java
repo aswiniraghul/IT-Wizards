@@ -1,6 +1,8 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
+import org.LaunchCode.IT_Wizards_API.exceptions.DuplicateItemCategoryException;
 import org.LaunchCode.IT_Wizards_API.repository.ItemCategoryRepository;
+
 import org.LaunchCode.IT_Wizards_API.exceptions.ItemCategoryNotFoundException;
 import org.LaunchCode.IT_Wizards_API.exceptions.ItemNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Item;
@@ -21,8 +23,7 @@ public class ItemCategoryController {
     public ItemCategory createItem(@RequestBody ItemCategory newItemCategory){
         Optional<ItemCategory> checkCategory = itemCategoryRepository.findByName(newItemCategory.getName());
         if (checkCategory.isPresent()){
-            //replace this with a "DuplicateItemCategoryException"
-        return checkCategory.get();
+            throw new DuplicateItemCategoryException(newItemCategory.getName());
         }
         return itemCategoryRepository.save(newItemCategory);
     }

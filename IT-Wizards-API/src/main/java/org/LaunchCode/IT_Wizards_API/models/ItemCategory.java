@@ -1,10 +1,12 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Objects;
 public class ItemCategory extends AbstractEntity{
 
     //Fields
+
     @NotNull
     @Size(max=20)
     private String name;
@@ -29,6 +32,7 @@ public class ItemCategory extends AbstractEntity{
     public ItemCategory(){}
 
     //Getters and Setters
+
     public String getName() {
         return name;
     }
@@ -37,9 +41,11 @@ public class ItemCategory extends AbstractEntity{
         this.name = name;
     }
 
+
 //    public List<Item> getItems() {return items;}
 
 //Methods
+
 
     @Override
     public boolean equals(Object o) {
