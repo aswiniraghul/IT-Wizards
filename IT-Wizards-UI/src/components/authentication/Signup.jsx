@@ -61,7 +61,7 @@ const Signup = ({ register }) => {
       setLoading(false);
       setError(err.response.data.message);
     }
-    navigate('/api/users/signin');
+    navigate('/api/users/signin'); //not there
   };
 
   return (
@@ -176,6 +176,7 @@ const Signup = ({ register }) => {
             <p>
               Already have an account?{' '}
               <a href="/api/users/signin" className="link-primary text-decoration-underline">
+              {/* Already have an account? <a href="/">Login</a> */}
                 Login
               </a>
             </p>
