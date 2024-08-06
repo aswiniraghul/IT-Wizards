@@ -1,11 +1,12 @@
-import { useEffect, useState, useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { CartContext } from '../components/CartContext';
 import { getItems } from '../services/viewItemsService';
-import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
-import { CartContext } from './CartContext';
+import cauldron from '../assets/images/cauldron.png';
 
-const ItemDisplay = () => {
-    const cart = useContext(CartContext);
+const SearchResultsPage = () => {
+  const cart = useContext(CartContext);
+
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -34,10 +35,7 @@ const ItemDisplay = () => {
                   return (
                     <div className="mb-2 ml-2 mr-2" key={item.id}>
                       <Link to={`/items/${item.id}`}>
-                        <img
-                          src={cauldron}
-                          className="size-80"
-                        ></img>
+                        <img src={cauldron} className="size-80"></img>
                       </Link>
 
                       <div className="flex items-center justify-center">
@@ -95,4 +93,4 @@ const ItemDisplay = () => {
   );
 };
 
-export default ItemDisplay;
+export default SearchResultsPage;

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { MagnifyingGlass } from 'phosphor-react';
+import { useNavigate } from 'react-router-dom';
 
-const SearchBar = ({setResults}) => {
+const SearchBar = ({ setResults }) => {
   const [input, setInput] = useState('');
 
   const fetchSearchResults = (value) => {
@@ -20,10 +21,20 @@ const SearchBar = ({setResults}) => {
       });
   };
 
+  const navigate = useNavigate();
+
   const handleChange = (value) => {
     setInput(value);
     fetchSearchResults(value);
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      console.log('test');
+      navigate('/searchResults');
+    }
+  };
+
   return (
     <div className="flex items-center m-auto w-full bg-purple-800 text-green-400">
       <form className="flex items-center max-w-sm mx-auto py-3">
@@ -35,13 +46,15 @@ const SearchBar = ({setResults}) => {
             id="search"
             className="bg-black border border-gray-300 text-green-400 text-sm rounded-lg  block w-full ps-10 p-2.5"
             placeholder="Search for an item..."
-            vaule={input}
+            value={input}
             onChange={(e) => handleChange(e.target.value)}
             required
+            onKeyDown={(e) => handleKeyDown(e)}
           />
         </div>
         <button
           type="submit"
+          onClick={()=> navigate('/searchResults')}
           className="p-2.5 ms-2 text-lg font-medium text-black bg-green-500 rounded-lg border border-green-700 hover:bg-green-600 focus:ring-4 "
         >
           <MagnifyingGlass />
