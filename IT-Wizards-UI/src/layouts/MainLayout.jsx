@@ -7,12 +7,9 @@ import SearchResultsList  from '../components/search/SearchResultsList';
 import { useState } from 'react';
 
 const MainLayout = () => {
-  const [results, setResults] = useState([]);
   return (
     <div>
       <Navbar />
-      <SearchBar setResults={setResults} />
-      <SearchResultsList results={results} />
       <Outlet />
       <ToastContainer position='bottom-right' autoClose={2800} />
     </div>

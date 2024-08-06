@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MagnifyingGlass } from 'phosphor-react';
 import { useNavigate } from 'react-router-dom';
 
-const SearchBar = ({ setResults }) => {
+const SearchBar = ({ setResults, setSearchTerm }) => {
   const [input, setInput] = useState('');
 
   const fetchSearchResults = (value) => {
@@ -18,6 +18,7 @@ const SearchBar = ({ setResults }) => {
           );
         });
         setResults(results);
+        setSearchTerm(value);
       });
   };
 
