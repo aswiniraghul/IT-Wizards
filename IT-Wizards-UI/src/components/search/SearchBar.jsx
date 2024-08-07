@@ -31,10 +31,18 @@ const SearchBar = ({ setResults, setSearchTerm, results }) => {
 
   return (
     <div className="flex items-center m-auto w-full bg-purple-800 text-green-400">
-      <form className="flex items-center max-w-sm mx-auto py-3">
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (input.length === 0) {
+            return;
+          }
+          navigate(`/items/${results[0].id}`);
+        }}
+        className="flex items-center max-w-sm mx-auto py-3"
+      >
         <label className="sr-only">Search</label>
         <div className="relative w-full">
-          
           <input
             type="text"
             id="search"
@@ -46,7 +54,6 @@ const SearchBar = ({ setResults, setSearchTerm, results }) => {
         </div>
         <button
           type="submit"
-          onClick={()=> navigate(`/items/${results[0].id}`)}
           className="p-2.5 ms-2 text-lg font-medium text-black bg-green-500 rounded-lg border border-green-700 hover:bg-green-600 focus:ring-4 "
         >
           <MagnifyingGlass />
