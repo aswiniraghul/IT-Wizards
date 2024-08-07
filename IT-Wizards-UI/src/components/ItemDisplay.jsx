@@ -3,11 +3,17 @@ import { getItems } from '../services/viewItemsService';
 import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
+import  ItemFilter from './ItemFilter';
 
 const ItemDisplay = () => {
     const cart = useContext(CartContext);
 
   const [items, setItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const setSearchValue = event => {
+    setSearchTerm(event.target.value);
+  }
 
   useEffect(() => {
     fetchItems();
@@ -27,11 +33,16 @@ const ItemDisplay = () => {
       <div className="container bg-purple-400 m-auto max-w-6xl py-24">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">Shop</h2>
-
+          <ItemFilter onChange={setSearchValue} />
           <div className="container m-auto max-w-5xl py-12">
             <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {items.map((item) => {
+                  if(searchTerm.trim() && !item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    console.log('should filter by ', searchTerm);
+                    console.log('checking ', item.name);
+                    return;
+                  }
                   return (
                     <div className="mb-2 ml-2 mr-2" key={item.id}>
                       <Link to={`/items/${item.id}`}>
