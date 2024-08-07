@@ -46,19 +46,21 @@ const AddItemForm = () => {
           ) {
             notifyDuplicateItem();
             return;
-          }
-          if (
-            window.confirm(
-              `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
-            )
-          ) {
-            await axios.post('http://localhost:8080/itemCategories', {
-              name: itemCategory,
-            });
-            notifyCategoryAdded();
-            console.log('ItemCategory added');
-          } else {
-            console.log('ItemCategory not added');
+          } else if
+            (responseErrors == `Could not find an item category with name ${item.itemCategory}`) {
+            if (
+              window.confirm(
+                `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
+              )
+            ) {
+              await axios.post('http://localhost:8080/itemCategories', {
+                name: itemCategory,
+              });
+              notifyCategoryAdded();
+              console.log('ItemCategory added');
+            } else {
+              console.log('ItemCategory not added');
+            }
           }
         }
       }
@@ -105,6 +107,7 @@ const AddItemForm = () => {
                 placeholder="A brief description of the item, any possible adverse side effects, etc."
                 value={description}
                 onChange={(e) => onInputChange(e)}
+                required
               ></input>
             </div>
 
@@ -158,6 +161,7 @@ const AddItemForm = () => {
                 placeholder="Enter current inventory for the item"
                 value={currentInventory}
                 onChange={(e) => onInputChange(e)}
+                required
               />
             </div>
 
