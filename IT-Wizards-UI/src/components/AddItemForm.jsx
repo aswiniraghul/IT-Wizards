@@ -46,20 +46,19 @@ const AddItemForm = () => {
           ) {
             notifyDuplicateItem();
             return;
+          }
+          if (
+            window.confirm(
+              `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
+            )
+          ) {
+            await axios.post('http://localhost:8080/itemCategories', {
+              name: itemCategory,
+            });
+            notifyCategoryAdded();
+            console.log('ItemCategory added');
           } else {
-            if (
-              window.confirm(
-                `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
-              )
-            ) {
-              await axios.post('http://localhost:8080/itemCategories', {
-                name: itemCategory,
-              });
-              notifyCategoryAdded();
-              console.log('ItemCategory added');
-            } else {
-              console.log('ItemCategory not added');
-            }
+            console.log('ItemCategory not added');
           }
         }
       }
@@ -68,7 +67,7 @@ const AddItemForm = () => {
 
   return (
     <section className="bg-purple-400">
-      <div className="container m-auto max-w-3xl py-24">
+      <div className="container m-auto max-w-3xl pt-20 pb-48">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <form onSubmit={(e) => onSubmit(e)}>
             <h2 className="text-3xl text-center font-semibold mb-6">

@@ -8,7 +8,7 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   return (
     <div>
-      <SearchBar setSearchTerm={setSearchTerm} setResults={setResults} />
+      <SearchBar setSearchTerm={setSearchTerm} setResults={setResults} results={results} />
       <SearchResultsList results={results} />
       <ItemDisplay searchTerm={searchTerm} />
     </div>

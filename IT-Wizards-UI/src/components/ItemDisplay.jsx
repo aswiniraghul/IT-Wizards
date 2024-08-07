@@ -23,11 +23,11 @@ const ItemDisplay = ({ searchTerm }) => {
 
   return (
     <section className="bg-purple-400">
-      <div className="container bg-purple-400 m-auto max-w-6xl py-24">
-        <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
+      <div className="container bg-purple-400 m-auto max-w-6xl pt-8 pb-32">
+        <div className="bg-white px-6 py-8 mb-8 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">Shop</h2>
 
-          <div className="container m-auto max-w-5xl py-12">
+          <div className="container m-auto max-w-5xl py-10">
             <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {items.map((item) => {
@@ -39,7 +39,7 @@ const ItemDisplay = ({ searchTerm }) => {
                      return;
                    }
                   return (
-                    <div className="mb-2 ml-2 mr-2" key={item.id}>
+                    <div className="mb-6 ml-2 mr-2" key={item.id}>
                       <Link to={`/items/${item.id}`}>
                         <img
                           src={cauldron}
