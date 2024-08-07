@@ -13,16 +13,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const cart = useContext(CartContext);
   const navigate = useNavigate();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const storedUsername = JSON.parse(localStorage.getItem('user'));
     const storedRole = JSON.parse(localStorage.getItem('userRole'));
-    setUsername(storedUsername);
+    setUsername(storedUsername || '');
     setUserRole(storedRole || '');
   }, []);
 
@@ -33,8 +33,10 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userRole');
+    setUsername('');
+    setUserRole('');
     navigate('/');
-    // location.reload();
+    setDropdownOpen(false); // Close the dropdown after logout
   };
 
   const notify = () => toast('This is a toast notification !');
@@ -43,6 +45,12 @@ const Navbar = () => {
     isActive
       ? 'bg-black text-white hover:text-green-600 rounded-md px-3 py-2'
       : 'text-white hover:bg-black hover:text-green-600 rounded-md px-3 py-2';
+
+  const handleDropdownClick = (path) => {
+    navigate(path);
+    setDropdownOpen(false); // Close the dropdown after navigation
+  };
+
   return (
     <nav className="bg-purple-800 border-b border-purple-950-400">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -86,23 +94,22 @@ const Navbar = () => {
                       <div className="">
                         <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
                           {cart.itemsHeldInCart.map((item, index) => (
-                            <>
+                            <React.Fragment key={index}>
                               <div>
                                 <img
                                   className="items-center justify-center "
                                   src={cauldron}
+                                  alt={item.name}
                                 />
                               </div>
                               <div className="items-center justify-center mb-10 mt-10">
                                 <h1
                                   className="text-xl underline font-extrabold"
-                                  key={index}
                                 >
                                   {item.name}
                                 </h1>
                                 <h2
                                   className="text-base font-semibold mt-2 mb-3"
-                                  key={index}
                                 >
                                   {item.quantity} in cart
                                 </h2>
@@ -114,7 +121,7 @@ const Navbar = () => {
                                 </button>
                                 <button
                                   onClick={() => cart.removeOneFromCart(item)}
-                                  className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-base font-bold rounded-full w-8 h-min"
+                                  className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-base font-bold rounded-full w-8 h-min"
                                 >
                                   -
                                 </button>
@@ -125,7 +132,7 @@ const Navbar = () => {
                                   Remove all from cart
                                 </button>
                               </div>
-                            </>
+                            </React.Fragment>
                           ))}
                         </div>
 
@@ -152,42 +159,51 @@ const Navbar = () => {
                       alt="Profile"
                       className="rounded-full w-8 h-8"
                     />
-                    <span className="ml-2">{username}</span>
+                    <span className="ml-2">{username || 'Profile'}</span>
                   </button>
                   {dropdownOpen && (
                     <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                      <li>
-                        <Link
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          to="/api/users/signin"
-                        >
-                          Log In
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          to="/api/users/signup"
-                        >
-                          Register
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          to="/edit-profile"
-                        >
-                          Edit Profile
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </button>
-                      </li>
+                      {!username ? (
+                        <>
+                          <li>
+                            <button
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              onClick={() => handleDropdownClick('/api/users/signin')}
+                            >
+                              Log In
+                            </button>
+                          </li>
+                        </>
+                      ) : (
+                        <>
+                          <li>
+                            <button
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              onClick={() => handleDropdownClick('/edit-profile')}
+                            >
+                              Edit Profile
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              onClick={handleLogout}
+                            >
+                              Logout
+                            </button>
+                          </li>
+                        </>
+                      )}
+                      {username ? (
+                        <li>
+                          <button
+                            className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                            onClick={() => handleDropdownClick('/api/users/signup')}
+                          >
+                            Register
+                          </button>
+                        </li>
+                      ) : null}
                     </ul>
                   )}
                 </div>
