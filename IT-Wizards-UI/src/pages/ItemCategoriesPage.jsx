@@ -7,11 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const ItemCategoriesPage = () => {
   const [itemCategories, setItemCategories] = useState([]);
+  const [userRole, setUserRole] = useState('');
 
   const { id } = useParams();
 
   useEffect(() => {
     fetchItemCategories();
+    const storedRole = JSON.parse(localStorage.getItem('userRole'));
+    setUserRole(storedRole || '');
   }, []);
 
   const fetchItemCategories = async () => {
@@ -82,6 +85,7 @@ const ItemCategoriesPage = () => {
               </tbody>
             </table>
           </div>
+          {userRole === 'admin' && (
           <div className="flex items-center justify-center">
             <NavLink
               to="/AddItemCategories"
@@ -91,6 +95,7 @@ const ItemCategoriesPage = () => {
               Add an Item Category
             </NavLink>
           </div>
+          )}
         </div>
       </div>
     </section>

@@ -5,9 +5,12 @@ import axios from 'axios';
 
 const ItemsPage = () => {
   const [items, setItems] = useState([]);
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     fetchItems();
+    const storedRole = JSON.parse(localStorage.getItem('userRole'));
+    setUserRole(storedRole || '');
   }, []);
 
   const fetchItems = async () => {
@@ -82,6 +85,7 @@ const ItemsPage = () => {
               </tbody>
             </table>
           </div>
+          {userRole === 'admin' && (
           <div className="flex items-center justify-center">
             <NavLink
               to="/addItems"
@@ -91,6 +95,7 @@ const ItemsPage = () => {
               Add an Item
             </NavLink>
           </div>
+          )}
         </div>
       </div>
     </section>

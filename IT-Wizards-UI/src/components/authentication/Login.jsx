@@ -49,7 +49,7 @@ const Login = () => {
       setUserName("");
       setPassword("");
       setError("");
-      navigate("/");
+      window.location.reload(navigate("/"));
     } catch (err) {
       setLoading(false);
       setError(err.response.data.message);
