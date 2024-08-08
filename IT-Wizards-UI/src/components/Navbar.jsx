@@ -37,8 +37,6 @@ const Navbar = () => {
     // location.reload();
   };
 
-  const notify = () => toast('This is a toast notification !');
-
   const linkClass = ({ isActive }) =>
     isActive
       ? 'bg-black text-white hover:text-green-600 rounded-md px-3 py-2'
