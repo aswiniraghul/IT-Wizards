@@ -46,7 +46,8 @@ const AddItemForm = () => {
           ) {
             notifyDuplicateItem();
             return;
-          } else {
+          } else if
+            (responseErrors == `Could not find an item category with name ${item.itemCategory}`) {
             if (
               window.confirm(
                 `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
@@ -68,7 +69,7 @@ const AddItemForm = () => {
 
   return (
     <section className="bg-purple-400">
-      <div className="container m-auto max-w-3xl py-24">
+      <div className="container m-auto max-w-3xl pt-20 pb-48">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <form onSubmit={(e) => onSubmit(e)}>
             <h2 className="text-3xl text-center font-semibold mb-6">
@@ -106,6 +107,7 @@ const AddItemForm = () => {
                 placeholder="A brief description of the item, any possible adverse side effects, etc."
                 value={description}
                 onChange={(e) => onInputChange(e)}
+                required
               ></input>
             </div>
 
@@ -159,6 +161,7 @@ const AddItemForm = () => {
                 placeholder="Enter current inventory for the item"
                 value={currentInventory}
                 onChange={(e) => onInputChange(e)}
+                required
               />
             </div>
 

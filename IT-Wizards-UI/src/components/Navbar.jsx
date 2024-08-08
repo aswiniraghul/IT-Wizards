@@ -13,16 +13,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const cart = useContext(CartContext);
   const navigate = useNavigate();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const storedUsername = JSON.parse(localStorage.getItem('user'));
     const storedRole = JSON.parse(localStorage.getItem('userRole'));
-    setUsername(storedUsername);
+    setUsername(storedUsername || '');
     setUserRole(storedRole || '');
   }, []);
 
@@ -33,8 +33,10 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userRole');
+    setUsername('');
+    setUserRole('');
     navigate('/');
-    // location.reload();
+    setDropdownOpen(false);
   };
 
   const notify = () => toast('This is a toast notification !');
@@ -43,8 +45,14 @@ const Navbar = () => {
     isActive
       ? 'bg-black text-white hover:text-green-600 rounded-md px-3 py-2'
       : 'text-white hover:bg-black hover:text-green-600 rounded-md px-3 py-2';
+
+  const handleDropdownClick = (path) => {
+    navigate(path);
+    setDropdownOpen(false);
+  };
+
   return (
-    <nav className="bg-purple-800 border-b border-purple-950-400">
+    <nav className="bg-purple-800 border-b-4 border-black">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
@@ -108,13 +116,13 @@ const Navbar = () => {
                                 </h2>
                                 <button
                                   onClick={() => cart.addOneToCart(item)}
-                                  className=" mx-2 align-bottom bg-green-500 text-slate-700 text-base font-bold rounded-full w-8 h-min"
+                                  className=" mx-2 align-bottom bg-green-500  text-slate-700 text-base font-bold rounded-full w-8 h-min"
                                 >
                                   +
                                 </button>
                                 <button
                                   onClick={() => cart.removeOneFromCart(item)}
-                                  className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-base font-bold rounded-full w-8 h-min"
+                                  className="size-20 mx-2 align-bottom bg-red-500 text-slate-700 text-base font-bold rounded-full w-8 h-min"
                                 >
                                   -
                                 </button>
@@ -156,38 +164,37 @@ const Navbar = () => {
                   </button>
                   {dropdownOpen && (
                     <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                      <li>
-                        <Link
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          to="/api/users/signin"
-                        >
-                          Log In
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          to="/api/users/signup"
-                        >
-                          Register
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          to="/edit-profile"
-                        >
-                          Edit Profile
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </button>
-                      </li>
+                      {!username ? (
+                        <>
+                          <li>
+                            <button
+                              className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              onClick={() => handleDropdownClick('/api/users/signin')}
+                            >
+                              Log In
+                            </button>
+                          </li>
+                        </>
+                      ) : (
+                        <>
+                          <li>
+                            <button
+                              className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              onClick={() => handleDropdownClick('/edit-profile')}
+                            >
+                              Edit Profile
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              onClick={handleLogout}
+                            >
+                              Logout
+                            </button>
+                          </li>
+                        </>
+                      )}
                     </ul>
                   )}
                 </div>
