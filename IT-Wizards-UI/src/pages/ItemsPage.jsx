@@ -33,7 +33,7 @@ const ItemsPage = () => {
 
   return (
     <section className="bg-purple-400">
-      <div className="container bg-purple-400 m-auto max-w-6xl py-24 flex items-center justify-center">
+      <div className="container bg-purple-400 m-auto max-w-6xl pt-20 pb-64 flex items-center justify-center">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">Items</h2>
 
