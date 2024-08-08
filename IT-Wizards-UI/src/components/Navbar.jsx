@@ -36,7 +36,7 @@ const Navbar = () => {
     setUsername('');
     setUserRole('');
     navigate('/');
-    setDropdownOpen(false); // Close the dropdown after logout
+    setDropdownOpen(false);
   };
 
   const notify = () => toast('This is a toast notification !');
@@ -48,7 +48,7 @@ const Navbar = () => {
 
   const handleDropdownClick = (path) => {
     navigate(path);
-    setDropdownOpen(false); // Close the dropdown after navigation
+    setDropdownOpen(false);
   };
 
   return (
@@ -94,12 +94,11 @@ const Navbar = () => {
                       <div className="">
                         <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
                           {cart.itemsHeldInCart.map((item, index) => (
-                            <React.Fragment key={index}>
+                            <>
                               <div>
                                 <img
                                   className="items-center justify-center "
                                   src={cauldron}
-                                  alt={item.name}
                                 />
                               </div>
                               <div className="items-center justify-center mb-10 mt-10">
@@ -132,7 +131,7 @@ const Navbar = () => {
                                   Remove all from cart
                                 </button>
                               </div>
-                            </React.Fragment>
+                            </>
                           ))}
                         </div>
 
