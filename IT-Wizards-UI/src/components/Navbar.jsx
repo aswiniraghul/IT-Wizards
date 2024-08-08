@@ -104,17 +104,19 @@ const Navbar = () => {
                               <div className="items-center justify-center mb-10 mt-10">
                                 <h1
                                   className="text-xl underline font-extrabold"
+                                  key={index}
                                 >
                                   {item.name}
                                 </h1>
                                 <h2
                                   className="text-base font-semibold mt-2 mb-3"
+                                  key={index}
                                 >
                                   {item.quantity} in cart
                                 </h2>
                                 <button
                                   onClick={() => cart.addOneToCart(item)}
-                                  className=" mx-2 align-bottom bg-green-500 text-slate-700 text-base font-bold rounded-full w-8 h-min"
+                                  className=" mx-2 align-bottom bg-green-500  text-slate-700 text-base font-bold rounded-full w-8 h-min"
                                 >
                                   +
                                 </button>
