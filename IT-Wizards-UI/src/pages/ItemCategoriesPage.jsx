@@ -42,8 +42,8 @@ const ItemCategoriesPage = () => {
   };
 
   return (
-    <section className="bg-purple-400">
-      <div className="container m-auto max-w-xl py-24 flex items-center justify-center">
+    <section className="bg-purple-400 pt-20 pb-96">
+      <div className="container m-auto max-w-xl flex items-center justify-center">
         <div className="bg-white px-24 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="content-center text-3xl text-center font-semibold mb-2">
             Item Categories
