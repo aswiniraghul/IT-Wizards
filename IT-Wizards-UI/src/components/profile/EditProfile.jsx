@@ -71,9 +71,11 @@ const EditProfile = () => {
     try {
       const userId = JSON.parse(localStorage.getItem("user"));
       await axios.delete(`${USERS_API}/${userId}`);
+      localStorage.removeItem("user");
       setLoading(false);
       setSuccess("Profile deleted successfully.");
       navigate("/");
+      window.location.reload();
     } catch (error) {
       setLoading(false);
       setError("Failed to delete profile. Please try again.");

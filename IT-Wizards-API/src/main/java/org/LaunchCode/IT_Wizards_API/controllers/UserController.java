@@ -85,7 +85,12 @@ public class UserController {
                 existingUser.setLastName(updatedUser.getLastName());
 
                 if (updatedUser.getUserPassword() != null && !updatedUser.getUserPassword().isEmpty()) {
-                    existingUser.setUserPassword(passwordEncoder.encode(updatedUser.getUserPassword()));
+                    if (!isPasswordEncoded(updatedUser.getUserPassword())) {
+                        String encryptedPassword = passwordEncoder.encode(updatedUser.getUserPassword());
+                        existingUser.setUserPassword(encryptedPassword);
+                    } else {
+                        existingUser.setUserPassword(updatedUser.getUserPassword());
+                    }
                 }
 
                 existingUser.setMailId(updatedUser.getMailId());
@@ -114,5 +119,9 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private boolean isPasswordEncoded(String password) {
+        return password != null && (password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$"));
     }
 }
