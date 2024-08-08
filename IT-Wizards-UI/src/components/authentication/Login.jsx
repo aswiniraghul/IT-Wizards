@@ -49,7 +49,7 @@ const Login = () => {
       setUserName("");
       setPassword("");
       setError("");
-      navigate("/"); //navigate("/home");
+      window.location.reload(navigate("/"));
     } catch (err) {
       setLoading(false);
       setError(err.response.data.message);
@@ -123,7 +123,6 @@ const Login = () => {
           <div className="text-center mt-2">
             <p>
               Don't have an account? <a href="/api/users/signup" className="link-primary text-decoration-underline">Sign up</a>
-              {/* Don't have an account? <a href="/register">Sign up</a> */}
             </p>
           </div>
         </div>

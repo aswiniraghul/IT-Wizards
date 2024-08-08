@@ -159,7 +159,7 @@ const Navbar = () => {
                       alt="Profile"
                       className="rounded-full w-8 h-8"
                     />
-                    <span className="ml-2">{username || 'Profile'}</span>
+                    <span className="ml-2">{username}</span>
                   </button>
                   {dropdownOpen && (
                     <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
@@ -167,7 +167,7 @@ const Navbar = () => {
                         <>
                           <li>
                             <button
-                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
                               onClick={() => handleDropdownClick('/api/users/signin')}
                             >
                               Log In
@@ -178,7 +178,7 @@ const Navbar = () => {
                         <>
                           <li>
                             <button
-                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
                               onClick={() => handleDropdownClick('/edit-profile')}
                             >
                               Edit Profile
@@ -186,7 +186,7 @@ const Navbar = () => {
                           </li>
                           <li>
                             <button
-                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                              className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
                               onClick={handleLogout}
                             >
                               Logout
@@ -194,16 +194,6 @@ const Navbar = () => {
                           </li>
                         </>
                       )}
-                      {username ? (
-                        <li>
-                          <button
-                            className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            onClick={() => handleDropdownClick('/api/users/signup')}
-                          >
-                            Register
-                          </button>
-                        </li>
-                      ) : null}
                     </ul>
                   )}
                 </div>

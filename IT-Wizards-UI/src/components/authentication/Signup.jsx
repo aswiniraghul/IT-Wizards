@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { SIGNUP_API } from '../../env/config';
 import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 
 const Signup = ({ register }) => {
   const navigate = useNavigate();
@@ -13,8 +14,10 @@ const Signup = ({ register }) => {
   const [userPassword, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalType, setModalType] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,16 +55,23 @@ const Signup = ({ register }) => {
       setPassword('');
       setConfirmPassword('');
       setError('');
-      if (register === 'admin') {
-        setSuccess('Admin signed up successfully');
-      } else {
-        setSuccess('User signed up successfully');
-      }
+      setModalType('success');
+      setModalMessage(register === 'admin' ? 'Admin signed up successfully!!' : 'User signed up successfully!!');
+      setShowModal(true);
     } catch (err) {
       setLoading(false);
       setError(err.response.data.message);
+      // setModalType('error');
+      // setModalMessage(err.response.data.message);
+      // setShowModal(true);
     }
-    navigate('/api/users/signin'); //not there
+  };
+    
+  const handleCloseModal = () => {
+    setShowModal(false);
+    if (modalType === 'success') {
+      navigate('/api/users/signin');
+    }
   };
 
   return (
@@ -72,13 +82,7 @@ const Signup = ({ register }) => {
       <div className="card shadow-sm" style={{ width: '600px' }}>
         <div className="card-body">
           <h2 className="text-center mb-4 fw-bold">Sign Up</h2>
-          {error !== '' ? (
-            <div className="alert alert-danger">{error}</div>
-          ) : success ? (
-            <div className="alert alert-success">{success}</div>
-          ) : (
-            <></>
-          )}
+          {error && <div className="alert alert-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="row mb-3">
               <div className="col">
@@ -176,13 +180,25 @@ const Signup = ({ register }) => {
             <p>
               Already have an account?{' '}
               <a href="/api/users/signin" className="link-primary text-decoration-underline">
-              {/* Already have an account? <a href="/">Login</a> */}
                 Login
               </a>
             </p>
           </div>
         </div>
       </div>
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header>
+          <Modal.Title>{modalType === 'success' ? 'Success' : 'Error'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalMessage}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button className="btn btn-primary btn-block" onClick={handleCloseModal}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
