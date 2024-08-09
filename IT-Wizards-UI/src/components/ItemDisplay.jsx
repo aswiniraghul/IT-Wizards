@@ -4,9 +4,8 @@ import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
 
-const ItemDisplay = () => {
+const ItemDisplay = ({ searchTerm }) => {
   const cart = useContext(CartContext);
-
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -33,6 +32,15 @@ const ItemDisplay = () => {
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {items.map((item) => {
+                    console.log(searchTerm);
+                    if (
+                      searchTerm.trim() &&
+                      !item.name
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                    ) {
+                      return;
+                    }
                     return (
                       <div className="mb-2 ml-2 mr-2" key={item.id}>
                         <Link to={`/items/${item.id}`}>
@@ -82,14 +90,6 @@ const ItemDisplay = () => {
                             Add to Cart
                           </button>
                         )}
-                        {/* <p className="text-center">
-                        <button
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-auto mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                          type="submit"
-                        >
-                          Add to Cart
-                        </button>
-                      </p> */}
                       </div>
                     );
                   })}

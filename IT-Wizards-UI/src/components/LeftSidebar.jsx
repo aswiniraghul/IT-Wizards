@@ -1,28 +1,56 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
+  const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
 
+  const toggleFilterDropdown = () => {
+    setFilterDropdownOpen(!filterDropdownOpen);
+  };
 
-    return (
-      <div className="flex flex-row w-full bg-slate-500 py-4 px-2 justify-center h-[calc(100vh-5rem)]">
-        <aside className="w-full">
-          <div className="bg-gray-200 rounded p-2 mb-2">
-            <button>Filter</button>
+  const toggleSortDropdown = () => {
+    setSortDropdownOpen(!sortDropdownOpen);
+  };
+
+  return (
+    <div className="flex flex-row w-full bg-purple-800 py-2 pt-4 border-black border-4 pl-4 justify-left h-[calc(100vh-5rem)]">
+      <aside className="w-auto">
+        <div className="text-green-400 text-xl hover:font-bold mb-1">
+          <button onClick={toggleFilterDropdown}>Filter</button>
+        </div>
+        {filterDropdownOpen ? (
+          <div className="ml-2">
+            <ul className="text-green-400 ">
+              <li className="py-1 hover:font-bold">
+                <button className="text-sm">By Category</button>
+              </li>
+            </ul>
           </div>
+        ) : (
+          <div></div>
+        )}
 
-          <div className="bg-gray-200 rounded items-center p-2 ">
-            <button
-              className="bg-transparent focus:outline-none"
-              type="text"
-              placeholder="Search foods"
-            >
-              Sort
-            </button>
+        <div className="text-green-400 text-xl hover:font-bold mt-8 mb-1">
+          <button onClick={toggleSortDropdown}>Sort</button>
+        </div>
+        {sortDropdownOpen ? (
+          <div className="ml-2">
+            <ul className="text-green-400 ">
+              <li className="py-1 hover:font-bold">
+                <button className="text-sm">By Name</button>
+              </li>
+              <li className="py-1 hover:font-bold">
+                <button className="text-sm">By Price</button>
+              </li>
+            </ul>
           </div>
-        </aside>
-      </div>
-    );
+        ) : (
+          <div></div>
+        )}
+      </aside>
+    </div>
+  );
 };
 
 export default Navbar;

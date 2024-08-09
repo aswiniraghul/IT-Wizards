@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AddItemForm = () => {
+
   const [item, setItem] = useState({
     name: '',
     description: '',
@@ -46,7 +47,8 @@ const AddItemForm = () => {
           ) {
             notifyDuplicateItem();
             return;
-          } else {
+          } else if
+            (responseErrors == `Could not find an item category with name ${item.itemCategory}`) {
             if (
               window.confirm(
                 `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
@@ -68,7 +70,7 @@ const AddItemForm = () => {
 
   return (
     <section className="bg-purple-400">
-      <div className="container m-auto max-w-3xl py-24">
+      <div className="container m-auto max-w-3xl pt-20 pb-48">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <form onSubmit={(e) => onSubmit(e)}>
             <h2 className="text-3xl text-center font-semibold mb-6">
