@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 const Navbar = () => {
-  const [nav, setNav] = useState(false);
   const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
 
@@ -14,9 +13,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row w-full bg-purple-800 py-2 pt-4 border-black border-4 pl-4 justify-left h-[calc(100vh-5rem)]">
+    <div className="flex flex-row w-full bg-purple-800 pt-8 border-black border-4 pl-4 justify-left h-[calc(100vh-5rem)]">
       <aside className="w-auto">
-        <div className="text-green-400 text-xl hover:font-bold mb-1">
+        <div className="text-green-400 text-xl hover:font-bold">
           <button onClick={toggleFilterDropdown}>Filter</button>
         </div>
         {filterDropdownOpen ? (
@@ -31,7 +30,7 @@ const Navbar = () => {
           <div></div>
         )}
 
-        <div className="text-green-400 text-xl hover:font-bold mt-8 mb-1">
+        <div className="text-green-400 text-xl hover:font-bold mt-4 mb-1">
           <button onClick={toggleSortDropdown}>Sort</button>
         </div>
         {sortDropdownOpen ? (

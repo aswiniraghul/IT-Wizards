@@ -8,7 +8,6 @@ import cauldron from '../assets/images/cauldron.png';
 import profileImage from '../assets/images/profile.jpg';
 import '../dropdown.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
@@ -51,11 +50,11 @@ const Navbar = () => {
 
   return (
     <nav className="bg-purple-800 border-b-4 border-black">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-full px-2 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
-          <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
+          <div className="flex flex-1 items-center justify-center pl-6 md:items-stretch">
             <NavLink className="flex flex-shrink-0 items-center mr-4" to="/">
-              <span className="hidden md:block text-white text-2xl font-bold ml-2  hover:text-green-600">
+              <span className="hidden md:block text-white text-3xl font-bold hover:text-green-600">
                 B.R.E.W.S.
               </span>
             </NavLink>

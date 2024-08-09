@@ -1,25 +1,18 @@
-import React from 'react'
+import { useState } from 'react';
 
 const RightSidebar = () => {
   return (
-    <div className="flex flex-row w-full bg-slate-500 py-4 px-2 justify-center h-[calc(100vh-5rem)]">
-      <aside className="w-full">
-        <div className="bg-gray-200 rounded p-2 mb-2">
-          <button>Filter</button>
-        </div>
-
-        <div className="bg-gray-200 rounded items-center p-2 ">
-          <button
-            className="bg-transparent focus:outline-none"
-            type="text"
-            placeholder="Search foods"
-          >
-            Sort
-          </button>
-        </div>
+    <div className="flex flex-row w-full bg-purple-800 pt-2 border-black border-4 text-center h-[calc(100vh-5rem)]">
+      <aside className="w-auto text-green-400 text-lg py-4">
+        <button className="hover:font-bold py-2">
+          About Us
+        </button>
+        <button className='hover:font-bold py-2'>
+          Contact Us
+        </button>
       </aside>
     </div>
   );
-}
+};
 
-export default RightSidebar
+export default RightSidebar;
