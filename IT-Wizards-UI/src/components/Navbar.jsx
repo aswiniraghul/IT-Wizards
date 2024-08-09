@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart } from 'phosphor-react';
+import { ShoppingCart, Heart } from 'phosphor-react';
 import Modal from './Modal';
 import { CartContext } from './CartContext';
 import PlaidLinkButton from './PlaidLinkButton';
@@ -71,6 +71,9 @@ const Navbar = () => {
                 </NavLink>
                 <NavLink to="/itemCategories" className={linkClass}>
                   Item Categories
+                </NavLink>
+                <NavLink to="/wishlist" className={linkClass}>
+                  <Heart width={40} />
                 </NavLink>
                 <button
                   className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
