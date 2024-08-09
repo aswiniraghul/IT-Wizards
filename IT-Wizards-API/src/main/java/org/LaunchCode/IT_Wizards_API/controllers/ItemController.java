@@ -1,7 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
 import org.LaunchCode.IT_Wizards_API.exceptions.DuplicateItemException;
-import org.LaunchCode.IT_Wizards_API.exceptions.DuplicateItemException;
 import org.LaunchCode.IT_Wizards_API.exceptions.ItemCategoryNotFoundException;
 import org.LaunchCode.IT_Wizards_API.repository.ItemCategoryRepository;
 import org.LaunchCode.IT_Wizards_API.repository.ItemRepository;

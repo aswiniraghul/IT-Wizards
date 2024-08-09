@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AddItemForm = () => {
-
   const [item, setItem] = useState({
     name: '',
     description: '',
@@ -108,6 +107,7 @@ const AddItemForm = () => {
                 placeholder="A brief description of the item, any possible adverse side effects, etc."
                 value={description}
                 onChange={(e) => onInputChange(e)}
+                required
               ></input>
             </div>
 
@@ -161,6 +161,7 @@ const AddItemForm = () => {
                 placeholder="Enter current inventory for the item"
                 value={currentInventory}
                 onChange={(e) => onInputChange(e)}
+                required
               />
             </div>
 
