@@ -36,7 +36,6 @@ const ItemDisplay = ({ searchTerm }) => {
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
                   {items.map((item) => {
-                    console.log(searchTerm);
                     if (
                       searchTerm.trim() &&
                       !item.name
@@ -46,7 +45,6 @@ const ItemDisplay = ({ searchTerm }) => {
                       return;
                     } else {
                       itemsArr.push(item);
-                      console.log(itemsArr.length);
                     }
 
                     return (
