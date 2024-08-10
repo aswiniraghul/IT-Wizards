@@ -22,15 +22,15 @@ const ItemDisplay = ({ searchTerm }) => {
   };
 
   return (
-    <section className="bg-blue-500 w-full overflow-y-auto">
+    <section className="bg-blue-500 w-full border-t-4 border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
         <div className="container bg-purple-400 py-8 px-12">
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
-            <h2 className="text-3xl text-center font-semibold mb-2">Shop</h2>
+            <h2 className="text-5xl text-center font-bold underline mb-2">Welcome to the Shop</h2>
 
             <div className="container m-auto max-w-5xl py-12">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
                   {items.map((item) => {
                     console.log(searchTerm);
                     if (
@@ -42,9 +42,9 @@ const ItemDisplay = ({ searchTerm }) => {
                       return;
                     }
                     return (
-                      <div className="mb-2 ml-2 mr-2" key={item.id}>
+                      <div className="mb-2 ml-2 mr-2 hover:scale-105" key={item.id}>
                         <Link to={`/items/${item.id}`}>
-                          <img src={cauldron} className="size-80"></img>
+                          <img src={cauldron} className="size-72"></img>
                         </Link>
 
                         <div className="flex items-center justify-center">
