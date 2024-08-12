@@ -104,7 +104,6 @@ export function CartProvider({ children }) {
 
   function getItemQuantity(id) {
     const quantity = cartItems.find((cartItem) => cartItem.id === id)?.quantity;
-    console.log(quantity);
 
     if (quantity === undefined) {
       return 0;
@@ -148,7 +147,6 @@ export function CartProvider({ children }) {
         removeItemFromInventory(item);
         notifyIncrease();
       }
-      console.log('$' + JSON.stringify(cartItems));
     }
   }
 
