@@ -1,19 +1,24 @@
 import { createContext, useEffect, useState } from 'react';
 import { getItems } from '../services/viewItemsService';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { HOST_NAME } from '../env/config';
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
-  totalItemsInCart: (id) => {},
-  getItemQuantity: (id) => {},
-  addOneToCart: (item) => {},
-  removeOneFromCart: (item) => {},
-  deleteFromCart: (item) => {},
-  getTotalCost: (id) => {},
+  totalItemsInCart: () => {},
+  getItemQuantity: () => {},
+  addOneToCart: () => {},
+  removeOneFromCart: () => {},
+  deleteFromCart: () => {},
+  getTotalCost: () => { },
+  clearCart: () => { },
 });
 export const ItemDetails = () => {
   const { id } = useParams(id);
-  const [item, setItemDetails] = useState([]);
+  const [item, setItems] = useState([]);
 
   useEffect(() => {
     fetchItems();
@@ -22,17 +27,86 @@ export const ItemDetails = () => {
   const fetchItems = async () => {
     try {
       const data = await getItems(id);
-      setItemDetails(data);
+      setItems(data);
     } catch (error) {
       console.error('Failed to fetch data', error);
     }
   };
 };
 
-export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+  const cartFromLocalStorage = JSON.parse(
+    localStorage.getItem('cartItems') || '[]'
+  );
 
-  //[{id: 1, quantity: 2}, {id: 2, quantity:1}]
+
+export function CartProvider({ children }) {
+  const [cartItems, setCartItems] = useState(cartFromLocalStorage);
+
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems])
+
+  const [itemDetails, setItemDetails] = useState({
+    name: '',
+    description: '',
+    itemCategory: '',
+    price: '',
+    currentInventory: '',
+  });
+
+  const notifyAdd = () => toast.success('Item added to cart');
+  const notifyIncrease = () => toast.info('Increased amount in cart');
+  const notifyDecrease = () => toast.info('Decreased amount in cart');
+  const notifyRemoveAll = () => toast.info('Removed item from cart');
+  const notifyOutOfStock = () => toast.error('Insufficient inventory, item out of stock!');
+
+  const removeItemFromInventory = async (item) => {
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
+    const itemDetails = response.data;
+    if (itemDetails.currentInventory > 0) {
+      setItemDetails((prevItemDetails) => ({
+        ...prevItemDetails,
+        currentInventory: itemDetails.currentInventory - 1,
+      }));
+      await axios.put(`${HOST_NAME}/items/editItem/${item.id}`, {
+        ...itemDetails,
+        currentInventory: itemDetails.currentInventory - 1,
+      });
+    } else {
+      console.log("Insufficient Inventory")
+      notifyOutOfStock();
+    }
+  };
+
+
+  const addItemBackToInventory = async (item) => {
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
+    const itemDetails = response.data;
+    setItemDetails((prevItemDetails) => ({
+      ...prevItemDetails,
+      currentInventory: itemDetails.currentInventory + 1,
+    }));
+    await axios.put(`${HOST_NAME}/items/editItem/${item.id}`, {
+      ...itemDetails,
+      currentInventory: itemDetails.currentInventory + 1,
+    });
+    notifyDecrease();
+  };
+
+  const addAllBackToInventory = async (item) => {
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
+    const itemDetails = response.data;
+    setItemDetails((prevItemDetails) => ({
+      ...prevItemDetails,
+      currentInventory: itemDetails.currentInventory + getItemQuantity(item.id),
+    }));
+    await axios.put(`${HOST_NAME}/items/editItem/${item.id}`, {
+      ...itemDetails,
+      currentInventory: itemDetails.currentInventory + getItemQuantity(item.id),
+    });
+    notifyRemoveAll();
+  };
 
   function totalItemsInCart() {
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -41,7 +115,6 @@ export function CartProvider({ children }) {
 
   function getItemQuantity(id) {
     const quantity = cartItems.find((cartItem) => cartItem.id === id)?.quantity;
-    console.log(quantity);
 
     if (quantity === undefined) {
       return 0;
@@ -49,31 +122,43 @@ export function CartProvider({ children }) {
     return quantity;
   }
 
-  function addOneToCart(item) {
+  async function addOneToCart(item) {
     const quantity = getItemQuantity(item.id);
-
-    if (quantity === 0) {
-      //item is not yet in cart
-      setCartItems([
-        ...cartItems,
-        {
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: 1,
-        },
-      ]);
+    const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
+    const itemDetails = response.data;
+    if (itemDetails.currentInventory <= 0) {
+      notifyOutOfStock();
+      console.log('Insufficient Inventory');
+      return;
     } else {
-      //item is in cart
-      setCartItems(
-        cartItems.map((cartItem) =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        )
-      );
+      if (quantity === 0) {
+        //item is not yet in cart
+        setCartItems([
+          ...cartItems,
+          {
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            currentInventory: item.currentInventory,
+            quantity: 1,
+          },
+        ]);
+        removeItemFromInventory(item);
+        notifyAdd();
+      } else {
+        //item is in cart
+        setCartItems(
+          cartItems.map((cartItem) =>
+            cartItem.id === item.id
+              ? { ...cartItem, quantity: cartItem.quantity + 1 }
+              : cartItem
+          )
+        );
+        removeItemFromInventory(item);
+        notifyIncrease();
+      }
     }
-    console.log('$' + JSON.stringify(cartItems));
   }
 
   function removeOneFromCart(item) {
@@ -84,9 +169,12 @@ export function CartProvider({ children }) {
     } else {
       setCartItems(
         cartItems.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            : cartItem
         )
       );
+      addItemBackToInventory(item);
     }
   }
 
@@ -96,6 +184,7 @@ export function CartProvider({ children }) {
         return currentItem.id != item.id;
       })
     );
+    addAllBackToInventory(item);
   }
 
   function getTotalCost() {
@@ -106,6 +195,10 @@ export function CartProvider({ children }) {
     return totalCost;
   }
 
+  function clearCart() {
+    setCartItems([]);
+  }
+
   const contextValue = {
     itemsHeldInCart: cartItems,
     totalItemsInCart,
@@ -114,6 +207,7 @@ export function CartProvider({ children }) {
     removeOneFromCart,
     deleteFromCart,
     getTotalCost,
+    clearCart,
   };
 
   return (
