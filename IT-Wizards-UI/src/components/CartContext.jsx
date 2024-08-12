@@ -34,8 +34,19 @@ export const ItemDetails = () => {
   };
 };
 
+  const cartFromLocalStorage = JSON.parse(
+    localStorage.getItem('cartItems') || '[]'
+  );
+
+
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(cartFromLocalStorage);
+
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems])
+
   const [itemDetails, setItemDetails] = useState({
     name: '',
     description: '',
