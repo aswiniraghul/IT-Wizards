@@ -34,7 +34,7 @@ const ItemDetailsDisplay = (results) => {
 
   return (
     <section className="bg-purple-400">
-      <div className="container bg-purple-400 m-auto max-w-6xl pt-32 pb-56">
+      <div className="container bg-purple-400 m-auto max-w-6xl pt-16 pb-56">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">
             Item Details

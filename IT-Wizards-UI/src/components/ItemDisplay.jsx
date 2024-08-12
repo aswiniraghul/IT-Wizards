@@ -24,9 +24,9 @@ const ItemDisplay = ({ searchTerm }) => {
   const itemsArr = [];
 
   return (
-    <section className="bg-blue-500 w-full border-t-4 border-b-4 border-black overflow-y-auto">
+    <section className="w-full border-t-4 border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
-        <div className="container bg-purple-400 py-8 px-12">
+        <div className="container bg-purple-400 py-12 pb-36 px-12">
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
             <h2 className="text-5xl text-center font-bold underline mb-2">
               Welcome to the Shop

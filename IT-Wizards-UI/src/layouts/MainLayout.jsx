@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import UserNavbar from '../components/UserNavbar';
+import Navbar from '../components/Navbar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const MainLayout = () => {
   return (
     <div>
-      <UserNavbar />
+      <Navbar />
       <Outlet />
       <ToastContainer position='bottom-right' autoClose={2800} />
     </div>

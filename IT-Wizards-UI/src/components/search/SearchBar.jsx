@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MagnifyingGlass } from 'phosphor-react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 
 const SearchBar = ({ setResults, setSearchTerm, results }) => {
   const [input, setInput] = useState('');
@@ -30,7 +30,7 @@ const SearchBar = ({ setResults, setSearchTerm, results }) => {
   };
 
   return (
-    <div className="flex items-center m-auto w-full bg-purple-800 text-green-400">
+    <div className="flex items-center border-l-4 border-r-4 border-black m-auto w-full bg-purple-800 text-green-400">
       <form
         onSubmit={(event) => {
           event.preventDefault()
