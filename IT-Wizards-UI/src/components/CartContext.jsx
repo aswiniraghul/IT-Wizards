@@ -8,12 +8,13 @@ import { HOST_NAME } from '../env/config';
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
-  totalItemsInCart: (id) => {},
-  getItemQuantity: (id) => {},
-  addOneToCart: (item) => {},
-  removeOneFromCart: (item) => {},
-  deleteFromCart: (item) => {},
-  getTotalCost: (id) => {},
+  totalItemsInCart: () => {},
+  getItemQuantity: () => {},
+  addOneToCart: () => {},
+  removeOneFromCart: () => {},
+  deleteFromCart: () => {},
+  getTotalCost: () => { },
+  clearCart: () => { },
 });
 export const ItemDetails = () => {
   const { id } = useParams(id);
@@ -33,8 +34,19 @@ export const ItemDetails = () => {
   };
 };
 
+  const cartFromLocalStorage = JSON.parse(
+    localStorage.getItem('cartItems') || '[]'
+  );
+
+
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(cartFromLocalStorage);
+
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems])
+
   const [itemDetails, setItemDetails] = useState({
     name: '',
     description: '',
@@ -183,6 +195,10 @@ export function CartProvider({ children }) {
     return totalCost;
   }
 
+  function clearCart() {
+    setCartItems([]);
+  }
+
   const contextValue = {
     itemsHeldInCart: cartItems,
     totalItemsInCart,
@@ -191,6 +207,7 @@ export function CartProvider({ children }) {
     removeOneFromCart,
     deleteFromCart,
     getTotalCost,
+    clearCart,
   };
 
   return (
