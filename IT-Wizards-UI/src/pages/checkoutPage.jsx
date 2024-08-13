@@ -8,7 +8,7 @@ import AddressForm from '../components/AddressForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const checkoutPage = () => {
+const CheckoutPage = () => {
   const cart = useContext(CartContext);
   const navigate = useNavigate();
 
@@ -131,4 +131,4 @@ const checkoutPage = () => {
   );
 };
 
-export default checkoutPage;
+export default CheckoutPage;
