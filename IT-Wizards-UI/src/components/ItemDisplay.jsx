@@ -24,7 +24,7 @@ const ItemDisplay = ({ searchTerm }) => {
   const itemsArr = [];
 
   return (
-    <section className="w-full border-t-4 border-b-4 border-black overflow-y-auto">
+    <section className="w-full border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
         <div className="container bg-purple-400 py-12 pb-36 px-12">
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
@@ -48,11 +48,8 @@ const ItemDisplay = ({ searchTerm }) => {
                     }
 
                     return (
-                      <div>
-                        <div
-                          className="mb-2 ml-2 mr-2 hover:scale-105"
-                          key={item.id}
-                        >
+                      <div key={item.id}>
+                        <div className="mb-2 ml-2 mr-2 hover:scale-105">
                           <Link to={`/items/${item.id}`}>
                             <img src={cauldron} className="size-72"></img>
                           </Link>

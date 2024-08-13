@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../src/EditProfile.css";
 import { USERS_API } from "../../env/config";
+import AddressForm from '../../components/AddressForm';
 
 const EditProfile = () => {
   const [userData, setUserData] = useState({
@@ -166,12 +167,14 @@ const EditProfile = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" disabled={loading}>
+          <div className="font-extrabold underline pb-3 pt-6">Address Info</div>
+          <AddressForm />
+          <button type="submit" className="btn btn-primary mt-4" disabled={loading}>
             {loading ? "Saving..." : "Save Changes"}
           </button>
           <button
             type="button"
-            className="btn btn-danger ms-2"
+            className="btn btn-danger ms-2 mt-4"
             onClick={() => setShowDeleteModal(true)}
             disabled={loading}
           >
