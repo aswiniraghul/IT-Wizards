@@ -47,12 +47,22 @@ const UserNavbar = () => {
     setDropdownOpen(false);
   };
 
-  // const handleCartOnLogout = () => {
-  //   if (cart.itemsHeldInCart.length > 0) {
-  //     window.confirm('Are you sure you want to Logout? Your cart will be cleared.'){
-
-  //     }
-  // }
+  const handleCartOnLogout = () => {
+    if (cart.itemsHeldInCart.length > 0) {
+      if (
+        window.confirm(
+          'Are you sure you want to Logout? Your cart will be cleared.'
+        )
+      ) {
+        cart.returnAllItemsToInv();
+        handleLogout();
+      } else {
+        return;
+      }
+    } else {
+      handleLogout();
+    }
+  };
 
   return (
     <nav className="bg-purple-800 border-4 py-2 border-black">
@@ -85,15 +95,19 @@ const UserNavbar = () => {
                     Wishlist
                   </NavLink>
                 )}
-                <button
-                  className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
-                  onClick={() => setOpen(true)}
-                >
-                  <ShoppingCart width={40} />
-                </button>
-                <div className="text-green-600 font-bold text-sm">
-                  {cart.totalItemsInCart()}
-                </div>
+                {userRole !== 'admin' && (
+                  <>
+                    <button
+                      className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
+                      onClick={() => setOpen(true)}
+                    >
+                      <ShoppingCart width={40} />
+                    </button>
+                    <div className="text-green-600 font-bold text-sm">
+                      {cart.totalItemsInCart()}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -168,6 +182,7 @@ const UserNavbar = () => {
                 <h1>Your cart is empty!</h1>
               )}
             </Modal>
+
             <div className="relative ml-4">
               <button
                 className="flex items-center text-white bg-gray-800 rounded-full px-4 py-2"
@@ -208,7 +223,7 @@ const UserNavbar = () => {
                       <li>
                         <button
                           className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          onClick={handleLogout}
+                          onClick={() => handleCartOnLogout()}
                         >
                           Logout
                         </button>
