@@ -17,6 +17,7 @@ import CartProvider from './components/CartContext';
 import EditProfile from './components/profile/EditProfile';
 import Signup from './components/authentication/Signup';
 import Login from './components/authentication/Login';
+import CheckoutPage from './pages/CheckoutPage';
 
 const App = () => {
 
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/api/users/signup" element={<Signup />} />
         <Route path="/api/users/admin-signup" element={<Signup register="admin" />} />
         <Route path="/api/users/signin" element={<Login />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Route>
     )
   );

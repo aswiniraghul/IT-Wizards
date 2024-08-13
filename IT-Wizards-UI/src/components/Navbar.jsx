@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ShoppingCart } from 'phosphor-react';
 import Modal from './Modal';
 import { CartContext } from './CartContext';
-import PlaidLinkButton from './PlaidLinkButton';
 import cauldron from '../assets/images/cauldron.png';
 import profileImage from '../assets/images/profile.jpg';
 import '../dropdown.css';
@@ -47,6 +46,13 @@ const UserNavbar = () => {
     navigate(path);
     setDropdownOpen(false);
   };
+
+  // const handleCartOnLogout = () => {
+  //   if (cart.itemsHeldInCart.length > 0) {
+  //     window.confirm('Are you sure you want to Logout? Your cart will be cleared.'){
+
+  //     }
+  // }
 
   return (
     <nav className="bg-purple-800 border-4 py-2 border-black">
@@ -103,26 +109,23 @@ const UserNavbar = () => {
                 <>
                   <div className="">
                     <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
-                      {cart.itemsHeldInCart.map((item, index) => (
+                      {cart.itemsHeldInCart.map((item) => (
                         <>
-                          <div>
+                          <div key={item.id}>
                             <img
                               className="items-center justify-center "
                               src={cauldron}
                             />
                           </div>
                           <div className="items-center justify-center mb-10 mt-10">
-                            <h1
-                              className="text-xl underline font-extrabold"
-                              key={index}
-                            >
+                            <h1 className="text-xl underline font-extrabold">
                               {item.name}
                             </h1>
-                            <h2
-                              className="text-base font-semibold mt-2 mb-3"
-                              key={index}
-                            >
+                            <h2 className="text-base font-semibold mt-2">
                               {item.quantity} in cart
+                            </h2>
+                            <h2 className="text-base font-semibold mb-2">
+                              ${(item.price * item.quantity).toFixed(2)}
                             </h2>
                             <button
                               onClick={() => cart.addOneToCart(item)}
@@ -137,7 +140,7 @@ const UserNavbar = () => {
                               -
                             </button>
                             <button
-                              className="flex bg-red-600 hover:bg-red-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
+                              className="flex bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
                               onClick={() => cart.deleteFromCart(item)}
                             >
                               Remove all from cart
@@ -147,13 +150,18 @@ const UserNavbar = () => {
                       ))}
                     </div>
 
-                    <h1 className="text-xl text-green-700 text-center border-8 border-indigo-500 mt-6 mb-6 font-extrabold">
+                    <h1 className="text-xl text-green-700 text-center rounded-xl border-8 border-indigo-500 mt-6 mb-6 font-extrabold">
                       Total: ${cart.getTotalCost().toFixed(2)}
                     </h1>
-                    <button className="flex bg-indigo-600 hover:bg-indigo-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline">
-                      Checkout
+                    <button
+                      onClick={() => {
+                        navigate('/checkout');
+                        setOpen(false);
+                      }}
+                      className="flex bg-indigo-600 hover:bg-indigo-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
+                    >
+                      Proceed to Checkout
                     </button>
-                    <PlaidLinkButton />
                   </div>
                 </>
               ) : (
