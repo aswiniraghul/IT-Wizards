@@ -4,7 +4,7 @@ const ShippingForm = () => {
   return (
     <form>
       <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2">
+        <label className="block text-gray-700 mb-2">
           Street Address
         </label>
         <input
@@ -20,7 +20,7 @@ const ShippingForm = () => {
 
       <div className='flex'>
         <div className="mb-2 mr-10">
-          <label className="block text-gray-700 font-bold mb-2">City</label>
+          <label className="block text-gray-700 mb-2">City</label>
           <input
             id="city"
             name="city"
@@ -32,7 +32,7 @@ const ShippingForm = () => {
         </div>
 
         <div className="mb-2 mr-10 ml-10">
-          <label className="block text-gray-700 font-bold mb-2">State</label>
+          <label className="block text-gray-700 mb-2">State</label>
           <input
             id="state"
             name="state"
@@ -43,7 +43,7 @@ const ShippingForm = () => {
         </div>
 
         <div className="mb-4 ml-10">
-          <label className="block text-gray-700 font-bold mb-2">Zipcode</label>
+          <label className="block text-gray-700 mb-2">Zipcode</label>
           <input
             id="zipcode"
             name="zipcode"
