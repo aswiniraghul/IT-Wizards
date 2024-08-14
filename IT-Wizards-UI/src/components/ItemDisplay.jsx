@@ -9,12 +9,7 @@ const ItemDisplay = ({ searchTerm }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState([]);
-
-  const setSearchValue = event => {
-    setSearchTerm(event.target.value);
-  }
 
   useEffect(() => {
     fetchItems();
@@ -47,7 +42,7 @@ const ItemDisplay = ({ searchTerm }) => {
             <h2 className="text-5xl text-center font-bold underline mb-2">
               Welcome to the Shop
             </h2>
-            <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter} />
+            <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter.length ? categoryFilter : categories} />
             <div className="container m-auto max-w-5xl py-12">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
@@ -57,9 +52,9 @@ const ItemDisplay = ({ searchTerm }) => {
                       !item.name
                         .toLowerCase()
                         .includes(searchTerm.toLowerCase())
-                      ) || (categoryFilter &&
-                        !item.itemCategory.name ||
-                        !categoryFilter.includes(item.itemCategory.name)
+                      ) || (categoryFilter.length &&
+                        (!item.itemCategory.name ||
+                        !categoryFilter.includes(item.itemCategory.name))
                       )
                     ) {
                       return;
