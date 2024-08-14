@@ -1,15 +1,17 @@
 import { useEffect, useState, useContext } from 'react';
-import { getItems } from '../services/viewItemsService';
+import { getItems, getItemCategoryList } from '../services/viewItemsService';
 import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
-import  ItemFilter from './ItemFilter';
+import  ItemFilter from './Filter/ItemFilter';
 
 const ItemDisplay = () => {
     const cart = useContext(CartContext);
 
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState([]);
 
   const setSearchValue = event => {
     setSearchTerm(event.target.value);
@@ -17,6 +19,7 @@ const ItemDisplay = () => {
 
   useEffect(() => {
     fetchItems();
+    fetchCategories();
   }, []);
 
   const fetchItems = async () => {
@@ -28,16 +31,29 @@ const ItemDisplay = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const data = await getItemCategoryList();
+      setCategories(data);
+    } catch (error) {
+      console.error('Failed to fetch category data', error);
+    }
+  };
+
   return (
     <section className="bg-purple-400">
       <div className="container bg-purple-400 m-auto max-w-6xl py-24">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">Shop</h2>
-          <ItemFilter onChange={setSearchValue} />
+          <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter} />
           <div className="container m-auto max-w-5xl py-12">
             <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {items.map((item) => {
+                {items.filter(item => {
+                  if(!categoryFilter || !categoryFilter.length) return true;
+                  else if(item.itemCategory.name && categoryFilter.includes(item.itemCategory.name)) return true;
+                  else return false;
+                }).map((item) => {
                   if(searchTerm.trim() && !item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
                     console.log('should filter by ', searchTerm);
                     console.log('checking ', item.name);
@@ -53,12 +69,16 @@ const ItemDisplay = () => {
                       </Link>
 
                       <div className="flex items-center justify-center">
-                        {item.name}
+                      {item.name}
                       </div>
                       <div className="flex items-center justify-center">
                         ${(Math.round(item.price * 100) / 100).toFixed(2)}
                       </div>
-
+                      {item.itemCategory?.name && (
+                        <div className="flex items-center justify-center">
+                          <span className="item-category">{item.itemCategory.name}</span>
+                        </div>
+                      )}
                       {cart.getItemQuantity(item.id) > 0 ? (
                         <div className="">
                           <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
