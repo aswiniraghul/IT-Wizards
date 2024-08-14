@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row w-full bg-purple-800 pt-8 border-black border-4 pl-4 justify-left h-[calc(100vh-5rem)]">
+    <div className="flex flex-row w-full bg-purple-800 pt-8 border-black border-l-4 border-r-4 border-b-4 pl-4 justify-left h-[calc(100vh-5rem)]">
       <aside className="w-auto">
         <div className="text-green-400 text-xl hover:font-bold">
           <button onClick={toggleFilterDropdown}>Filter</button>
