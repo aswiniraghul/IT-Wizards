@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
 import  ItemFilter from './Filter/ItemFilter';
 
-const ItemDisplay = ({ searchTerm }) => {
+const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [categoryFilter, setCategoryFilter] = useState([]);
+  // const [categoryFilter, setCategoryFilter] = useState([]);
 
   useEffect(() => {
     fetchItems();
@@ -42,7 +42,7 @@ const ItemDisplay = ({ searchTerm }) => {
             <h2 className="text-5xl text-center font-bold underline mb-2">
               Welcome to the Shop
             </h2>
-            <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter.length ? categoryFilter : categories} />
+            {/* <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter.length ? categoryFilter : categories} /> */}
             <div className="container m-auto max-w-5xl py-12">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
