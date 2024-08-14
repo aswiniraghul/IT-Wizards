@@ -31,7 +31,7 @@ const EditItemForm = () => {
   const notifyItemEdited = () =>
     toast.success('Item successfully edited.');
 
-  const onSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:8080/items/editItem/${id}`, item);
@@ -71,9 +71,9 @@ const EditItemForm = () => {
 
   return (
     <section className="bg-purple-400 ">
-      <div className="container m-auto max-w-2xl py-24 ">
+      <div className="container m-auto max-w-2xl pt-20 pb-36 ">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4  md:m-0">
-          <form onSubmit={(e) => onSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <h2 className="text-3xl text-center font-semibold mb-6">
               Edit Item
             </h2>

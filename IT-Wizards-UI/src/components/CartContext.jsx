@@ -8,12 +8,14 @@ import { HOST_NAME } from '../env/config';
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
-  totalItemsInCart: (id) => {},
-  getItemQuantity: (id) => {},
-  addOneToCart: (item) => {},
-  removeOneFromCart: (item) => {},
-  deleteFromCart: (item) => {},
-  getTotalCost: (id) => {},
+  totalItemsInCart: () => {},
+  getItemQuantity: () => {},
+  addOneToCart: () => {},
+  removeOneFromCart: () => {},
+  deleteFromCart: () => {},
+  getTotalCost: () => {},
+  clearCart: () => { },
+  returnAllItemsToInv: () => { },
 });
 export const ItemDetails = () => {
   const { id } = useParams(id);
@@ -33,8 +35,17 @@ export const ItemDetails = () => {
   };
 };
 
+const cartFromLocalStorage = JSON.parse(
+  localStorage.getItem('cartItems') || '[]'
+);
+
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(cartFromLocalStorage);
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const [itemDetails, setItemDetails] = useState({
     name: '',
     description: '',
@@ -47,7 +58,8 @@ export function CartProvider({ children }) {
   const notifyIncrease = () => toast.info('Increased amount in cart');
   const notifyDecrease = () => toast.info('Decreased amount in cart');
   const notifyRemoveAll = () => toast.info('Removed item from cart');
-  const notifyOutOfStock = () => toast.error('Insufficient inventory, item out of stock!');
+  const notifyOutOfStock = () =>
+    toast.error('Insufficient inventory, item out of stock!');
 
   const removeItemFromInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
@@ -62,11 +74,10 @@ export function CartProvider({ children }) {
         currentInventory: itemDetails.currentInventory - 1,
       });
     } else {
-      console.log("Insufficient Inventory")
+      console.log('Insufficient Inventory');
       notifyOutOfStock();
     }
   };
-
 
   const addItemBackToInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
@@ -103,7 +114,6 @@ export function CartProvider({ children }) {
 
   function getItemQuantity(id) {
     const quantity = cartItems.find((cartItem) => cartItem.id === id)?.quantity;
-    console.log(quantity);
 
     if (quantity === undefined) {
       return 0;
@@ -147,7 +157,6 @@ export function CartProvider({ children }) {
         removeItemFromInventory(item);
         notifyIncrease();
       }
-      console.log('$' + JSON.stringify(cartItems));
     }
   }
 
@@ -185,6 +194,16 @@ export function CartProvider({ children }) {
     return totalCost;
   }
 
+  function clearCart() {
+    setCartItems([]);
+  }
+
+  function returnAllItemsToInv() {
+    cartItems.map((cartItem) => {
+      deleteFromCart(cartItem);
+    });
+  }
+
   const contextValue = {
     itemsHeldInCart: cartItems,
     totalItemsInCart,
@@ -193,6 +212,8 @@ export function CartProvider({ children }) {
     removeOneFromCart,
     deleteFromCart,
     getTotalCost,
+    clearCart,
+    returnAllItemsToInv,
   };
 
   return (
