@@ -1,0 +1,10 @@
+
+.filter-button {
+    border: 1px solid grey;
+    border-radius: 0.25em;
+    padding: 0.125em 0.5em;
+    margin: 0.5rem;
+}
+.filter-button.active {
+    background-color: lightblue;
+}
