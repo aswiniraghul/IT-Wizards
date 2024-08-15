@@ -1,10 +1,11 @@
 import { createContext, useEffect, useState } from 'react';
 import { getItems } from '../services/viewItemsService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HOST_NAME } from '../env/config';
+
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
@@ -20,6 +21,7 @@ export const CartContext = createContext({
 export const ItemDetails = () => {
   const { id } = useParams(id);
   const [item, setItems] = useState([]);
+
 
   useEffect(() => {
     fetchItems();
@@ -53,7 +55,8 @@ export function CartProvider({ children }) {
     price: '',
     currentInventory: '',
   });
-
+  
+  const notifyLoginRequired = () => toast.error('Please login to add items to cart. Redirecting to log in page.')
   const notifyAdd = () => toast.success('Item added to cart');
   const notifyIncrease = () => toast.info('Increased amount in cart');
   const notifyDecrease = () => toast.info('Decreased amount in cart');
@@ -121,7 +124,17 @@ export function CartProvider({ children }) {
     return quantity;
   }
 
+  const isLoggedIn = () => localStorage.getItem('user');
+
   async function addOneToCart(item) {
+    if (!isLoggedIn()) {
+      notifyLoginRequired();
+      setTimeout(() => {
+        window.location.href = '/api/users/signin'; 
+      }, 4000);
+      return;
+    }
+
     const quantity = getItemQuantity(item.id);
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;

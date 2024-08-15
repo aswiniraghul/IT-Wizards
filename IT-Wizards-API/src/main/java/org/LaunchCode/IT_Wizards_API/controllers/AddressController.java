@@ -25,11 +25,6 @@ public class AddressController {
     Address newAddress(@RequestBody Address newAddress) {
         return addressRepository.save(newAddress);
     }
-
-    @GetMapping()
-    List<Address> getAllAddresses() {
-        return addressRepository.findAll();
-    }
   
     @GetMapping("/{id}")
     Address getAddressById(@PathVariable Long id) {

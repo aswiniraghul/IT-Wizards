@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlaidLinkButton from '../components/PlaidLinkButton';
 import { CartContext } from '../components/CartContext';
@@ -7,13 +7,47 @@ import RightSidebar from '../components/RightSidebar';
 import AddressForm from '../components/AddressForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
-const CheckoutPage = () => {
+const BASEAPIURL = "http://localhost:8080";
+
+const CheckoutPage = ({userId}) => {
   const cart = useContext(CartContext);
   const navigate = useNavigate();
+  const [address, setAddress] = useState({
+    address: '',
+    city: '',
+    state: '',
+    zipcode: ''
+  });
 
-  const notifyOrderSubmitted = () =>
+  const addressChange = (updatedAddress) => {
+    setAddress(updatedAddress);
+  };
+
+  const submitOrder = async () => {
+    const order = {
+      user: {
+        id: userId
+      },
+      address,
+      cartItems: cart.itemsHeldInCart.map(item => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      }))
+    };
+
+  try {
+    await axios.post(`${BASEAPIURL}/orders`, order);
+    cart.clearCart();
+    navigate('/');
     toast.success('Your order has successfully been submitted!');
+  } catch (error) {
+    toast.error('There was an error submitting your order.');
+  }
+};
 
   return (
     <div className="flex flex-row h-[calc(100vh-5rem)]">
@@ -101,24 +135,14 @@ const CheckoutPage = () => {
               </div>
             </div>
             <div className="px-20 my-6 pb-4 border-b-4 border-green-400 w-full">
-              <AddressForm />
+              <AddressForm address={address} onAddressChange={setAddress}/>
             </div>
             <div className="ml-8">
               <PlaidLinkButton />
             </div>
             <div className="flex justify-center ">
-              <button
-                onClick={() => {
-                  {
-                    cart.clearCart();
-                    navigate('/');
-                    notifyOrderSubmitted();
-                  }
-                }}
-                className="w-fit my-6 py-2 font-extrabold border-4 align-middle border-purple-700 rounded-xl px-2"
-              >
-                Confirm Purchase
-              </button>
+              <button onClick={submitOrder} className="w-fit my-6 py-2 font-extrabold border-4 align-middle border-purple-700 rounded-xl px-2"
+              >Confirm Purchase</button>
             </div>
           </div>
         </div>

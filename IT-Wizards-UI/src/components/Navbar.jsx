@@ -98,9 +98,19 @@ const UserNavbar = () => {
                   <NavLink to="/wishlist" className={linkClass}>
                     Wishlist
                   </NavLink>
+                  <button
+                      className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
+                      onClick={() => setOpen(true)}
+                    >
+                      <ShoppingCart width={40} />
+                    </button>
+                    <div className="text-green-600 font-bold text-sm">
+                      {cart.totalItemsInCart()}
+                    </div>
                   </>
+                  
                 )}
-                {userRole !== 'admin' && (
+                {/* {userRole !== 'admin' && (
                   <>
                     <button
                       className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
@@ -112,7 +122,7 @@ const UserNavbar = () => {
                       {cart.totalItemsInCart()}
                     </div>
                   </>
-                )}
+                )} */}
               </div>
             </div>
 

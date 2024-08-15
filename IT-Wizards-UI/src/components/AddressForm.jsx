@@ -1,6 +1,15 @@
 import React from 'react';
 
-const ShippingForm = () => {
+const AddressForm = ({ address, onAddressChange}) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    onAddressChange(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+
   return (
     <form>
       <div className="mb-4">
@@ -9,12 +18,12 @@ const ShippingForm = () => {
         </label>
         <input
           id="street"
-          name="street"
+          name="address"
           className="border rounded w-full py-2 px-3"
-          rows="1"
           placeholder="Street Address"
           required
-          onChange={(e) => onInputChange(e)}
+          value={address.address}
+          onChange={handleInputChange}
         ></input>
       </div>
 
@@ -27,7 +36,8 @@ const ShippingForm = () => {
             className="border rounded w-fit py-2 px-3 mb-2"
             placeholder="City"
             required
-            onChange={(e) => onInputChange(e)}
+            value={address.city}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -38,7 +48,8 @@ const ShippingForm = () => {
             name="state"
             className="border rounded w-fit py-2 px-3"
             placeholder="State"
-            onChange={(e) => onInputChange(e)}
+            value={address.state}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -49,7 +60,8 @@ const ShippingForm = () => {
             name="zipcode"
             className="border rounded w-fit py-2 px-3"
             placeholder="Zipcode"
-            onChange={(e) => onInputChange(e)}
+            value={address.zipcode}
+            onChange={handleInputChange}
           />
         </div>
       </div>
@@ -57,4 +69,4 @@ const ShippingForm = () => {
   );
 };
 
-export default ShippingForm;
+export default AddressForm;

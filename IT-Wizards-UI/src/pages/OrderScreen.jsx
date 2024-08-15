@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
+import { getOrders } from '../services/orderService';
 
-const OrderScreen = () => {
+const OrderScreen = ({userId}) => {
     const [orders,setOrders] = useState([]);
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const data = await getOrders();
-                setOrders();
+                const data = await getOrders(userId);
+                setOrders(data);
             }catch (error) {
                 console.error('Failed to fetch orders', error)
             }
         };
         fetchOrders();
-    }, []);
+    }, [userId]);
 
   return (
     <div className="container mx-auto py-8">
