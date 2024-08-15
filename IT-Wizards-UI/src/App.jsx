@@ -18,6 +18,7 @@ import EditProfile from './components/profile/EditProfile';
 import Signup from './components/authentication/Signup';
 import Login from './components/authentication/Login';
 import CheckoutPage from './pages/CheckoutPage';
+import OrderScreen from './pages/OrderScreen';
 
 const App = () => {
 
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/api/users/admin-signup" element={<Signup register="admin" />} />
         <Route path="/api/users/signin" element={<Login />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/orders" element={<OrderScreen />} />
       </Route>
     )
   );

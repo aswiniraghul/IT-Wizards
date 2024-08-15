@@ -19,14 +19,15 @@ public class OrdersController {
     Orders newOrder(@RequestBody Orders newOrder) {
         return ordersRepository.save(newOrder);
     }
-    @GetMapping()
-    List<Orders> getAllOrders() {
-        return ordersRepository.findAll();
+
+    @GetMapping("/{userId}")
+    public List<Orders> getOrdersByUserId(@PathVariable Long userId) {
+        return ordersRepository.findByUserId(userId);
     }
 
-    @GetMapping("/{id}")
-    Orders getOrderById(@PathVariable Long id) {
-        return ordersRepository.findById(id)
+    @GetMapping("/{userId}/{id}")
+    public Orders getOrderById(@PathVariable Long userId, @PathVariable Long id) {
+        return ordersRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new OrdersNotFoundException(id));
     }
 

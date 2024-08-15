@@ -91,9 +91,14 @@ const UserNavbar = () => {
                   </>
                 )}
                 {userRole === 'user' && (
+                  <>
+                  <NavLink to="/orders" className={linkClass}>
+                    Orders
+                  </NavLink>
                   <NavLink to="/wishlist" className={linkClass}>
                     Wishlist
                   </NavLink>
+                  </>
                 )}
                 {userRole !== 'admin' && (
                   <>
