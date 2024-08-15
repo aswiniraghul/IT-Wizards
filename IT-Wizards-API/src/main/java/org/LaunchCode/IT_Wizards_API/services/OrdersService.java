@@ -47,20 +47,25 @@ public class OrdersService {
                 .orElseThrow(() -> new OrdersNotFoundException(id));
     }
 
-    public CartItem addCartItemToOrder(Long orderId, CartItem cartItem) {
-        Orders order = ordersRepository.findById(orderId)
-                .orElseThrow(() -> new OrdersNotFoundException(orderId));
-        cartItem.setOrder(order);
+    public CartItem addCartItemToUserCart(Long userId, CartItem newCartItem) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(userRepository.findById(userId)
+                            .orElseThrow(() -> new UserNotFoundException(userId)));
+                    return cartRepository.save(newCart);
+                });
 
-        return cartItemRepository.save(cartItem);
+        newCartItem.setCart(cart);
+        return cartItemRepository.save(newCartItem);
     }
     public List<CartItem> getAllCartItems() {
-        return cartItemRepository.findAll(); // Fetch all cart items
+        return cartItemRepository.findAll();
     }
 
     public CartItem getCartItemById(Long id) {
         return cartItemRepository.findById(id)
-                .orElseThrow(() -> new CartItemNotFoundException(id)); // Fetch cart item by ID
+                .orElseThrow(() -> new CartItemNotFoundException(id));
     }
 
     public CartItem linkCartItemToOrder(Long cartItemId, Long orderId) {

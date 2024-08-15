@@ -139,6 +139,7 @@ const UserNavbar = () => {
                   <div className="">
                     <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
                       {cart.itemsHeldInCart.map((item) => (
+                        <React.Fragment key={item.id}>
                         <>
                           <div key={item.id}>
                             <img
@@ -176,6 +177,7 @@ const UserNavbar = () => {
                             </button>
                           </div>
                         </>
+                        </React.Fragment>
                       ))}
                     </div>
 

@@ -1,11 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
-import org.LaunchCode.IT_Wizards_API.exceptions.AddressNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.OrdersNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.UserNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Orders;
 import org.LaunchCode.IT_Wizards_API.services.OrdersService;
-import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +22,12 @@ public class OrdersController {
         return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
-    @GetMapping()
+    @GetMapping("/{userId}")
         public List<Orders> getOrdersByUserId(@PathVariable Long userId) {
         return ordersService.getOrdersByUserId(userId);
 }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}/{id}")
     public Orders getOrderById(@PathVariable Long userId, @PathVariable Long id) {
         return ordersService.getOrderById(userId, id);
     }

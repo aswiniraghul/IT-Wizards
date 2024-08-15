@@ -28,7 +28,7 @@ const CheckoutPage = () => {
   };
 
   const submitOrder = async () => {
-    if (!userId || !address || cart.itemsHeldInCart.length === 0) {
+    if (!userId || !address.address) {
       toast.error('Missing information to complete order.');
       return;
     }
@@ -37,7 +37,7 @@ const CheckoutPage = () => {
         id: userId
       },
       address: {
-        id: address.id || null,
+        id: address.id,
         address: address.address,
         city: address.city,
         state: address.state,
@@ -70,14 +70,14 @@ const CheckoutPage = () => {
         <div className="container px-20 text-indigo-700">
           <div className=" bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
             {cart.itemsHeldInCart.map((item) => (
-              <div className="grid grid-flow-row justify-items-center items-center auto-rows-min grid-cols-2 border-b-4 border-green-400">
-                <div>
-                  <img
-                    className="items-center border-4 rounded-xl border-purple-700 size-56 justify-center "
-                    src={cauldron}
-                  />
-                </div>
-                <div className="container mb-10 mt-10" key={item.id}>
+               <div key={item.id} className="grid grid-flow-row justify-items-center items-center auto-rows-min grid-cols-2 border-b-4 border-green-400">
+               <div>
+                 <img
+                   className="items-center border-4 rounded-xl border-purple-700 size-56 justify-center "
+                   src={cauldron}
+                 />
+               </div>
+               <div className="container mb-10 mt-10">
                   <h1 className="text-xl underline font-extrabold">
                     {item.name}
                   </h1>
@@ -142,12 +142,11 @@ const CheckoutPage = () => {
                   className="border rounded w-full py-2 px-3"
                   rows="3"
                   placeholder="Last Name"
-                  onChange={(e) => onInputChange(e)}
                 ></input>
               </div>
             </div>
             <div className="px-20 my-6 pb-4 border-b-4 border-green-400 w-full">
-              <AddressForm address={address} onAddressChange={setAddress}/>
+              <AddressForm address={address} onAddressChange={addressChange}/>
             </div>
             <div className="ml-8">
               <PlaidLinkButton />

@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getOrders } from '../services/orderService';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 
 
-const OrderScreen = ({userId}) => {
+const OrderScreen = () => {
     const [orders,setOrders] = useState([]);
+    const { userId } = useParams();
 
     useEffect(() => {
-      if (!userId) {
-        toast.error('User ID is missing.');
-        return;
-      }
         const fetchOrders = async () => {
             try {
                 const data = await getOrders(userId);
@@ -21,7 +18,9 @@ const OrderScreen = ({userId}) => {
                 console.error('Failed to fetch orders', error)
             }
         };
+        if (userId) {
         fetchOrders();
+        }
     }, [userId]);
 
   return (
