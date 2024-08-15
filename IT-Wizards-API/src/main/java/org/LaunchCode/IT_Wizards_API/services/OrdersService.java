@@ -1,11 +1,8 @@
 package org.LaunchCode.IT_Wizards_API.services;
 
-import org.LaunchCode.IT_Wizards_API.exceptions.CartNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.OrdersNotFoundException;
-import org.LaunchCode.IT_Wizards_API.models.Cart;
-import org.LaunchCode.IT_Wizards_API.models.Orders;
-import org.LaunchCode.IT_Wizards_API.repository.CartRepository;
-import org.LaunchCode.IT_Wizards_API.repository.OrdersRepository;
+import org.LaunchCode.IT_Wizards_API.exceptions.*;
+import org.LaunchCode.IT_Wizards_API.models.*;
+import org.LaunchCode.IT_Wizards_API.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +17,25 @@ public class OrdersService {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
     public Orders createOrder (Orders newOrder) {
-        Cart userCart = cartRepository.findByUserId(newOrder.getUser().getId())
-                .orElseThrow(() -> new CartNotFoundException(newOrder.getUser().getId()));
-        newOrder.getCartItems().addAll(userCart.getCartItems());
+        User user = userRepository.findById(newOrder.getUser().getId())
+                .orElseThrow(() ->new UserNotFoundException(newOrder.getUser().getId()));
+                newOrder.setUser(user);
+        Address address = addressRepository.findById(newOrder.getAddress().getId())
+                .orElseThrow(()-> new AddressNotFoundException(newOrder.getAddress().getId()));
+                newOrder.setAddress(address);
+        Cart userCart = cartRepository.findByUserId(user.getId())
+                .orElseThrow(()-> new CartNotFoundException(user.getId()));
+                newOrder.getCartItems().addAll(userCart.getCartItems());
         return ordersRepository.save(newOrder);
     }
 
@@ -33,5 +45,32 @@ public class OrdersService {
     public Orders getOrderById(Long userId, Long id) {
         return ordersRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new OrdersNotFoundException(id));
+    }
+
+    public CartItem addCartItemToOrder(Long orderId, CartItem cartItem) {
+        Orders order = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new OrdersNotFoundException(orderId));
+        cartItem.setOrder(order);
+
+        return cartItemRepository.save(cartItem);
+    }
+    public List<CartItem> getAllCartItems() {
+        return cartItemRepository.findAll(); // Fetch all cart items
+    }
+
+    public CartItem getCartItemById(Long id) {
+        return cartItemRepository.findById(id)
+                .orElseThrow(() -> new CartItemNotFoundException(id)); // Fetch cart item by ID
+    }
+
+    public CartItem linkCartItemToOrder(Long cartItemId, Long orderId) {
+        Orders order = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new OrdersNotFoundException(orderId));
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+
+        cartItem.setOrder(order);
+        return cartItemRepository.save(cartItem);
     }
 }

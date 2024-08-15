@@ -1,5 +1,6 @@
+
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PlaidLinkButton from '../components/PlaidLinkButton';
 import { CartContext } from '../components/CartContext';
 import cauldron from '../assets/images/cauldron.png';
@@ -11,7 +12,8 @@ import axios from 'axios';
 
 const BASEAPIURL = "http://localhost:8080";
 
-const CheckoutPage = ({userId}) => {
+const CheckoutPage = () => {
+  const { userId } = useParams();
   const cart = useContext(CartContext);
   const navigate = useNavigate();
   const [address, setAddress] = useState({
@@ -26,11 +28,21 @@ const CheckoutPage = ({userId}) => {
   };
 
   const submitOrder = async () => {
+    if (!userId || !address || cart.itemsHeldInCart.length === 0) {
+      toast.error('Missing information to complete order.');
+      return;
+    }
     const order = {
       user: {
         id: userId
       },
-      address,
+      address: {
+        id: address.id || null,
+        address: address.address,
+        city: address.city,
+        state: address.state,
+        zipcode: address.zipcode
+      },
       cartItems: cart.itemsHeldInCart.map(item => ({
         id: item.id,
         name: item.name,

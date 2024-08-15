@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { getOrders } from '../services/orderService';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+
 
 const OrderScreen = ({userId}) => {
     const [orders,setOrders] = useState([]);
 
     useEffect(() => {
+      if (!userId) {
+        toast.error('User ID is missing.');
+        return;
+      }
         const fetchOrders = async () => {
             try {
                 const data = await getOrders(userId);
@@ -18,8 +25,13 @@ const OrderScreen = ({userId}) => {
     }, [userId]);
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-4">Your Orders</h1>
+    <section className="w-full border-b-4 border-black overflow-y-auto">
+      <section className="bg-purple-400">
+        <div className="container bg-purple-400 py-12 pb-36 px-12">
+          <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
+            <h2 className="text-5xl text-center font-bold underline mb-2">
+              Your Orders
+            </h2>
       {orders.length === 0 ? (
         <p>No orders.</p>
       ) : (
@@ -34,6 +46,9 @@ const OrderScreen = ({userId}) => {
         </ul>
       )}
     </div>
+    </div>
+    </section>
+    </section>
   );
   
 }
