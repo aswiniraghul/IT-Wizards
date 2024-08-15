@@ -31,7 +31,7 @@ const ItemFilter = ({filters = [], callbackFunc, setValue = []}) => {
   
   return (
     <div>
-      <h2>Select Categories to Filter Results</h2>
+      <h2>By Category</h2>
       <button 
         className={`filter-button${setValue.length === filters.length ? ' active ' : ''
       }`}
