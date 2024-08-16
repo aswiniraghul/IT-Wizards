@@ -26,21 +26,25 @@ const ItemDisplay = ({ searchTerm }) => {
 
   const fetchWishlist = async () => {
     try {
-        const data = await getWishlist();
+        const data = await getWishlist(userId);
         setWishlist(data);
     }catch (error) {
         console.error('Error fetching wishlist', error);
     }
 };
 
-const inWishlist = (itemId) => {
-  return wishlist.some(item => item.item.id === itemId);
-};
+// const inWishlist = (itemId) => {
+//   for (let i = 0; i<wishlist.length; i++) {
+//       if (wishlist[i].item_id === itemId) {
+//           return true;
+//       }
+//   }
+//   return false;
+// };
 
 const  addToWishlist= async (itemId) => {
   try {
-    console.log(itemId);
-      await addItemToWishlist(itemId);
+      await addItemToWishlist(userId, itemId);
       fetchWishlist();
   } catch (error) {
       console.error('Error adding item from wishlist', error);
@@ -50,8 +54,7 @@ const  addToWishlist= async (itemId) => {
 const removeFromWishlist = async (itemId) => {
 
   try { 
-    console.log(itemId);
-      await removeItemFromWishlist(itemId);
+      await removeItemFromWishlist(userId, itemId);
       fetchWishlist();
 
   } catch (error) {
@@ -101,18 +104,14 @@ const removeFromWishlist = async (itemId) => {
                           <div className="flex items-center justify-center">
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
-                          {inWishlist(item.id) ? (
                             <button
                             className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
                             onClick={()=> removeFromWishlist(item.id)}
                             > Remove From Wishlist </button>
-                          ) : (
                             <button
                             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
                             onClick={()=> addToWishlist(item.id)}
                             > Add To Wishlist</button>
-                          )
-                        }
 
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">

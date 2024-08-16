@@ -23,15 +23,15 @@ const fetchWishlist = async () => {
     }
 };
 
-const handleRemoveFromWishlist = async (itemId) => {
-    try { 
-        console.log(itemId.id);
-        await removeItemFromWishlist(itemId.id);
-        fetchWishlist();
-    } catch (error) {
-        console.error('Error removing item from wishlist', error);
-    }
-  };
+// const handleRemoveFromWishlist = async (itemId) => {
+//     try { 
+//         console.log(itemId);
+//         await removeItemFromWishlist(itemId);
+//         fetchWishlist();
+//     } catch (error) {
+//         console.error('Error removing item from wishlist', error);
+//     }
+//   };
 
   return (
 
@@ -42,20 +42,20 @@ const handleRemoveFromWishlist = async (itemId) => {
           <h2 className="text-3xl text-center font-semibold mb-2">Wishlist</h2>
           <div className="grid grid-cols-3 md:grid-cols-3 gap-6">
           {wishlist.map((item) => (
-                <div key={item.item.id} className="mb-2 ml-2 mr-2 hover:scale-105">
+                <div key={item.id} className="mb-2 ml-2 mr-2 hover:scale-105">
                   <img src={cauldron} className="size-72" alt="Item"/>
                   <div className="flex items-center justify-center">
-                    {item.item.name}
+                    {item.name}
                   </div>
                   <div className="flex items-center justify-center">
-                    ${(Math.round(item.item.price * 100) / 100).toFixed(2)}
+                    ${(Math.round(item.price * 100) / 100).toFixed(2)}
                   </div>
-                  <button
+                  {/* <button
                     className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
-                    onClick={() => handleRemoveFromWishlist(item.item.id)}
+                    onClick={() => handleRemoveFromWishlist(item.id)}
                   >
                     Remove From Wishlist
-                    </button>
+                    </button> */}
                             </div>
                              ))}
                         </div>
