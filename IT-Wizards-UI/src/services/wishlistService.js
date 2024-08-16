@@ -16,6 +16,7 @@ export const getWishlist = async () => {
 
 export const addItemToWishlist = async (itemId) => {
     try {
+        console.log(itemId);
         const response = await axios.post(`${BASEAPIURL}/wishlist`)
         return response.data;
     } catch (error) {
@@ -25,7 +26,7 @@ export const addItemToWishlist = async (itemId) => {
 
 export const removeItemFromWishlist = async (itemId) => {
     try {
-        await axios.delete(`${BASEAPIURL}/wishlist`);
+        await axios.delete(`${BASEAPIURL}/wishlist/${itemId}`);
     }catch (error) {
         console.error("There was an error removing item from wishlist.", error);
         throw error;

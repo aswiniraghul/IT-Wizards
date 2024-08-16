@@ -39,6 +39,7 @@ const inWishlist = (itemId) => {
 
 const  addToWishlist= async (itemId) => {
   try {
+    console.log(itemId);
       await addItemToWishlist(itemId);
       fetchWishlist();
   } catch (error) {
@@ -47,9 +48,12 @@ const  addToWishlist= async (itemId) => {
 };
 
 const removeFromWishlist = async (itemId) => {
+
   try { 
+    console.log(itemId);
       await removeItemFromWishlist(itemId);
       fetchWishlist();
+
   } catch (error) {
       console.error('Error removing item from wishlist', error);
   }
