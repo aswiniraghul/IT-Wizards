@@ -1,9 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
-import org.LaunchCode.IT_Wizards_API.exceptions.WishlistNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Wishlist;
 import org.LaunchCode.IT_Wizards_API.repository.WishlistRepository;
-import org.LaunchCode.IT_Wizards_API.services.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,20 +12,21 @@ import java.util.List;
 public class WishlistController {
 
     @Autowired
-    private WishlistService wishlistService;
+    private WishlistRepository wishlistRepository;
 
-    @GetMapping("/{userId}")
-    public List<Wishlist> getWishlist(@PathVariable Long userId) {
-        return wishlistService.getWishlistByUserId(userId);
+    @GetMapping()
+    public List<Wishlist> getWishlist() {
+        return wishlistRepository.findAll();
     }
 
-    @PostMapping("/{userId}/{itemId}")
-    public Wishlist addItem(@PathVariable Long userId, @PathVariable Long itemId) {
-        return wishlistService.addItemToWishlist(userId, itemId);
+    @PostMapping()
+    public Wishlist addItemToWishlist(@RequestBody Wishlist wishlist) {
+        return wishlistRepository.save(wishlist);
     }
 
-    @DeleteMapping("/{userId}/{itemId}")
-    public void removeItem(@PathVariable Long userId, @PathVariable Long itemId) {
-        wishlistService.removeItemFromWishlist(userId, itemId);
+    @DeleteMapping("/{itemId}")
+    public void removeItemFromWishlist(@PathVariable Long itemId) {
+        wishlistRepository.deleteByItemId(itemId);
     }
+
 }

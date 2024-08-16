@@ -75,7 +75,7 @@ const UserNavbar = () => {
                   </>
                 )}
                 {userRole === 'user' && (
-                  <NavLink to="/wishlist/${userId}" className={linkClass}>
+                  <NavLink to="/wishlist" className={linkClass}>
                     Wishlist
                   </NavLink>
                 )}

@@ -39,7 +39,7 @@ const App = () => {
         <Route path="/api/users/signup" element={<Signup />} />
         <Route path="/api/users/admin-signup" element={<Signup register="admin" />} />
         <Route path="/api/users/signin" element={<Login />} />
-        <Route path="/wishlist/:userId" element={<WishlistPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
       </Route>
     )
   );

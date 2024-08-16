@@ -9,7 +9,6 @@ const ItemDisplay = ({ searchTerm }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
   const [wishlist, setWishlist] = useState([]);
-  const userId = '${userId}';
 
   useEffect(() => {
     fetchItems();
@@ -27,25 +26,20 @@ const ItemDisplay = ({ searchTerm }) => {
 
   const fetchWishlist = async () => {
     try {
-        const data = await getWishlist(userId);
+        const data = await getWishlist();
         setWishlist(data);
     }catch (error) {
         console.error('Error fetching wishlist', error);
     }
 };
 
-  const inWishlist = (itemId) => {
-    for (let i = 0; i<wishlist.length; i++) {
-        if (wishlist[i].item_id === itemId) {
-            return true;
-        }
-    }
-    return false;
+const inWishlist = (itemId) => {
+  return wishlist.some(item => item.item.id === itemId);
 };
 
 const  addToWishlist= async (itemId) => {
   try {
-      await addItemToWishlist(userId, itemId);
+      await addItemToWishlist(itemId);
       fetchWishlist();
   } catch (error) {
       console.error('Error adding item from wishlist', error);
@@ -54,7 +48,7 @@ const  addToWishlist= async (itemId) => {
 
 const removeFromWishlist = async (itemId) => {
   try { 
-      await removeItemFromWishlist(userId, itemId);
+      await removeItemFromWishlist(itemId);
       fetchWishlist();
   } catch (error) {
       console.error('Error removing item from wishlist', error);
