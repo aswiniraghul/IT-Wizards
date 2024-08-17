@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -9,6 +10,23 @@ const ContactUs = () => {
 
   const sendEmail = (e) => {
     e.preventDefault();
+
+    emailjs
+      .sendForm('service_xrolzrh', 'template_woputc8', form.current, {
+        publicKey: '-UGhv6vIVJOdfvSRq',
+      })
+      .then(
+        () => {
+          setMessage('Message Sent!');
+          setError(null);
+          form.current.reset();
+        },
+        (error) => {
+          setMessage(null);
+          setError('Failed to send message. Please try again later.');
+          console.log('FAILED...', error.text);
+        },
+      );
   };
 
   return (
