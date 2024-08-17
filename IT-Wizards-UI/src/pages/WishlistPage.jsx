@@ -23,15 +23,15 @@ const fetchWishlist = async () => {
     }
 };
 
-// const handleRemoveFromWishlist = async (itemId) => {
-//     try { 
-//         console.log(itemId);
-//         await removeItemFromWishlist(itemId);
-//         fetchWishlist();
-//     } catch (error) {
-//         console.error('Error removing item from wishlist', error);
-//     }
-//   };
+const handleRemoveFromWishlist = async (itemId) => {
+    try { 
+        console.log(itemId);
+        await removeItemFromWishlist(itemId);
+        fetchWishlist();
+    } catch (error) {
+        console.error('Error removing item from wishlist', error);
+    }
+  };
 
   return (
 
@@ -50,12 +50,12 @@ const fetchWishlist = async () => {
                   <div className="flex items-center justify-center">
                     ${(Math.round(item.price * 100) / 100).toFixed(2)}
                   </div>
-                  {/* <button
+                  <button
                     className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
                     onClick={() => handleRemoveFromWishlist(item.id)}
                   >
                     Remove From Wishlist
-                    </button> */}
+                    </button>
                             </div>
                              ))}
                         </div>

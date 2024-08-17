@@ -42,25 +42,25 @@ const ItemDisplay = ({ searchTerm }) => {
 //   return false;
 // };
 
-const  addToWishlist= async (itemId) => {
-  try {
-      await addItemToWishlist(userId, itemId);
-      fetchWishlist();
-  } catch (error) {
-      console.error('Error adding item from wishlist', error);
-  }
-};
+// const  addToWishlist= async (itemId) => {
+//   try {
+//       await addItemToWishlist(userId, itemId);
+//       fetchWishlist();
+//   } catch (error) {
+//       console.error('Error adding item from wishlist', error);
+//   }
+// };
 
-const removeFromWishlist = async (itemId) => {
+// const removeFromWishlist = async (itemId) => {
 
-  try { 
-      await removeItemFromWishlist(userId, itemId);
-      fetchWishlist();
+//   try { 
+//       await removeItemFromWishlist(userId, itemId);
+//       fetchWishlist();
 
-  } catch (error) {
-      console.error('Error removing item from wishlist', error);
-  }
-};
+//   } catch (error) {
+//       console.error('Error removing item from wishlist', error);
+//   }
+// };
 
   const itemsArr = [];
 
@@ -104,15 +104,18 @@ const removeFromWishlist = async (itemId) => {
                           <div className="flex items-center justify-center">
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
+                          {/* {inWishlist(item.id) ? (
                             <button
                             className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
                             onClick={()=> removeFromWishlist(item.id)}
                             > Remove From Wishlist </button>
+                          ) : (
                             <button
                             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
                             onClick={()=> addToWishlist(item.id)}
                             > Add To Wishlist</button>
-
+                          )
+                        } */}
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">
                               <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">

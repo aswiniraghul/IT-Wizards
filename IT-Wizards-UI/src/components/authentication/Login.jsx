@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LOGIN_API } from "../../env/config";
 
-const Login = () => {
+const Login = ({ setAuthenticated }) => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [userName, setUserName] = useState("");
@@ -41,7 +41,6 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(LOGIN_API, { userName, userPassword });
-
       localStorage.setItem("user", JSON.stringify(response.data.userName));
       localStorage.setItem("userRole", JSON.stringify(response.data.loginRole));
 
@@ -49,7 +48,8 @@ const Login = () => {
       setUserName("");
       setPassword("");
       setError("");
-      window.location.reload(navigate("/"));
+      window.location.reload(navigate("/"))
+      setAuthenticated(true);
     } catch (err) {
       setLoading(false);
       setError(err.response.data.message);
