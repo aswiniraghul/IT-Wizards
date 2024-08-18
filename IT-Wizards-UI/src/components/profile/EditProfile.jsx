@@ -23,7 +23,7 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = JSON.parse(localStorage.getItem("user"));
+        const userId = localStorage.getItem("user");
         const response = await axios.get(`${USERS_API}/${userId}`);
         setUserData(response.data);
       } catch (error) {
@@ -55,7 +55,7 @@ const EditProfile = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const userId = JSON.parse(localStorage.getItem("user"));
+      const userId = localStorage.getItem("user");
       await axios.put(`${USERS_API}/${userId}`, userData);
       setLoading(false);
       setSuccess("Changes updated successfully.");
@@ -69,7 +69,7 @@ const EditProfile = () => {
     setShowDeleteModal(false);
     setLoading(true);
     try {
-      const userId = JSON.parse(localStorage.getItem("user"));
+      const userId = localStorage.getItem("user");
       await axios.delete(`${USERS_API}/${userId}`);
       localStorage.removeItem("user");
       setLoading(false);
