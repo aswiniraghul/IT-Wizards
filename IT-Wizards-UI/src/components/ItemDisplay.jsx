@@ -3,6 +3,10 @@ import { getItems } from '../services/viewItemsService';
 import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as filledHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as outlineHeart } from "@fortawesome/free-regular-svg-icons";
+
 import {
   addItemToWishlist,
   removeItemFromWishlist,
@@ -24,8 +28,14 @@ const ItemDisplay = ({ searchTerm }) => {
   }, []);
 
   useEffect(() => {
+    if(userID)
     fetchWishlist();
-  },[userName])
+  },[userID]);
+
+  useEffect(() => {
+    if(userID)
+    fetchWishlist();
+  },[wishlist]);
 
   const fetchItems = async () => {
     try {
@@ -124,14 +134,26 @@ const ItemDisplay = ({ searchTerm }) => {
                     }
 
                     return (
-                      <div>
-                        <div
-                          className="mb-2 ml-2 mr-2 hover:scale-105"
-                          key={item.id}
-                        >
-                          <Link to={`/items/${item.id}`}>
-                            <img src={cauldron} className="size-72"></img>
-                          </Link>
+                      <div key={item.id}>
+                      <div
+                        className="mb-2 ml-2 mr-2 relative hover:scale-105"
+                      >
+                        <Link to={`/items/${item.id}`}>
+                          <img src={cauldron} className="size-72" alt={item.name}></img>
+                          {userName !== null && (
+                            <div
+                              onClick={(e) => {
+                                e.preventDefault();
+                                inWishlist(item.id)
+                                  ? removeFromWishlist(item.id)
+                                  : addToWishlist(item.id);
+                              }}
+                              className="absolute top-2 right-2 cursor-pointer text-3xl"
+                            >
+                              <FontAwesomeIcon icon={inWishlist(item.id) ? filledHeart : outlineHeart} />
+                            </div>
+                          )}
+                        </Link>
 
                           <div className="flex items-center justify-center">
                             {item.name}
@@ -139,18 +161,6 @@ const ItemDisplay = ({ searchTerm }) => {
                           <div className="flex items-center justify-center">
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
-                          {userName !== null ? ( inWishlist(item.id) ? (
-                            <button
-                              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
-                              onClick={() => removeFromWishlist(item.id)}
-                            > Remove From Wishlist </button>
-                          ) : (
-                            <button
-                              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
-                              onClick={() => addToWishlist(item.id)}
-                            > Add To Wishlist</button>
-                          )
-                          ):""}
 
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">
