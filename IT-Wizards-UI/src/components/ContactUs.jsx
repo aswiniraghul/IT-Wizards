@@ -1,12 +1,12 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ContactUs = () => {
   const form = useRef();
-  const [message, setMessage] = React.useState(null);
-  const [error, setError] = React.useState(null);
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   const sendEmail = (e) => {
     e.preventDefault();
