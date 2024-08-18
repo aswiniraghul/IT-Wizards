@@ -42,8 +42,8 @@ const Login = () => {
     try {
       const response = await axios.post(LOGIN_API, { userName, userPassword });
 
-      localStorage.setItem("user", JSON.stringify(response.data.userName));
-      localStorage.setItem("userRole", JSON.stringify(response.data.loginRole));
+      localStorage.setItem("user", response.data.userName);
+      localStorage.setItem("userRole", response.data.loginRole);
 
       setLoading(false);
       setUserName("");

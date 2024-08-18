@@ -3,17 +3,29 @@ import { getItems } from '../services/viewItemsService';
 import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
-import { addItemToWishlist, removeItemFromWishlist, getWishlist } from '../services/wishlistService';
+import {
+  addItemToWishlist,
+  removeItemFromWishlist,
+  getWishlist,
+} from '../services/wishlistService';
+import { getUser } from '../services/userService';
 
 const ItemDisplay = ({ searchTerm }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
+  const [userID, setUserId] = useState();
   const [wishlist, setWishlist] = useState([]);
+
+  const userName = localStorage.getItem('user');
 
   useEffect(() => {
     fetchItems();
-    fetchWishlist();
+    fetchUser();
   }, []);
+
+  useEffect(() => {
+    fetchWishlist();
+  },[userName])
 
   const fetchItems = async () => {
     try {
@@ -24,43 +36,66 @@ const ItemDisplay = ({ searchTerm }) => {
     }
   };
 
-  const fetchWishlist = async () => {
-    try {
-        const data = await getWishlist(userId);
-        setWishlist(data);
-    }catch (error) {
-        console.error('Error fetching wishlist', error);
+  const fetchUser = async () => {
+    if (userName === null) {
+      return;
+    } else {
+      try {
+        const data = await getUser(userName);
+        setUserId(data.id);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
+      }
     }
-};
+  };
 
-// const inWishlist = (itemId) => {
-//   for (let i = 0; i<wishlist.length; i++) {
-//       if (wishlist[i].item_id === itemId) {
-//           return true;
-//       }
-//   }
-//   return false;
-// };
+  const fetchWishlist = async () => {
+    // const id = userID;
+    if (userName === null) {
+      return;
+    } else {
+      try {
+        const data = await getWishlist(userID);
+        setWishlist(data);
+      } catch (error) {
+        console.error('Error fetching wishlist', error);
+      }
+    }
+  };
 
-const  addToWishlist= async (itemId) => {
-  try {
-      await addItemToWishlist(userId, itemId);
+  const inWishlist = (itemId) => {
+    for (let i = 0; i < wishlist.length; i++) {
+      if (wishlist[i].item.id === itemId) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const addToWishlist = async (itemId) => {
+    if (inWishlist(itemId)) {
+      console.log('item already in wishlist');
+      return;
+    } else {
+      // const id = userID;
+      try {
+        await addItemToWishlist(userID, itemId);
+        fetchWishlist();
+      } catch (error) {
+        console.error('Error adding item from wishlist', error);
+      }
+    }
+  };
+
+  const removeFromWishlist = async (itemId) => {
+    // const id = userID;
+    try {
+      await removeItemFromWishlist(userID, itemId);
       fetchWishlist();
-  } catch (error) {
-      console.error('Error adding item from wishlist', error);
-  }
-};
-
-const removeFromWishlist = async (itemId) => {
-
-  try { 
-      await removeItemFromWishlist(userId, itemId);
-      fetchWishlist();
-
-  } catch (error) {
+    } catch (error) {
       console.error('Error removing item from wishlist', error);
-  }
-};
+    }
+  };
 
   const itemsArr = [];
 
@@ -104,14 +139,18 @@ const removeFromWishlist = async (itemId) => {
                           <div className="flex items-center justify-center">
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
+                          {userName !== null ? ( inWishlist(item.id) ? (
                             <button
-                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
-                            onClick={()=> removeFromWishlist(item.id)}
+                              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
+                              onClick={() => removeFromWishlist(item.id)}
                             > Remove From Wishlist </button>
+                          ) : (
                             <button
-                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
-                            onClick={()=> addToWishlist(item.id)}
+                              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
+                              onClick={() => addToWishlist(item.id)}
                             > Add To Wishlist</button>
+                          )
+                          ):""}
 
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">

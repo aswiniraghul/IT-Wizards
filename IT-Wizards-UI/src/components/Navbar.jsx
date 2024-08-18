@@ -9,6 +9,7 @@ import profileImage from '../assets/images/profile.jpg';
 import '../dropdown.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { getUser } from '../services/userService';
 
 const UserNavbar = () => {
   const [open, setOpen] = useState(false);
@@ -19,8 +20,8 @@ const UserNavbar = () => {
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
-    const storedUsername = JSON.parse(localStorage.getItem('user'));
-    const storedRole = JSON.parse(localStorage.getItem('userRole'));
+    const storedUsername = localStorage.getItem('user');
+    const storedRole = localStorage.getItem('userRole');
     setUsername(storedUsername || '');
     setUserRole(storedRole || '');
   }, []);
@@ -34,7 +35,7 @@ const UserNavbar = () => {
     localStorage.removeItem('userRole');
     setUsername('');
     setUserRole('');
-    navigate('/');
+    window.location.reload(navigate('/'));
     setDropdownOpen(false);
   };
 
@@ -75,7 +76,7 @@ const UserNavbar = () => {
                   </>
                 )}
                 {userRole === 'user' && (
-                  <NavLink to="/wishlist" className={linkClass}>
+                  <NavLink to={`/wishlist/${18}`} className={linkClass}>
                     Wishlist
                   </NavLink>
                 )}

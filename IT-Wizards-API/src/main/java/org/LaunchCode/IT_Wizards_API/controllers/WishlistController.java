@@ -33,6 +33,6 @@ public class WishlistController {
 
     @DeleteMapping("/{userId}/{itemId}")
     public void removeItemFromWishlist(@PathVariable Long userId, @PathVariable Long itemId) {
-
+        wishlistService.removeItemFromWishlist(userId, itemId);
     }
 }
