@@ -24,7 +24,7 @@ const WishlistPage = () => {
 
   const fetchUser = async () => {
     try {
-      const data = await getUser(trimmedUserName);
+      const data = await getUser(userName);
       console.log(data.id);
       setUserId(data.id);
     } catch (error) {
