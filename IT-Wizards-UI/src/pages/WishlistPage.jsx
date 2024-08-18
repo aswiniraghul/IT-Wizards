@@ -11,7 +11,6 @@ const WishlistPage = () => {
   const [userID, setUserId] = useState(null);
 
   const userName = localStorage.getItem('user');
-  const trimmedUserName = userName !== null ? userName.replaceAll('"', '') : '';
 
   useEffect(() => {
     fetchUser();

@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LOGIN_API } from "../../env/config";
 
-const Login = () => {
+const Login = ({ setAuthenticated }) => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [userName, setUserName] = useState("");
@@ -49,7 +49,8 @@ const Login = () => {
       setUserName("");
       setPassword("");
       setError("");
-      window.location.reload(navigate("/"));
+      window.location.reload(navigate("/"))
+      setAuthenticated(true);
     } catch (err) {
       setLoading(false);
       setError(err.response.data.message);
