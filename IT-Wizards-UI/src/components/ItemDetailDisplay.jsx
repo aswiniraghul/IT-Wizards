@@ -34,7 +34,7 @@ const ItemDetailsDisplay = (results) => {
 
   return (
     <section className="bg-purple-400">
-      <div className="container bg-purple-400 m-auto max-w-6xl pt-32 pb-56">
+      <div className="container bg-purple-400 m-auto max-w-6xl pt-16 pb-56">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">
             Item Details
@@ -43,7 +43,7 @@ const ItemDetailsDisplay = (results) => {
           <div className="container m-auto max-w-5xl py-12 flex items-center justify-center">
             <div className="table-fixed border-separate border-spacing-6 m-auto border text-left border-purple-600">
               <div className="grid grid-cols-2 gap-6 ">
-                <div classname="flex items-center justify-center">
+                <div className="flex items-center justify-center">
                   <img
                     src={cauldron}
                     className="max-w-xs flex items-center justify-center"
