@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { ShoppingCart } from 'phosphor-react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { ShoppingCart, Heart } from 'phosphor-react';
 import Modal from './Modal';
 import { CartContext } from './CartContext';
 import cauldron from '../assets/images/cauldron.png';
@@ -8,6 +8,7 @@ import profileImage from '../assets/images/profile.jpg';
 import '../dropdown.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { getUser } from '../services/userService';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -16,24 +17,42 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
-    const storedUsername = JSON.parse(localStorage.getItem('user'));
-    const storedRole = JSON.parse(localStorage.getItem('userRole'));
+    const storedUsername = localStorage.getItem('user');
+    const storedRole = localStorage.getItem('userRole');
     setUsername(storedUsername || '');
     setUserRole(storedRole || '');
+    fetchUser();
   }, []);
+
+  const userName = localStorage.getItem('user');
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+
+    const fetchUser = async () => {
+      if (userName === null) {
+        return;
+      } else {
+        try {
+          const data = await getUser(userName);
+          setUserId(data.id);
+        } catch (error) {
+          console.error('Failed to fetch data', error);
+        }
+      }
+    };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userRole');
     setUsername('');
     setUserRole('');
-    navigate('/');
+    window.location.reload(navigate('/'));
     setDropdownOpen(false);
   };
 
@@ -91,7 +110,7 @@ const Navbar = () => {
                   </>
                 )}
                 {userRole === 'user' && (
-                  <NavLink to="/wishlist" className={linkClass}>
+                  <NavLink to={`/wishlist/${userId}`} className={linkClass}>
                     Wishlist
                   </NavLink>
                 )}

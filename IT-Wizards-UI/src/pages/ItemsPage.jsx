@@ -10,7 +10,7 @@ const ItemsPage = () => {
 
   useEffect(() => {
     fetchItems();
-    const storedRole = JSON.parse(localStorage.getItem('userRole'));
+    const storedRole = localStorage.getItem('userRole');
     setUserRole(storedRole || '');
   }, []);
 
