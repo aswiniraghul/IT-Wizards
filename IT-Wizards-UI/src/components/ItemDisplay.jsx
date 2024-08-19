@@ -6,6 +6,9 @@ import { CartContext } from './CartContext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as filledHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as outlineHeart } from "@fortawesome/free-regular-svg-icons";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import {
   addItemToWishlist,
@@ -13,6 +16,9 @@ import {
   getWishlist,
 } from '../services/wishlistService';
 import { getUser } from '../services/userService';
+
+const notifyAddToWishlist = () => toast.success('✨Successfully added to wishlist!✨');
+const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
 
 const ItemDisplay = ({ searchTerm }) => {
   const cart = useContext(CartContext);
@@ -31,11 +37,6 @@ const ItemDisplay = ({ searchTerm }) => {
     if(userID)
     fetchWishlist();
   },[userID]);
-
-  useEffect(() => {
-    if(userID)
-    fetchWishlist();
-  },[wishlist]);
 
   const fetchItems = async () => {
     try {
@@ -91,6 +92,7 @@ const ItemDisplay = ({ searchTerm }) => {
       try {
         await addItemToWishlist(userID, itemId);
         fetchWishlist();
+        notifyAddToWishlist();
       } catch (error) {
         console.error('Error adding item from wishlist', error);
       }
@@ -102,6 +104,7 @@ const ItemDisplay = ({ searchTerm }) => {
     try {
       await removeItemFromWishlist(userID, itemId);
       fetchWishlist();
+      notifyRemovedFromWishlist();
     } catch (error) {
       console.error('Error removing item from wishlist', error);
     }

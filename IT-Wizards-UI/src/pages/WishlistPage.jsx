@@ -5,12 +5,17 @@ import {
 } from '../services/wishlistService';
 import { getUser } from '../services/userService';
 import cauldron from '../assets/images/cauldron.png';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
   const [userID, setUserId] = useState(null);
 
   const userName = localStorage.getItem('user');
+
+  const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
+
 
   useEffect(() => {
     fetchUser();
@@ -46,6 +51,7 @@ const WishlistPage = () => {
     try {
       await removeItemFromWishlist(userID, itemId);
       fetchWishlist();
+      notifyRemovedFromWishlist();
     } catch (error) {
       console.error('Error removing item from wishlist', error);
     }
@@ -56,6 +62,11 @@ const WishlistPage = () => {
       <div className="container bg-purple-400 m-auto max-w-6xl pt-20 pb-64 flex items-center justify-center">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <h2 className="text-3xl text-center font-semibold mb-2">Wishlist</h2>
+          {wishlist.length === 0 ? (
+            <div className="text-center text-xl font-semibold mt-6 text-gray-600">
+            Wishlist is empty
+          </div>
+          ) : (
           <div className="grid grid-cols-3 md:grid-cols-3 gap-6">
             {wishlist.map((item) => (
               <div
@@ -78,6 +89,7 @@ const WishlistPage = () => {
               </div>
             ))}
           </div>
+          )}
         </div>
       </div>
     </section>
