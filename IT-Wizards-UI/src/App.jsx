@@ -18,6 +18,7 @@ import EditProfile from './components/profile/EditProfile';
 import Signup from './components/authentication/Signup';
 import Login from './components/authentication/Login';
 import WishlistPage from './pages/WishlistPage';
+import CheckoutPage from './pages/CheckoutPage';
 
 const App = () => {
 
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/api/users/admin-signup" element={<Signup register="admin" />} />
         <Route path="/api/users/signin" element={<Login />} />
         <Route path="/wishlist/:id" element={<WishlistPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Route>
     )
   );

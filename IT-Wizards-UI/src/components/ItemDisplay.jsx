@@ -1,8 +1,16 @@
 import { useEffect, useState, useContext } from 'react';
-import { getItems } from '../services/viewItemsService';
+import { getItems, getItemCategoryList } from '../services/viewItemsService';
 import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
+import  ItemFilter from './Filter/ItemFilter';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as filledHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as outlineHeart } from "@fortawesome/free-regular-svg-icons";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 import {
   addItemToWishlist,
   removeItemFromWishlist,
@@ -10,9 +18,15 @@ import {
 } from '../services/wishlistService';
 import { getUser } from '../services/userService';
 
-const ItemDisplay = ({ searchTerm }) => {
+const notifyAddToWishlist = () => toast.success('✨Successfully added to wishlist!✨');
+const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
+
+
+const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  // const [categoryFilter, setCategoryFilter] = useState([]);
   const [userID, setUserId] = useState();
   const [wishlist, setWishlist] = useState([]);
 
@@ -21,11 +35,13 @@ const ItemDisplay = ({ searchTerm }) => {
   useEffect(() => {
     fetchItems();
     fetchUser();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
+    if(userID)
     fetchWishlist();
-  },[userName])
+  },[userID]);
 
   const fetchItems = async () => {
     try {
@@ -81,6 +97,7 @@ const ItemDisplay = ({ searchTerm }) => {
       try {
         await addItemToWishlist(userID, itemId);
         fetchWishlist();
+        notifyAddToWishlist();
       } catch (error) {
         console.error('Error adding item from wishlist', error);
       }
@@ -92,31 +109,43 @@ const ItemDisplay = ({ searchTerm }) => {
     try {
       await removeItemFromWishlist(userID, itemId);
       fetchWishlist();
+      notifyRemovedFromWishlist();
     } catch (error) {
       console.error('Error removing item from wishlist', error);
     }
   };
 
   const itemsArr = [];
-
+  const fetchCategories = async () => {
+    try {
+      const data = await getItemCategoryList();
+      setCategories(data);
+    } catch (error) {
+      console.error('Failed to fetch category data', error);
+    }
+  };
   return (
-    <section className="w-full border-t-4 border-b-4 border-black overflow-y-auto">
+    <section className="w-full border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
         <div className="container bg-purple-400 py-12 pb-36 px-12">
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
             <h2 className="text-5xl text-center font-bold underline mb-2">
               Welcome to the Shop
             </h2>
-
+            {/* <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter.length ? categoryFilter : categories} /> */}
             <div className="container m-auto max-w-5xl py-12">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
                   {items.map((item) => {
                     if (
-                      searchTerm.trim() &&
+                      (searchTerm.trim() &&
                       !item.name
                         .toLowerCase()
                         .includes(searchTerm.toLowerCase())
+                      ) || (categoryFilter.length &&
+                        (!item.itemCategory.name ||
+                        !categoryFilter.includes(item.itemCategory.name))
+                      )
                     ) {
                       return;
                     } else {
@@ -124,34 +153,37 @@ const ItemDisplay = ({ searchTerm }) => {
                     }
 
                     return (
-                      <div>
-                        <div
-                          className="mb-2 ml-2 mr-2 hover:scale-105"
-                          key={item.id}
-                        >
-                          <Link to={`/items/${item.id}`}>
-                            <img src={cauldron} className="size-72"></img>
-                          </Link>
-
+                      <div key={item.id}>
+                      <div
+                        className="mb-2 ml-2 mr-2 relative hover:scale-105"
+                      >
+                        <Link to={`/items/${item.id}`}>
+                          <img src={cauldron} className="size-72" alt={item.name}></img>
+                          {userName !== null && (
+                            <div
+                              onClick={(e) => {
+                                e.preventDefault();
+                                inWishlist(item.id)
+                                  ? removeFromWishlist(item.id)
+                                  : addToWishlist(item.id);
+                              }}
+                              className="absolute top-2 right-2 cursor-pointer text-3xl"
+                            >
+                              <FontAwesomeIcon icon={inWishlist(item.id) ? filledHeart : outlineHeart} />
+                            </div>
+                          )}
+                        </Link>
                           <div className="flex items-center justify-center">
                             {item.name}
                           </div>
                           <div className="flex items-center justify-center">
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
-                          {userName !== null ? ( inWishlist(item.id) ? (
-                            <button
-                              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
-                              onClick={() => removeFromWishlist(item.id)}
-                            > Remove From Wishlist </button>
-                          ) : (
-                            <button
-                              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-full mt-3"
-                              onClick={() => addToWishlist(item.id)}
-                            > Add To Wishlist</button>
-                          )
-                          ):""}
-
+                          {item.itemCategory?.name && (
+                            <div className="flex items-center justify-center">
+                              <span className="item-category">{item.itemCategory.name}</span>
+                            </div>
+                          )}
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">
                               <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
