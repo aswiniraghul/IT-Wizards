@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { getUser } from '../services/userService';
 
-const UserNavbar = () => {
+const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const cart = useContext(CartContext);
@@ -36,7 +36,7 @@ const UserNavbar = () => {
   };
 
     const fetchUser = async () => {
-      if (userName === '') {
+      if (userName === null) {
         return;
       } else {
         try {
@@ -236,4 +236,4 @@ const UserNavbar = () => {
   );
 };
 
-export default UserNavbar;
+export default Navbar;

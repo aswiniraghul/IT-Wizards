@@ -23,12 +23,16 @@ const WishlistPage = () => {
   }, [userID])
 
   const fetchUser = async () => {
-    try {
-      const data = await getUser(userName);
-      console.log(data.id);
-      setUserId(data.id);
-    } catch (error) {
-      console.error('Failed to fetch data', error);
+    if (userID === null) {
+      return
+    } else {
+      try {
+        const data = await getUser(userName);
+        console.log(data.id);
+        setUserId(data.id);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
+      }
     }
   };
 

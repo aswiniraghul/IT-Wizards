@@ -9,7 +9,7 @@ const HomePage = () => {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   return (
-    <div>
+    <div onClick={()=> setResults([])}>
       <SearchBar
         setSearchTerm={setSearchTerm}
         setResults={setResults}
