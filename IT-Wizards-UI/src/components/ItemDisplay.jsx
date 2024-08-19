@@ -4,17 +4,44 @@ import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
 import  ItemFilter from './Filter/ItemFilter';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as filledHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as outlineHeart } from "@fortawesome/free-regular-svg-icons";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+import {
+  addItemToWishlist,
+  removeItemFromWishlist,
+  getWishlist,
+} from '../services/wishlistService';
+import { getUser } from '../services/userService';
+
+const notifyAddToWishlist = () => toast.success('✨Successfully added to wishlist!✨');
+const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
+
 
 const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   // const [categoryFilter, setCategoryFilter] = useState([]);
+  const [userID, setUserId] = useState();
+  const [wishlist, setWishlist] = useState([]);
+
+  const userName = localStorage.getItem('user');
 
   useEffect(() => {
     fetchItems();
+    fetchUser();
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if(userID)
+    fetchWishlist();
+  },[userID]);
 
   const fetchItems = async () => {
     try {
@@ -22,6 +49,69 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       setItems(data);
     } catch (error) {
       console.error('Failed to fetch data', error);
+    }
+  };
+
+  const fetchUser = async () => {
+    if (userName === null) {
+      return;
+    } else {
+      try {
+        const data = await getUser(userName);
+        setUserId(data.id);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
+      }
+    }
+  };
+
+  const fetchWishlist = async () => {
+    // const id = userID;
+    if (userName === null) {
+      return;
+    } else {
+      try {
+        const data = await getWishlist(userID);
+        setWishlist(data);
+      } catch (error) {
+        console.error('Error fetching wishlist', error);
+      }
+    }
+  };
+
+  const inWishlist = (itemId) => {
+    for (let i = 0; i < wishlist.length; i++) {
+      if (wishlist[i].item.id === itemId) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const addToWishlist = async (itemId) => {
+    if (inWishlist(itemId)) {
+      console.log('item already in wishlist');
+      return;
+    } else {
+      // const id = userID;
+      try {
+        await addItemToWishlist(userID, itemId);
+        fetchWishlist();
+        notifyAddToWishlist();
+      } catch (error) {
+        console.error('Error adding item from wishlist', error);
+      }
+    }
+  };
+
+  const removeFromWishlist = async (itemId) => {
+    // const id = userID;
+    try {
+      await removeItemFromWishlist(userID, itemId);
+      fetchWishlist();
+      notifyRemovedFromWishlist();
+    } catch (error) {
+      console.error('Error removing item from wishlist', error);
     }
   };
 
@@ -64,11 +154,25 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
                     return (
                       <div key={item.id}>
-                        <div className="mb-2 ml-2 mr-2 hover:scale-105">
-                          <Link to={`/items/${item.id}`}>
-                            <img src={cauldron} className="size-72"></img>
-                          </Link>
-
+                      <div
+                        className="mb-2 ml-2 mr-2 relative hover:scale-105"
+                      >
+                        <Link to={`/items/${item.id}`}>
+                          <img src={cauldron} className="size-72" alt={item.name}></img>
+                          {userName !== null && (
+                            <div
+                              onClick={(e) => {
+                                e.preventDefault();
+                                inWishlist(item.id)
+                                  ? removeFromWishlist(item.id)
+                                  : addToWishlist(item.id);
+                              }}
+                              className="absolute top-2 right-2 cursor-pointer text-3xl"
+                            >
+                              <FontAwesomeIcon icon={inWishlist(item.id) ? filledHeart : outlineHeart} />
+                            </div>
+                          )}
+                        </Link>
                           <div className="flex items-center justify-center">
                             {item.name}
                           </div>

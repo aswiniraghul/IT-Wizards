@@ -11,7 +11,7 @@ const HomePage = () => {
   const [categoryFilter, setCategoryFilter] = useState([]);
 
   return (
-    <div>
+    <div onClick={()=> setResults([])}>
       <SearchBar
         setSearchTerm={setSearchTerm}
         setResults={setResults}
