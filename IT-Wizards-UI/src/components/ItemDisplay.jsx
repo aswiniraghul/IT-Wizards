@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
-import { getItems } from '../services/viewItemsService';
+import { getItems, getItemCategoryList } from '../services/viewItemsService';
 import cauldron from '../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
+import  ItemFilter from './Filter/ItemFilter';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as filledHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as outlineHeart } from "@fortawesome/free-regular-svg-icons";
@@ -20,9 +21,12 @@ import { getUser } from '../services/userService';
 const notifyAddToWishlist = () => toast.success('✨Successfully added to wishlist!✨');
 const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
 
-const ItemDisplay = ({ searchTerm }) => {
+
+const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  // const [categoryFilter, setCategoryFilter] = useState([]);
   const [userID, setUserId] = useState();
   const [wishlist, setWishlist] = useState([]);
 
@@ -31,6 +35,7 @@ const ItemDisplay = ({ searchTerm }) => {
   useEffect(() => {
     fetchItems();
     fetchUser();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -111,25 +116,36 @@ const ItemDisplay = ({ searchTerm }) => {
   };
 
   const itemsArr = [];
-
+  const fetchCategories = async () => {
+    try {
+      const data = await getItemCategoryList();
+      setCategories(data);
+    } catch (error) {
+      console.error('Failed to fetch category data', error);
+    }
+  };
   return (
-    <section className="w-full border-t-4 border-b-4 border-black overflow-y-auto">
+    <section className="w-full border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
         <div className="container bg-purple-400 py-12 pb-36 px-12">
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
             <h2 className="text-5xl text-center font-bold underline mb-2">
               Welcome to the Shop
             </h2>
-
+            {/* <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter.length ? categoryFilter : categories} /> */}
             <div className="container m-auto max-w-5xl py-12">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
                   {items.map((item) => {
                     if (
-                      searchTerm.trim() &&
+                      (searchTerm.trim() &&
                       !item.name
                         .toLowerCase()
                         .includes(searchTerm.toLowerCase())
+                      ) || (categoryFilter.length &&
+                        (!item.itemCategory.name ||
+                        !categoryFilter.includes(item.itemCategory.name))
+                      )
                     ) {
                       return;
                     } else {
@@ -157,14 +173,17 @@ const ItemDisplay = ({ searchTerm }) => {
                             </div>
                           )}
                         </Link>
-
                           <div className="flex items-center justify-center">
                             {item.name}
                           </div>
                           <div className="flex items-center justify-center">
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
-
+                          {item.itemCategory?.name && (
+                            <div className="flex items-center justify-center">
+                              <span className="item-category">{item.itemCategory.name}</span>
+                            </div>
+                          )}
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">
                               <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">

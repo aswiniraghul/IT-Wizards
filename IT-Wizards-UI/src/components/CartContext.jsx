@@ -13,8 +13,9 @@ export const CartContext = createContext({
   addOneToCart: () => {},
   removeOneFromCart: () => {},
   deleteFromCart: () => {},
-  getTotalCost: () => { },
+  getTotalCost: () => {},
   clearCart: () => { },
+  returnAllItemsToInv: () => { },
 });
 export const ItemDetails = () => {
   const { id } = useParams(id);
@@ -34,18 +35,16 @@ export const ItemDetails = () => {
   };
 };
 
-  const cartFromLocalStorage = JSON.parse(
-    localStorage.getItem('cartItems') || '[]'
-  );
-
+const cartFromLocalStorage = JSON.parse(
+  localStorage.getItem('cartItems') || '[]'
+);
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState(cartFromLocalStorage);
 
-
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems])
+  }, [cartItems]);
 
   const [itemDetails, setItemDetails] = useState({
     name: '',
@@ -59,7 +58,8 @@ export function CartProvider({ children }) {
   const notifyIncrease = () => toast.info('Increased amount in cart');
   const notifyDecrease = () => toast.info('Decreased amount in cart');
   const notifyRemoveAll = () => toast.info('Removed item from cart');
-  const notifyOutOfStock = () => toast.error('Insufficient inventory, item out of stock!');
+  const notifyOutOfStock = () =>
+    toast.error('Insufficient inventory, item out of stock!');
 
   const removeItemFromInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
@@ -74,11 +74,10 @@ export function CartProvider({ children }) {
         currentInventory: itemDetails.currentInventory - 1,
       });
     } else {
-      console.log("Insufficient Inventory")
+      console.log('Insufficient Inventory');
       notifyOutOfStock();
     }
   };
-
 
   const addItemBackToInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
@@ -199,6 +198,12 @@ export function CartProvider({ children }) {
     setCartItems([]);
   }
 
+  function returnAllItemsToInv() {
+    cartItems.map((cartItem) => {
+      deleteFromCart(cartItem);
+    });
+  }
+
   const contextValue = {
     itemsHeldInCart: cartItems,
     totalItemsInCart,
@@ -208,6 +213,7 @@ export function CartProvider({ children }) {
     deleteFromCart,
     getTotalCost,
     clearCart,
+    returnAllItemsToInv,
   };
 
   return (
