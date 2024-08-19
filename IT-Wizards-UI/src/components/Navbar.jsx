@@ -18,17 +18,35 @@ const UserNavbar = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('user');
     const storedRole = localStorage.getItem('userRole');
     setUsername(storedUsername || '');
     setUserRole(storedRole || '');
+    fetchUser();
   }, []);
+
+  const userName = localStorage.getItem('user');
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+
+    const fetchUser = async () => {
+      if (userName === '') {
+        return;
+      } else {
+        try {
+          const data = await getUser(userName);
+          setUserId(data.id);
+        } catch (error) {
+          console.error('Failed to fetch data', error);
+        }
+      }
+    };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -76,7 +94,7 @@ const UserNavbar = () => {
                   </>
                 )}
                 {userRole === 'user' && (
-                  <NavLink to={`/wishlist/${18}`} className={linkClass}>
+                  <NavLink to={`/wishlist/${userId}`} className={linkClass}>
                     Wishlist
                   </NavLink>
                 )}
