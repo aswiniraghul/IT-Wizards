@@ -49,6 +49,8 @@ public class PlaidController {
                     .execute();
             // Send the data to the client
             return response.body();
+
+
         }
     }
 }
