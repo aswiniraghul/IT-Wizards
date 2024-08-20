@@ -155,7 +155,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                     return (
                       <div key={item.id}>
                       <div
-                        className="mb-2 ml-2 mr-2 relative hover:scale-105"
+                        className="mb-2 ml-2 mr-2 z-0 relative hover:scale-105"
                       >
                         <Link to={`/items/${item.id}`}>
                           <img src={cauldron} className="size-72" alt={item.name}></img>
@@ -180,17 +180,17 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
                           <div>
-                         {item.currentInventory < 1 ? (
-                         <div className="text-sm text-center text-red-600">
-                           Out of stock, check back soon!
-                           </div>
-                           ) : (
+                            {item.currentInventory < 1 ? (
+                              <div className="text-sm text-center text-red-600">
+                                Out of stock, check back soon!
+                              </div>
+                            ) : (
                             <div></div>
                             )}
-                             </div>
+                          </div>
                           {item.itemCategory?.name && (
                             <div className="flex items-center justify-center">
-                              <span className="item-category">{item.itemCategory.name}</span>
+                              <span className="text-green-400 item-category">Category: {item.itemCategory.name}</span>
                             </div>
                           )}
                           {cart.getItemQuantity(item.id) > 0 ? (
@@ -247,67 +247,6 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
           </div>
         </div>
       </section>
-                      <div className="flex items-center justify-center">
-                        {item.name}
-                      </div>
-                      <div className="flex items-center justify-center">
-                        ${(Math.round(item.price * 100) / 100).toFixed(2)}
-                      </div>
-                      <div>
-                        {' '}
-                        {item.currentInventory < 1 ? (
-                          <div className="text-sm text-center text-red-600">
-                            Out of stock, check back soon!
-                          </div>
-                        ) : (
-                          <div></div>
-                        )}
-                      </div>
-
-                      {cart.getItemQuantity(item.id) > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-1">
-                          <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-10 mr-6 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
-                            In Cart: {cart.getItemQuantity(item.id)}
-                            <button
-                              onClick={() => cart.addOneToCart(item)}
-                              className=" mx-2 align-bottom bg-green-500 text-slate-700 text-sm font-bold rounded-full w-8 h-min"
-                            >
-                              +
-                            </button>
-                            <button
-                              onClick={() => cart.removeOneFromCart(item)}
-                              className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-sm font-bold rounded-full w-8 h-min"
-                            >
-                              -
-                            </button>
-                          </div>
-                          <div></div>
-                          <div>
-                            <button
-                              className="items-center bg-red-600 hover:bg-red-700 ml-12 mr-6 text-white text-sm font-bold py-2 px-4 rounded-full w-fit mt-3 mb-3 focus:outline-none focus:shadow-outline"
-                              onClick={() => cart.deleteFromCart(item)}
-                            >
-                              Remove all from cart
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => cart.addOneToCart(item)}
-                          className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                          type="submit"
-                        >
-                          Add to Cart
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
   );
 };
