@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { getItemDetails } from '../services/viewItemsService';
+import { getItemDetails } from '../../services/viewItemsService';
 import { useEffect, useState, useContext } from 'react';
-import cauldron from '../assets/images/cauldron.png';
-import { CartContext } from '../components/CartContext';
+import cauldron from '../../assets/images/cauldron.png';
+import { CartContext } from '../CartContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ItemDetailsDisplay = (results) => {
@@ -52,17 +52,28 @@ const ItemDetailsDisplay = (results) => {
 
                 <div className="items-center grid grid-flow-row auto-rows-min grid-cols-2 ">
                   <div
-                    className="flex items-center  mr-1 font-bold text-3xl mb-10 mt-4"
+                    className="flex items-center  mr-1 font-bold text-3xl mb-4 mt-4"
                     value={name}
                   >
                     {item.name}
                   </div>
                   <div
-                    className="flex items-center ml-1 font-bold text-xl mb-10 mt-4"
+                    className="flex items-center ml-1 font-bold text-xl mb-4 mt-4"
                     value={price}
                   >
                     ${(Math.round(item.price * 100) / 100).toFixed(2)}
                   </div>
+
+                  <div className="container">
+                    {item.currentInventory < 1 ? (
+                      <div className="text-sm font-bold text-center mb-4 text-red-600">
+                        Out of stock, check back soon!
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
+                  </div>
+                  <div />
                   <div>
                     <div className="flex items-center text-xl mb-4 font-bold">
                       Description:

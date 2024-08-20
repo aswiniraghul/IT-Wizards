@@ -14,8 +14,8 @@ export const CartContext = createContext({
   removeOneFromCart: () => {},
   deleteFromCart: () => {},
   getTotalCost: () => {},
-  clearCart: () => { },
-  returnAllItemsToInv: () => { },
+  clearCart: () => {},
+  returnAllItemsToInv: () => {},
 });
 export const ItemDetails = () => {
   const { id } = useParams(id);

@@ -54,7 +54,7 @@ const Navbar = ({ categoryFilter, setCategoryFilter }) => {
           <div></div>
         )}
 
-        <div className="text-white text-xl  hover:font-bold mt-4 mb-1">
+        {/* <div className="text-white text-xl  hover:font-bold mt-4 mb-1">
           <button onClick={toggleSortDropdown} className="underline">Sort</button>
         </div>
         {sortDropdownOpen ? (
@@ -70,7 +70,7 @@ const Navbar = ({ categoryFilter, setCategoryFilter }) => {
           </div>
         ) : (
           <div></div>
-        )}
+        )} */}
       </aside>
     </div>
   );
