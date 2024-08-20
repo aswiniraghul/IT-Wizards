@@ -3,6 +3,7 @@ package org.LaunchCode.IT_Wizards_API.controllers;
 import org.LaunchCode.IT_Wizards_API.repository.CartItemRepository;
 import org.LaunchCode.IT_Wizards_API.exceptions.CartItemNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.CartItem;
+import org.LaunchCode.IT_Wizards_API.services.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,21 +14,26 @@ import java.util.List;
 public class CartItemController {
 
     @Autowired
-    private CartItemRepository cartItemRepository;
+    private OrdersService ordersService;
 
-    @PostMapping()
-    CartItem newCartItem(@RequestBody CartItem newCartItem) {
-        return cartItemRepository.save(newCartItem);
+    @PostMapping("/addToCart/{userId}")
+    public CartItem addItemToCart(@PathVariable Long userId, @RequestBody CartItem newCartItem) {
+        return ordersService.addCartItemToUserCart(userId, newCartItem);
     }
 
     @GetMapping()
-    List<CartItem> getAllOrders() {
-        return cartItemRepository.findAll();
+    public List<CartItem> getAllCartItems() {
+        return ordersService.getAllCartItems();
     }
 
     @GetMapping("/{id}")
-    CartItem getCartItemById(@PathVariable Long id) {
-        return cartItemRepository.findById(id)
-                .orElseThrow(() -> new CartItemNotFoundException(id));
+    public CartItem getCartItemById(@PathVariable Long id) {
+        return ordersService.getCartItemById(id);
+    }
+
+    @PutMapping("/{cartItemId}/order/{orderId}")
+    public CartItem linkCartItemToOrder(@PathVariable Long cartItemId, @PathVariable Long orderId) {
+        return ordersService.linkCartItemToOrder(cartItemId, orderId);
     }
 }
+

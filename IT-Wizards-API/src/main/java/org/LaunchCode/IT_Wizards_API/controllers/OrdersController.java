@@ -5,6 +5,8 @@ import org.LaunchCode.IT_Wizards_API.exceptions.OrdersNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Orders;
 import org.LaunchCode.IT_Wizards_API.services.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,15 +20,9 @@ public class OrdersController {
     private OrdersService ordersService;
 
     @PostMapping()
-    public Orders createOrder(@RequestBody Orders newOrder) {
-        return ordersService.createOrder(
-                newOrder.getUser().getId(),
-                newOrder.getAddress().getId(),
-                newOrder.getAddress().getAddress(),
-                newOrder.getAddress().getCity(),
-                newOrder.getAddress().getState(),
-                newOrder.getAddress().getZipcode()
-        );
+    public ResponseEntity<Orders> createOrder(@RequestBody Orders newOrder) {
+        Orders createdOrder = ordersService.createOrder(newOrder);
+        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")
@@ -34,9 +30,10 @@ public class OrdersController {
         return ordersService.getOrdersByUserId(userId);
     }
 
-    @GetMapping("/{userId}/{orderId}")
-    public Orders getOrderByIdAndUserId(@PathVariable Long userId, @PathVariable Long orderId) {
-        return ordersService.getOrderByIdAndUserId(userId, orderId).orElseThrow(()-> new OrdersNotFoundException(orderId));
+    @GetMapping("/{userId}/{id}")
+    public Orders getOrderById(@PathVariable Long userId, @PathVariable Long id) {
+        return ordersService.getOrderById(userId, id);
     }
+
 
 }

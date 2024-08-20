@@ -1,7 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.repository;
 
 import org.LaunchCode.IT_Wizards_API.models.Orders;
-import org.LaunchCode.IT_Wizards_API.models.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
     List<Orders> findByUserId(Long userId);
-    Optional<Orders> findOrderByIdAndUserId(Long userId, Long orderId);
+    Optional<Orders> findByIdAndUserId(Long orderId, Long userId);
 
 }

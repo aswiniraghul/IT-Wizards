@@ -2,10 +2,7 @@ package org.LaunchCode.IT_Wizards_API.services;
 
 import org.LaunchCode.IT_Wizards_API.exceptions.*;
 import org.LaunchCode.IT_Wizards_API.models.*;
-import org.LaunchCode.IT_Wizards_API.repository.AddressRepository;
-import org.LaunchCode.IT_Wizards_API.repository.CartRepository;
-import org.LaunchCode.IT_Wizards_API.repository.OrdersRepository;
-import org.LaunchCode.IT_Wizards_API.repository.UserRepository;
+import org.LaunchCode.IT_Wizards_API.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,40 +16,68 @@ public class OrdersService {
     private OrdersRepository ordersRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private CartRepository cartRepository;
 
     @Autowired
-    private CartRepository cartRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    public Orders createOrder (Orders newOrder) {
+        User user = userRepository.findById(newOrder.getUser().getId())
+                .orElseThrow(() ->new UserNotFoundException(newOrder.getUser().getId()));
+        newOrder.setUser(user);
+        Address address = addressRepository.findById(newOrder.getAddress().getId())
+                .orElseThrow(()-> new AddressNotFoundException(newOrder.getAddress().getId()));
+        newOrder.setAddress(address);
+        Cart userCart = cartRepository.findByUserId(user.getId())
+                .orElseThrow(()-> new CartNotFoundException(user.getId()));
+        newOrder.getCartItems().addAll(userCart.getCartItems());
+        return ordersRepository.save(newOrder);
+    }
+
     public List<Orders> getOrdersByUserId(Long userId) {
         return ordersRepository.findByUserId(userId);
     }
-    public Optional<Orders> getOrderByIdAndUserId(Long userId, Long orderId) {
-        return ordersRepository.findOrderByIdAndUserId(userId, orderId);
+    public Orders getOrderById(Long userId, Long id) {
+        return ordersRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new OrdersNotFoundException(id));
     }
 
-    public Orders createOrder(Long userId, Long addressId, String addressLine, String city, String state, Integer zipcode) {
-        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException(userId));
-        Address address = addressRepository.findById(addressId).orElse(null);
+    public CartItem addCartItemToUserCart(Long userId, CartItem newCartItem) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(userRepository.findById(userId)
+                            .orElseThrow(() -> new UserNotFoundException(userId)));
+                    return cartRepository.save(newCart);
+                });
 
-        if (address == null) {
-            address = new Address();
-            address.setAddress(addressLine);
-            address.setCity(city);
-            address.setState(state);
-            address.setZipcode(zipcode);
-            address = addressRepository.save(address);
-        }
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(()-> new CartNotFoundException(userId));
-
-        Orders order = new Orders();
-        order.setUser(user);
-        order.setAddress(address);
-        order.setCart(cart);
-        return ordersRepository.save(order);
+        newCartItem.setCart(cart);
+        return cartItemRepository.save(newCartItem);
+    }
+    public List<CartItem> getAllCartItems() {
+        return cartItemRepository.findAll();
     }
 
+    public CartItem getCartItemById(Long id) {
+        return cartItemRepository.findById(id)
+                .orElseThrow(() -> new CartItemNotFoundException(id));
+    }
+
+    public CartItem linkCartItemToOrder(Long cartItemId, Long orderId) {
+        Orders order = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new OrdersNotFoundException(orderId));
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+
+        cartItem.setOrder(order);
+        return cartItemRepository.save(cartItem);
+    }
 }
+
