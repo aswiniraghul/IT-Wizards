@@ -7,6 +7,7 @@ import RightSidebar from '../components/RightSidebar';
 import AddressForm from '../components/AddressForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { handleConfirmPurchase } from '../services/ordersService';
 
 const CheckoutPage = () => {
   const cart = useContext(CartContext);
@@ -109,6 +110,7 @@ const CheckoutPage = () => {
             <div className="flex justify-center ">
               <button
                 onClick={() => {
+                  handleConfirmPurchase();
                   {
                     cart.clearCart();
                     navigate('/');

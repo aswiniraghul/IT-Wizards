@@ -32,3 +32,12 @@ export const addOrder = async (userId, orderId) => {
         console.error("There was an error adding item to wishlist.", error);
     }
 };
+
+const handleConfirmPurchase = async (userId, addressId) => {
+  try {
+    const response = await axios.post(`${BASEAPIURL}/orders`, { userId, addressId,});
+    return response.data;
+  } catch (error) {
+    console.error('Failed to submit order', error);
+  }
+};
