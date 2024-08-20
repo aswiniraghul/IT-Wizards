@@ -1,14 +1,11 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
 import com.plaid.client.ApiClient;
-import com.plaid.client.model.Products;
-import com.plaid.client.model.CountryCode;
-import com.plaid.client.model.LinkTokenCreateRequest;
-import com.plaid.client.model.LinkTokenCreateRequestUser;
-import com.plaid.client.model.LinkTokenCreateResponse;
+import com.plaid.client.model.*;
 import com.plaid.client.request.PlaidApi;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.LaunchCode.IT_Wizards_API.models.ItemCategory;
 import retrofit2.Response;
 import org.LaunchCode.IT_Wizards_API.models.User;
 
@@ -16,45 +13,88 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 
+
+import com.plaid.client.ApiClient;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import org.LaunchCode.IT_Wizards_API.services.PlaidService;
+
+@RestController
+@RequestMapping("/create_link_token")
 public class PlaidController {
-    static class GetLinkToken implements HttpHandler {
-        private static PlaidApi plaidClient;
-        public void handle(HttpExchange t) throws IOException {
-            // Create your Plaid client
-            HashMap<String, String> apiKeys = new HashMap<String, String>();
-//            apiKeys.put("clientId", CLIENT_ID);
-            apiKeys.put("clientId", "669d27e8b7e14d001ac7b884");
-//            apiKeys.put("secret", SECRET);
-            apiKeys.put("secret", "f292f639c530b860e14ad7e3606b34");
-            ApiClient apiClient = new ApiClient(apiKeys);
-            apiClient.setPlaidAdapter(ApiClient.Sandbox);
-            plaidClient = apiClient.createService(PlaidApi.class);
-            // Get the clientUserId by searching for the current user
-//            User userFromDB = db.find(...);
-//            String clientUserId = userFromDB.id;
-            String clientUserId = "1234";
-            LinkTokenCreateRequestUser user = new LinkTokenCreateRequestUser()
-                    .clientUserId(clientUserId);
-            // Create a link_token for the given user
-            LinkTokenCreateRequest request = new LinkTokenCreateRequest()
-                    .user(user)
-                    .clientName("Plaid Test App")
-                    .products(Arrays.asList(Products.fromValue("transactions")))
-                    .countryCodes(Arrays.asList(CountryCode.US))
-                    .language("en")
-                    .redirectUri("https://domainname.com/oauth-page.html")
-                    .webhook("https://webhook.example.com");
-            Response<LinkTokenCreateResponse> response = plaidClient
-                    .linkTokenCreate(request)
-                    .execute();
-            // Send the data to the client
-            return response.body();
 
+    private final PlaidService plaidService;
 
+    public PlaidController(PlaidService plaidService) {
+        this.plaidService = plaidService;
+    }
+
+    @PostMapping()
+    public ResponseEntity<ItemPublicTokenExchangeResponse> createLinkToken() {
+        try {
+            ItemPublicTokenExchangeResponse linkToken = plaidService.createLinkToken();
+            System.out.println(linkToken);
+            return new ResponseEntity<ItemPublicTokenExchangeResponse>(linkToken, HttpStatus.OK);
+//            LinkTokenCreateResponse linkToken = plaidService.createLinkToken();
+//            return new ResponseEntity<>(linkToken.getLinkToken(), HttpStatus.OK);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
 
+
+
+
+//public class PlaidController {
+//    static class GetLinkToken implements HttpHandler {
+//        private static PlaidApi plaidClient;
+//        public void handle(HttpExchange t) throws IOException {
+//            // Create your Plaid client
+//            HashMap<String, String> apiKeys = new HashMap<String, String>();
+////            apiKeys.put("clientId", CLIENT_ID);
+//            apiKeys.put("clientId", "669d27e8b7e14d001ac7b884");
+////            apiKeys.put("secret", SECRET);
+//            apiKeys.put("secret", "f292f639c530b860e14ad7e3606b34");
+//            ApiClient apiClient = new ApiClient(apiKeys);
+//            apiClient.setPlaidAdapter(ApiClient.Sandbox);
+//            plaidClient = apiClient.createService(PlaidApi.class);
+//            // Get the clientUserId by searching for the current user
+////            User userFromDB = db.find(...);
+////            String clientUserId = userFromDB.id;
+//            String clientUserId = "1234";
+//            LinkTokenCreateRequestUser user = new LinkTokenCreateRequestUser()
+//                    .clientUserId(clientUserId);
+//            // Create a link_token for the given user
+//            LinkTokenCreateRequest request = new LinkTokenCreateRequest()
+//                    .user(user)
+//                    .clientName("Plaid Test App")
+//                    .products(Arrays.asList(Products.fromValue("transactions")))
+//                    .countryCodes(Arrays.asList(CountryCode.US))
+//                    .language("en")
+//                    .redirectUri("https://domainname.com/oauth-page.html")
+//                    .webhook("https://webhook.example.com");
+//            Response<LinkTokenCreateResponse> response = plaidClient
+//                    .linkTokenCreate(request)
+//                    .execute();
+//            // Send the data to the client
+//            return response.body();
+//        }
+//    }
+//}
+//
 
 
 
