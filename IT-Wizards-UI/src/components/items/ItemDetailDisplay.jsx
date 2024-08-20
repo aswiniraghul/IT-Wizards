@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { getItemDetails } from '../services/viewItemsService';
+import { getItemDetails } from '../../services/viewItemsService';
 import { useEffect, useState, useContext } from 'react';
-import cauldron from '../assets/images/cauldron.png';
-import { CartContext } from '../components/CartContext';
+import cauldron from '../../assets/images/cauldron.png';
+import { CartContext } from '../CartContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ItemDetailsDisplay = (results) => {

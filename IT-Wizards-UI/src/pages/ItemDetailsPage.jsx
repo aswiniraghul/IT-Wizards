@@ -1,6 +1,5 @@
-import ItemDetailDisplay from '../components/ItemDetailDisplay';
+import ItemDetailDisplay from '../components/items/ItemDetailDisplay';
 import { useState } from 'react';
-import SearchBar from '../components/search/SearchBar';
 import SearchResultsList from '../components/search/SearchResultsList';
 
 const ItemDetailsPage = () => {

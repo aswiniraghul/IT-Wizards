@@ -4,14 +4,14 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from 'react-router-dom';
-import AddItemForm from './components/AddItemForm';
+import AddItemForm from './components/items/AddItemForm';
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import ItemsPage from './pages/ItemsPage';
-import EditItemForm from './components/EditItemForm';
+import EditItemForm from './components/items/EditItemForm';
 import ItemCategoriesPage from './pages/ItemCategoriesPage';
-import EditItemCategoriesForm from './components/EditItemCategoriesForm';
-import AddItemCategoryForm from './components/AddItemCategoryForm';
+import EditItemCategoriesForm from './components/items/EditItemCategoriesForm';
+import AddItemCategoryForm from './components/items/AddItemCategoryForm';
 import ItemDetailsPage from './pages/ItemDetailsPage';
 import CartProvider from './components/CartContext';
 import EditProfile from './components/profile/EditProfile';

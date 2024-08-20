@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FaExclamationTriangle } from 'react-icons/fa';
 
-const NotFoundPage = () => {
+const UnauthorizedPage = () => {
   return (
     <section className="bg-purple-400 text-center py-96 flex flex-col justify-center items-center h-96">
       <div className='absolute flex flex-col justify-center items-center'>
@@ -19,4 +19,4 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default UnauthorizedPage;

@@ -4,8 +4,7 @@ import { Link, useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NotFoundPage from './NotFoundPage';
-
+import UnauthorizedPage from './UnauthorizedPage';
 
 const ItemCategoriesPage = () => {
   const [itemCategories, setItemCategories] = useState([]);
@@ -48,7 +47,7 @@ const ItemCategoriesPage = () => {
   return (
     <div>
       {userRole !== 'admin' ? (
-        <NotFoundPage />
+        <UnauthorizedPage />
       ) : (
         <section className="bg-purple-400 pt-20 pb-96">
           <div className="container m-auto max-w-xl flex items-center justify-center">
