@@ -20,6 +20,7 @@ import Login from './components/authentication/Login';
 import WishlistPage from './pages/WishlistPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ContactUs from './components/ContactUs';
+import OrdersPage from './pages/OrdersPage';
 
 const App = () => {
 
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/wishlist/:id" element={<WishlistPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/contactUs" element={<ContactUs />} />
+        <Route path="/orders/:id" element={<OrdersPage />} />
       </Route>
     )
   );
