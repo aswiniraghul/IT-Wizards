@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getItemCategory } from '../services/viewItemsService';
+import { getItemCategory } from '../../services/viewItemsService';
 import axios from 'axios';
 
 const EditItemCategoriesForm = () => {

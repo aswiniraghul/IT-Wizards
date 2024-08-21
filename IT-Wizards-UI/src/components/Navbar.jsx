@@ -1,40 +1,58 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart } from 'phosphor-react';
+import { ShoppingCart, Heart } from 'phosphor-react';
 import Modal from './Modal';
 import { CartContext } from './CartContext';
-import PlaidLinkButton from './PlaidLinkButton';
 import cauldron from '../assets/images/cauldron.png';
 import profileImage from '../assets/images/profile.jpg';
 import '../dropdown.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { getUser } from '../services/userService';
 
-const UserNavbar = () => {
+const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const cart = useContext(CartContext);
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
-    const storedUsername = JSON.parse(localStorage.getItem('user'));
-    const storedRole = JSON.parse(localStorage.getItem('userRole'));
+    const storedUsername = localStorage.getItem('user');
+    const storedRole = localStorage.getItem('userRole');
     setUsername(storedUsername || '');
     setUserRole(storedRole || '');
+    fetchUser();
   }, []);
+
+  const userName = localStorage.getItem('user');
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+
+    const fetchUser = async () => {
+      if (userName === null) {
+        return;
+      } else {
+        try {
+          const data = await getUser(userName);
+          setUserId(data.id);
+        } catch (error) {
+          console.error('Failed to fetch data', error);
+        }
+      }
+    };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userRole');
     setUsername('');
     setUserRole('');
-    navigate('/');
+    window.location.reload(navigate('/'));
     setDropdownOpen(false);
   };
 
@@ -46,6 +64,23 @@ const UserNavbar = () => {
   const handleDropdownClick = (path) => {
     navigate(path);
     setDropdownOpen(false);
+  };
+
+  const handleCartOnLogout = () => {
+    if (cart.itemsHeldInCart.length > 0) {
+      if (
+        window.confirm(
+          'Are you sure you want to Logout? Your cart will be cleared.'
+        )
+      ) {
+        cart.returnAllItemsToInv();
+        handleLogout();
+      } else {
+        return;
+      }
+    } else {
+      handleLogout();
+    }
   };
 
   return (
@@ -75,19 +110,23 @@ const UserNavbar = () => {
                   </>
                 )}
                 {userRole === 'user' && (
-                  <NavLink to="/wishlist" className={linkClass}>
+                  <NavLink to={`/wishlist/${userId}`} className={linkClass}>
                     Wishlist
                   </NavLink>
                 )}
-                <button
-                  className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
-                  onClick={() => setOpen(true)}
-                >
-                  <ShoppingCart width={40} />
-                </button>
-                <div className="text-green-600 font-bold text-sm">
-                  {cart.totalItemsInCart()}
-                </div>
+                {userRole !== 'admin' && (
+                  <>
+                    <button
+                      className="hidden md:block rounded-md text-white text-2xl font-bold ml-2 hover:text-green-600 hover:bg-black"
+                      onClick={() => setOpen(true)}
+                    >
+                      <ShoppingCart width={40} />
+                    </button>
+                    <div className="text-green-600 font-bold text-sm">
+                      {cart.totalItemsInCart()}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -103,26 +142,23 @@ const UserNavbar = () => {
                 <>
                   <div className="">
                     <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
-                      {cart.itemsHeldInCart.map((item, index) => (
+                      {cart.itemsHeldInCart.map((item) => (
                         <>
-                          <div>
+                          <div key={item.id}>
                             <img
                               className="items-center justify-center "
                               src={cauldron}
                             />
                           </div>
                           <div className="items-center justify-center mb-10 mt-10">
-                            <h1
-                              className="text-xl underline font-extrabold"
-                              key={index}
-                            >
+                            <h1 className="text-xl underline font-extrabold">
                               {item.name}
                             </h1>
-                            <h2
-                              className="text-base font-semibold mt-2 mb-3"
-                              key={index}
-                            >
+                            <h2 className="text-base font-semibold mt-2">
                               {item.quantity} in cart
+                            </h2>
+                            <h2 className="text-base font-semibold mb-2">
+                              ${(item.price * item.quantity).toFixed(2)}
                             </h2>
                             <button
                               onClick={() => cart.addOneToCart(item)}
@@ -137,7 +173,7 @@ const UserNavbar = () => {
                               -
                             </button>
                             <button
-                              className="flex bg-red-600 hover:bg-red-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
+                              className="flex bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
                               onClick={() => cart.deleteFromCart(item)}
                             >
                               Remove all from cart
@@ -147,19 +183,25 @@ const UserNavbar = () => {
                       ))}
                     </div>
 
-                    <h1 className="text-xl text-green-700 text-center border-8 border-indigo-500 mt-6 mb-6 font-extrabold">
+                    <h1 className="text-xl text-green-700 text-center rounded-xl border-8 border-indigo-500 mt-6 mb-6 font-extrabold">
                       Total: ${cart.getTotalCost().toFixed(2)}
                     </h1>
-                    <button className="flex bg-indigo-600 hover:bg-indigo-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline">
-                      Checkout
+                    <button
+                      onClick={() => {
+                        navigate('/checkout');
+                        setOpen(false);
+                      }}
+                      className="flex bg-indigo-600 hover:bg-indigo-700 text-white text-base font-bold py-2 px-4 rounded-full w-auto mt-2 mb-2 focus:outline-none focus:shadow-outline"
+                    >
+                      Proceed to Checkout
                     </button>
-                    <PlaidLinkButton />
                   </div>
                 </>
               ) : (
                 <h1>Your cart is empty!</h1>
               )}
             </Modal>
+
             <div className="relative ml-4">
               <button
                 className="flex items-center text-white bg-gray-800 rounded-full px-4 py-2"
@@ -200,7 +242,7 @@ const UserNavbar = () => {
                       <li>
                         <button
                           className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          onClick={handleLogout}
+                          onClick={() => handleCartOnLogout()}
                         >
                           Logout
                         </button>
@@ -217,4 +259,4 @@ const UserNavbar = () => {
   );
 };
 
-export default UserNavbar;
+export default Navbar;

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../src/EditProfile.css";
 import { USERS_API } from "../../env/config";
+import AddressForm from '../../components/AddressForm';
 
 const EditProfile = () => {
   const [userData, setUserData] = useState({
@@ -23,7 +24,7 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = JSON.parse(localStorage.getItem("user"));
+        const userId = localStorage.getItem("user");
         const response = await axios.get(`${USERS_API}/${userId}`);
         setUserData(response.data);
       } catch (error) {
@@ -55,7 +56,7 @@ const EditProfile = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const userId = JSON.parse(localStorage.getItem("user"));
+      const userId = localStorage.getItem("user");
       await axios.put(`${USERS_API}/${userId}`, userData);
       setLoading(false);
       setSuccess("Changes updated successfully.");
@@ -69,7 +70,7 @@ const EditProfile = () => {
     setShowDeleteModal(false);
     setLoading(true);
     try {
-      const userId = JSON.parse(localStorage.getItem("user"));
+      const userId = localStorage.getItem("user");
       await axios.delete(`${USERS_API}/${userId}`);
       localStorage.removeItem("user");
       setLoading(false);
@@ -166,12 +167,14 @@ const EditProfile = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" disabled={loading}>
+          <div className="font-extrabold underline pb-3 pt-6">Address Info</div>
+          <AddressForm />
+          <button type="submit" className="btn btn-primary mt-4" disabled={loading}>
             {loading ? "Saving..." : "Save Changes"}
           </button>
           <button
             type="button"
-            className="btn btn-danger ms-2"
+            className="btn btn-danger ms-2 mt-4"
             onClick={() => setShowDeleteModal(true)}
             disabled={loading}
           >
