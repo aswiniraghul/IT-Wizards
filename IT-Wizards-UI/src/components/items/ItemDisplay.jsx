@@ -6,6 +6,7 @@ import { CartContext } from '../CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as filledHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
+import FavouriteButton from '../FavoriteButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -195,6 +196,10 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                 Category: {item.itemCategory.name}
                               </span>
                             </div>
+                          )}
+
+                          {userName !== null && userRole !== 'admin' && (
+                            <FavouriteButton itemId={item.id} />
                           )}
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">
