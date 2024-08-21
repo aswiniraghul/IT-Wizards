@@ -8,8 +8,10 @@ import SearchResultsList from '../components/search/SearchResultsList';
 const HomePage = () => {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState([]);
+
   return (
-    <div>
+    <div onClick={()=> setResults([])}>
       <SearchBar
         setSearchTerm={setSearchTerm}
         setResults={setResults}
@@ -18,10 +20,10 @@ const HomePage = () => {
       <SearchResultsList results={results} />
       <div className="flex flex-row h-[calc(100vh-5rem)]">
         <div className="w-1/12">
-          <LeftSidebar />
+          <LeftSidebar setCategoryFilter={setCategoryFilter} categoryFilter={categoryFilter} />
         </div>
         <div className="w-5/6 overflow-y-auto">
-          <ItemDisplay searchTerm={searchTerm} />
+          <ItemDisplay searchTerm={searchTerm} categoryFilter={categoryFilter} />
         </div>
         <div className="w-1/12">
           <RightSidebar />
