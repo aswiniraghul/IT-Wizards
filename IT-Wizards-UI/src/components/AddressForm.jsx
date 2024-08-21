@@ -7,7 +7,7 @@ const ShippingForm = ({ onInputChange, userAddress }) => {
     //   state: '',
     //   zipcode: '',
     // });
-  const {userName, address, city, state, zipcode } = userAddress;
+  const {address, city, state, zipcode } = userAddress;
 
   return (
     <form>

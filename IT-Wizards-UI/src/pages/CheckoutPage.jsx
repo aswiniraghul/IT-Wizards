@@ -13,13 +13,14 @@ const CheckoutPage = () => {
   const cart = useContext(CartContext);
   const navigate = useNavigate();
   const [userAddress, setUserAddress] = useState({
-    userName: `${localStorage.getItem('user')}`,
     address: '',
     city: '',
     state: '',
     zipcode: '',
   });
-  const { userName, address, city, state, zipcode } = userAddress;
+  const { address, city, state, zipcode } = userAddress;
+
+  const userName = localStorage.getItem('user');
 
   const onInputChange = (e) => {
     setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
@@ -34,8 +35,10 @@ const CheckoutPage = () => {
     // e.preventDefault();
     try {
       console.log(userAddress)
-      await axios.post('http://localhost:8080/addresses', userAddress);
-      return navigate('/');
+      await axios.post(`http://localhost:8080/addresses?userName=${userName}`, {
+        ...userAddress
+      });
+      navigate('/');
     } catch (error) {
       console.log('error', error);
     }

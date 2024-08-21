@@ -27,8 +27,10 @@ public class AddressController {
     private UserRepository userRepository;
 
     @PostMapping()
-    Address newAddress(@RequestBody Address newAddress) {
-        return addressRepository.save(newAddress);
+    Address newAddress(@RequestParam String userName, @RequestBody Address userAddress) {
+        User user = userRepository.findByUserName(userName);
+        userAddress.setUser(user);
+        return addressRepository.save(userAddress);
     }
 
     @GetMapping()

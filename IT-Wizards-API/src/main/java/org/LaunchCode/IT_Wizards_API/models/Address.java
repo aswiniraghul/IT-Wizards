@@ -10,7 +10,9 @@ import java.util.List;
 @Entity
 public class Address extends AbstractEntity {
     //Fields
-    private String userName;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
     private String address;
     private String city;
     private String state;
@@ -22,8 +24,15 @@ public class Address extends AbstractEntity {
 
     //Constructors
 
-    public Address(String userName, String address, String city, String state, Integer zipcode) {
-        this.userName = userName;
+    public Address(User user, String address, String city, String state, Integer zipcode) {
+        this.user = user;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+    }
+
+    public Address(String address, String city, String state, Integer zipcode) {
         this.address = address;
         this.city = city;
         this.state = state;
@@ -35,12 +44,12 @@ public class Address extends AbstractEntity {
     //Getters and Setters
 
 
-    public String getUserName() {
-        return userName;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getAddress() {return address;}
