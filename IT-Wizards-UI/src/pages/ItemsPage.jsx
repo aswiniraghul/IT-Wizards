@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { getItems } from '../services/viewItemsService';
 import axios from 'axios';
-import NotFoundPage from './NotFoundPage';
+import UnauthorizedPage from './UnauthorizedPage';
 
 const ItemsPage = () => {
   const [items, setItems] = useState([]);
@@ -35,7 +35,7 @@ const ItemsPage = () => {
   return (
     <div>
       {userRole !== 'admin' ? (
-        <NotFoundPage />
+        <UnauthorizedPage />
       ) : (
         <section className="bg-purple-400">
           <div className="container bg-purple-400 m-auto max-w-6xl pt-20 pb-64 flex items-center justify-center">

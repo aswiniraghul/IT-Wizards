@@ -1,36 +1,35 @@
 import { useEffect, useState, useContext } from 'react';
-import { getItems, getItemCategoryList } from '../services/viewItemsService';
-import cauldron from '../assets/images/cauldron.png';
+import { getItems, getItemCategoryList } from '../../services/viewItemsService';
+import cauldron from '../../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
-import { CartContext } from './CartContext';
-import  ItemFilter from './Filter/ItemFilter';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as filledHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as outlineHeart } from "@fortawesome/free-regular-svg-icons";
+import { CartContext } from '../CartContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as filledHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 import {
   addItemToWishlist,
   removeItemFromWishlist,
   getWishlist,
-} from '../services/wishlistService';
-import { getUser } from '../services/userService';
+} from '../../services/wishlistService';
+import { getUser } from '../../services/userService';
 
-const notifyAddToWishlist = () => toast.success('✨Successfully added to wishlist!✨');
-const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
-
+const notifyAddToWishlist = () =>
+  toast.success('✨Successfully added to wishlist!✨');
+const notifyRemovedFromWishlist = () =>
+  toast.success('💫Successfully removed from wishlist!💫');
 
 const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  // const [categoryFilter, setCategoryFilter] = useState([]);
   const [userID, setUserId] = useState();
   const [wishlist, setWishlist] = useState([]);
 
   const userName = localStorage.getItem('user');
+  const userRole = localStorage.getItem('userRole');
 
   useEffect(() => {
     fetchItems();
@@ -39,9 +38,8 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   }, []);
 
   useEffect(() => {
-    if(userID)
-    fetchWishlist();
-  },[userID]);
+    if (userID) fetchWishlist();
+  }, [userID]);
 
   const fetchItems = async () => {
     try {
@@ -66,7 +64,6 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   };
 
   const fetchWishlist = async () => {
-    // const id = userID;
     if (userName === null) {
       return;
     } else {
@@ -93,7 +90,6 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       console.log('item already in wishlist');
       return;
     } else {
-      // const id = userID;
       try {
         await addItemToWishlist(userID, itemId);
         fetchWishlist();
@@ -105,7 +101,6 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   };
 
   const removeFromWishlist = async (itemId) => {
-    // const id = userID;
     try {
       await removeItemFromWishlist(userID, itemId);
       fetchWishlist();
@@ -132,20 +127,18 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
             <h2 className="text-5xl text-center font-bold underline mb-2">
               Welcome to the Shop
             </h2>
-            {/* <ItemFilter filters={categories} callbackFunc={setCategoryFilter} setValue={categoryFilter.length ? categoryFilter : categories} /> */}
             <div className="container m-auto max-w-5xl py-12">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
                   {items.map((item) => {
                     if (
                       (searchTerm.trim() &&
-                      !item.name
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
-                      ) || (categoryFilter.length &&
+                        !item.name
+                          .toLowerCase()
+                          .includes(searchTerm.toLowerCase())) ||
+                      (categoryFilter.length &&
                         (!item.itemCategory.name ||
-                        !categoryFilter.includes(item.itemCategory.name))
-                      )
+                          !categoryFilter.includes(item.itemCategory.name)))
                     ) {
                       return;
                     } else {
@@ -154,34 +147,53 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
                     return (
                       <div key={item.id}>
-                      <div
-                        className="mb-2 ml-2 mr-2 relative hover:scale-105"
-                      >
-                        <Link to={`/items/${item.id}`}>
-                          <img src={cauldron} className="size-72" alt={item.name}></img>
-                          {userName !== null && (
-                            <div
-                              onClick={(e) => {
-                                e.preventDefault();
-                                inWishlist(item.id)
-                                  ? removeFromWishlist(item.id)
-                                  : addToWishlist(item.id);
-                              }}
-                              className="absolute top-2 right-2 cursor-pointer text-3xl"
-                            >
-                              <FontAwesomeIcon icon={inWishlist(item.id) ? filledHeart : outlineHeart} />
-                            </div>
-                          )}
-                        </Link>
+                        <div className="mb-2 ml-2 mr-2 z-0 relative hover:scale-105">
+                          <Link to={`/items/${item.id}`}>
+                            <img
+                              src={cauldron}
+                              className="size-72"
+                              alt={item.name}
+                            ></img>
+                            {userName !== null && userRole !== 'admin' && (
+                              <div
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  inWishlist(item.id)
+                                    ? removeFromWishlist(item.id)
+                                    : addToWishlist(item.id);
+                                }}
+                                className="absolute top-2 right-2 cursor-pointer text-3xl"
+                              >
+                                <FontAwesomeIcon
+                                  icon={
+                                    inWishlist(item.id)
+                                      ? filledHeart
+                                      : outlineHeart
+                                  }
+                                />
+                              </div>
+                            )}
+                          </Link>
                           <div className="flex items-center justify-center">
                             {item.name}
                           </div>
                           <div className="flex items-center justify-center">
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </div>
+                          <div>
+                            {item.currentInventory < 1 ? (
+                              <div className="text-sm text-center text-red-600">
+                                Out of stock, check back soon!
+                              </div>
+                            ) : (
+                              <div></div>
+                            )}
+                          </div>
                           {item.itemCategory?.name && (
                             <div className="flex items-center justify-center">
-                              <span className="item-category">{item.itemCategory.name}</span>
+                              <span className="text-green-500 item-category">
+                                Category: {item.itemCategory.name}
+                              </span>
                             </div>
                           )}
                           {cart.getItemQuantity(item.id) > 0 ? (
