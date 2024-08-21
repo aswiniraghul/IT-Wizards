@@ -26,7 +26,7 @@ const AddItemForm = () => {
   const notifyDuplicateItem = () =>
     toast.warning(`An item with the name "${item.name}" already exists!`);
 
-  const onSubmit = async (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:8080/items', item);
@@ -71,7 +71,7 @@ const AddItemForm = () => {
     <section className="bg-purple-400">
       <div className="container m-auto max-w-3xl pt-20 pb-48">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
-          <form onSubmit={(e) => onSubmit(e)}>
+          <form onSubmit={(e) => handleOnSubmit(e)}>
             <h2 className="text-3xl text-center font-semibold mb-6">
               Add Item
             </h2>

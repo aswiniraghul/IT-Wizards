@@ -1,8 +1,10 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
 
+import org.LaunchCode.IT_Wizards_API.models.User;
 import org.LaunchCode.IT_Wizards_API.repository.AddressRepository;
 import org.LaunchCode.IT_Wizards_API.exceptions.AddressNotFoundException;
+import org.LaunchCode.IT_Wizards_API.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 import org.LaunchCode.IT_Wizards_API.models.Address;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class AddressController {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping()
     Address newAddress(@RequestBody Address newAddress) {

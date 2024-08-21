@@ -1,9 +1,8 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.List;
 @Entity
 public class Address extends AbstractEntity {
     //Fields
+    private String userName;
     private String address;
     private String city;
     private String state;
@@ -22,7 +22,8 @@ public class Address extends AbstractEntity {
 
     //Constructors
 
-    public Address(String address, String city, String state, Integer zipcode) {
+    public Address(String userName, String address, String city, String state, Integer zipcode) {
+        this.userName = userName;
         this.address = address;
         this.city = city;
         this.state = state;
@@ -32,6 +33,15 @@ public class Address extends AbstractEntity {
     public Address() {}
 
     //Getters and Setters
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getAddress() {return address;}
 

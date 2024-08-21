@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlaidLinkButton from '../components/PlaidLinkButton';
 import { CartContext } from '../components/CartContext';
@@ -7,10 +7,39 @@ import RightSidebar from '../components/RightSidebar';
 import AddressForm from '../components/AddressForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const CheckoutPage = () => {
   const cart = useContext(CartContext);
   const navigate = useNavigate();
+  const [userAddress, setUserAddress] = useState({
+    userName: `${localStorage.getItem('user')}`,
+    address: '',
+    city: '',
+    state: '',
+    zipcode: '',
+  });
+  const { userName, address, city, state, zipcode } = userAddress;
+
+  const onInputChange = (e) => {
+    setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
+    console.log(userAddress);
+  }
+
+  const submitAddress = (e) => {
+    handleOnSubmit(e);
+  }
+
+  const handleOnSubmit = async (e) => {
+    // e.preventDefault();
+    try {
+      console.log(userAddress)
+      await axios.post('http://localhost:8080/addresses', userAddress);
+      return navigate('/');
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
 
   const notifyOrderSubmitted = () =>
     toast.success('Your order has successfully been submitted!');
@@ -96,12 +125,11 @@ const CheckoutPage = () => {
                   className="border rounded w-full py-2 px-3"
                   rows="3"
                   placeholder="Last Name"
-                  onChange={(e) => onInputChange(e)}
                 ></input>
               </div>
             </div>
             <div className="px-20 my-6 pb-4 border-b-4 border-green-400 w-full">
-              <AddressForm />
+              <AddressForm onInputChange={onInputChange} userAddress={userAddress} name="addressForm"/>
             </div>
             <div className="ml-8">
               <PlaidLinkButton />
@@ -111,7 +139,7 @@ const CheckoutPage = () => {
                 onClick={() => {
                   {
                     cart.clearCart();
-                    navigate('/');
+                    submitAddress("addressForm");
                     notifyOrderSubmitted();
                   }
                 }}
