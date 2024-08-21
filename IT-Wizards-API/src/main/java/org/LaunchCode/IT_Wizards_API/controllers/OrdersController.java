@@ -20,8 +20,8 @@ public class OrdersController {
     private OrdersService ordersService;
 
     @PostMapping()
-    public ResponseEntity<Orders> createOrder(@RequestParam Long userId, @RequestParam Long addressId) {
-        Orders createdOrder = ordersService.createOrder(userId, addressId);
+    public ResponseEntity<Orders> createOrder(@RequestParam Long userId) {
+        Orders createdOrder = ordersService.createOrder(userId);
         return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 

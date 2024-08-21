@@ -31,9 +31,5 @@ public class CartItemController {
         return ordersService.getCartItemById(id);
     }
 
-    @PutMapping("/{cartItemId}/order/{orderId}")
-    public CartItem linkCartItemToOrder(@PathVariable Long cartItemId, @PathVariable Long orderId) {
-        return ordersService.linkCartItemToOrder(cartItemId, orderId);
-    }
 }
 

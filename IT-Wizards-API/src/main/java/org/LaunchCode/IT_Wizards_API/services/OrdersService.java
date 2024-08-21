@@ -22,16 +22,11 @@ public class OrdersService {
     private UserRepository userRepository;
 
     @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
     private CartItemRepository cartItemRepository;
 
-    public Orders createOrder(Long userId, Long addressId) {
+    public Orders createOrder(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new AddressNotFoundException(addressId));
         Cart userCart = cartRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new CartNotFoundException(user.getId()));
 
@@ -41,17 +36,9 @@ public class OrdersService {
 
         Orders newOrder = new Orders();
         newOrder.setUser(user);
-        newOrder.setAddress(address);
-
-        for (CartItem item : userCart.getCartItems()) {
-            item.setOrder(newOrder);
-            item.setCart(null);
-        }
-
-        newOrder.getCartItems().addAll(userCart.getCartItems());
+        newOrder.setCart(userCart);
 
         Orders savedOrder = ordersRepository.save(newOrder);
-        userCart.getCartItems().clear();
         cartRepository.save(userCart);
 
         return savedOrder;

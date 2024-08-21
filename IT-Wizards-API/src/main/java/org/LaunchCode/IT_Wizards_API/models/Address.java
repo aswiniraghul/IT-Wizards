@@ -16,10 +16,6 @@ public class Address extends AbstractEntity {
     private String state;
     private Integer zipcode;
 
-
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
-    private final List<Orders> orders = new ArrayList<>();
-
     //Constructors
 
     public Address(String address, String city, String state, Integer zipcode) {
@@ -49,5 +45,4 @@ public class Address extends AbstractEntity {
 
     public void setZipcode(Integer zipcode) {this.zipcode = zipcode;}
 
-    public List<Orders> getOrders() {return orders;}
 }

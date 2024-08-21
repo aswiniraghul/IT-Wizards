@@ -16,18 +16,13 @@ public class Orders extends AbstractEntity{
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
-
-    @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
     //Constructors
 
-    public Orders(User user, Address address) {
+    public Orders(User user) {
         this.user = user;
-        this.address = address;
     }
 
     public Orders() {}
@@ -39,10 +34,6 @@ public class Orders extends AbstractEntity{
     public User getUser() {return user;}
 
     public void setUser(User user) {this.user = user;}
-
-    public Address getAddress() {return address;}
-
-    public void setAddress(Address address) {this.address = address;}
 
     public Cart getCart() { return cart; }
 
