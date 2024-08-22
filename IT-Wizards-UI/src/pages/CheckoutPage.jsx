@@ -57,10 +57,7 @@ const CheckoutPage = () => {
           Your cart contents:
         </div>
         <div className="container px-20 text-indigo-700">
-          <div
-            onSubmit={(e) => handleOnSubmit(e)}
-            className=" bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0"
-          >
+          <div className=" bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
             {cart.itemsHeldInCart.map((item) => (
               <div
                 key={item.id}
@@ -121,7 +118,7 @@ const CheckoutPage = () => {
               Shipping Info
             </h2>
 
-            <form>
+            <form onSubmit={(e) => handleOnSubmit(e)}>
               <div className="flex ml-20">
                 <div className=" mr-10">
                   <label className="block text-gray-700 font-bold mb-2">
