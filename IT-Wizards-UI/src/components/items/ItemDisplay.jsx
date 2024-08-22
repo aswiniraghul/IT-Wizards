@@ -212,9 +212,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                               </span>
                             </div>
                           )}
-                          {userID !== null && userRole !== 'admin' && (
-                            <FavouriteButton itemId={item.id} userId={userID} favourites={favourites} />
-                          )}
+                          { userID && <FavouriteButton itemId={item.id} userId={userID} favourites={favourites} />}
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">
                               <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
