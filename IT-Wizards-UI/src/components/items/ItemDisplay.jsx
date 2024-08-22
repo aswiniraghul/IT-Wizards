@@ -6,9 +6,13 @@ import { CartContext } from '../CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as filledHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
+import FavouriteButton from '../FavoriteButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../LoadingSpinner';
+
+import axios from 'axios';
+import { HOST_NAME } from '../../env/config';
 
 import {
   addItemToWishlist,
@@ -26,6 +30,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [favourites, setFavourites] = useState([]);
   const [userID, setUserId] = useState();
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +46,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
   useEffect(() => {
     if (userID) fetchWishlist();
+    if (userID) fetchFavourites();
   }, [userID]);
 
   const fetchItems = async () => {
@@ -121,6 +127,16 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       setCategories(data);
     } catch (error) {
       console.error('Failed to fetch category data', error);
+    }
+  };
+  const fetchFavourites = async () => {
+    try {
+        const response = await axios.get(`${HOST_NAME}/api/favourites/list?userId=${userID}`, null);
+        if(response.status === 200) {
+          setFavourites(response.data);
+        }
+    } catch (error) {
+        console.error('Unable to favourite item:', error);
     }
   };
   return (
@@ -207,6 +223,13 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </span>
                                 </div>
                               )}
+                              {userID && (
+                                <FavouriteButton
+                                  itemId={item.id}
+                                  userId={userID}
+                                  favourites={favourites}
+                                />
+                              )}
                               {cart.getItemQuantity(item.id) > 0 ? (
                                 <div className="">
                                   <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
@@ -237,17 +260,20 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </div>
                                 </div>
                               ) : (
-                              <div>
+                                <div>
                                   {userRole !== 'admin' ? (
-                                <button
-                                  onClick={() => cart.addOneToCart(item)}
-                                  className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                                  type="submit"
-                                >
-                                  Add to Cart
-                                </button>):('')
-                                    }
-                                  </div>)}
+                                    <button
+                                      onClick={() => cart.addOneToCart(item)}
+                                      className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
+                                      type="submit"
+                                    >
+                                      Add to Cart
+                                    </button>
+                                  ) : (
+                                    ''
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
                         );
