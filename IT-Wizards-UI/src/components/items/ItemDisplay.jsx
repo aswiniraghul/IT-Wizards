@@ -237,14 +237,17 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </div>
                                 </div>
                               ) : (
+                              <div>
+                                  {userRole !== 'admin' ? (
                                 <button
                                   onClick={() => cart.addOneToCart(item)}
                                   className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
                                   type="submit"
                                 >
                                   Add to Cart
-                                </button>
-                              )}
+                                </button>):('')
+                                    }
+                                  </div>)}
                             </div>
                           </div>
                         );

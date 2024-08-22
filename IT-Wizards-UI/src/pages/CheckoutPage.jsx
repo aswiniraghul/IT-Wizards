@@ -27,17 +27,15 @@ const CheckoutPage = () => {
     console.log(userAddress);
   }
 
-  const submitAddress = (e) => {
-    handleOnSubmit(e);
-  }
-
   const handleOnSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     try {
       console.log(userAddress)
       await axios.post(`http://localhost:8080/addresses?userName=${userName}`, {
         ...userAddress
       });
+      notifyOrderSubmitted();
+      cart.clearCart();
       return navigate('/');
     } catch (error) {
       console.log('error', error);
@@ -54,7 +52,7 @@ const CheckoutPage = () => {
           Your cart contents:
         </div>
         <div className="container px-20 text-indigo-700">
-          <div className=" bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
+          <form onSubmit={(e) => handleOnSubmit(e)} className="bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
             {cart.itemsHeldInCart.map((item) => (
               <div className="grid grid-flow-row justify-items-center items-center auto-rows-min grid-cols-2 border-b-4 border-green-400">
                 <div>
@@ -128,6 +126,7 @@ const CheckoutPage = () => {
                   className="border rounded w-full py-2 px-3"
                   rows="3"
                   placeholder="Last Name"
+                  required
                 ></input>
               </div>
             </div>
@@ -139,19 +138,13 @@ const CheckoutPage = () => {
             </div>
             <div className="flex justify-center ">
               <button
-                onClick={() => {
-                  {
-                    cart.clearCart();
-                    submitAddress("addressForm");
-                    notifyOrderSubmitted();
-                  }
-                }}
+                type="submit"
                 className="w-fit my-6 py-2 font-extrabold border-4 align-middle border-purple-700 rounded-xl px-2"
               >
                 Confirm Purchase
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
 

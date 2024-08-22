@@ -1,5 +1,3 @@
-import {useState} from 'react';
-
 const ShippingForm = ({ onInputChange, userAddress }) => {
     // const [userAddress, setUserAddress] = useState({
     //   address: '',
@@ -10,7 +8,7 @@ const ShippingForm = ({ onInputChange, userAddress }) => {
   const {address, city, state, zipcode } = userAddress;
 
   return (
-    <form>
+    <div>
       <div className="mb-4">
         <label className="block text-gray-700 mb-2">
           Street Address
@@ -50,6 +48,7 @@ const ShippingForm = ({ onInputChange, userAddress }) => {
             placeholder="State"
             value={state}
             onChange={(e) => onInputChange(e)}
+            required
           />
         </div>
 
@@ -62,10 +61,11 @@ const ShippingForm = ({ onInputChange, userAddress }) => {
             placeholder="Zipcode"
             value={zipcode}
             onChange={(e) => onInputChange(e)}
+            required
           />
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 
