@@ -69,4 +69,5 @@ B.R.E.W.S (BUY RARE AND ENCHANTED WIZARD SUPPLIES) is an intuitive online mercha
 
 ### **Contact**
 
-For questions or contributions, please reach out to [brewslauncode@gmail.com](mailto:brewslauncode@gmail.com).
+For questions or contributions, please reach out to [brewslaunchcode@outlook.com](mailto:brewslaunchcode@outlook.com).
+
