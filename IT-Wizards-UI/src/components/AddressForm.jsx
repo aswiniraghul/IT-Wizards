@@ -1,18 +1,16 @@
 const ShippingForm = ({ onInputChange, userAddress }) => {
-    // const [userAddress, setUserAddress] = useState({
-    //   address: '',
-    //   city: '',
-    //   state: '',
-    //   zipcode: '',
-    // });
-  const {address, city, state, zipcode } = userAddress;
+  // const [userAddress, setUserAddress] = useState({
+  //   address: '',
+  //   city: '',
+  //   state: '',
+  //   zipcode: '',
+  // });
+  const { address, city, state, zipcode } = userAddress;
 
   return (
     <div>
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">
-          Street Address
-        </label>
+        <label className="block text-gray-700 mb-2">Street Address</label>
         <input
           id="address"
           name="address"
@@ -25,7 +23,7 @@ const ShippingForm = ({ onInputChange, userAddress }) => {
         ></input>
       </div>
 
-      <div className='flex'>
+      <div className="flex">
         <div className="mb-2 mr-10">
           <label className="block text-gray-700 mb-2">City</label>
           <input
