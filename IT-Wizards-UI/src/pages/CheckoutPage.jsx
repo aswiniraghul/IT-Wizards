@@ -38,7 +38,7 @@ const CheckoutPage = () => {
       await axios.post(`http://localhost:8080/addresses?userName=${userName}`, {
         ...userAddress
       });
-      navigate('/');
+      return navigate('/');
     } catch (error) {
       console.log('error', error);
     }
