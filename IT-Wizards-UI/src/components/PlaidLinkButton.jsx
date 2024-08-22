@@ -1,24 +1,32 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { usePlaidLink } from "react-plaid-link";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { HOST_NAME } from '../env/config';
+import axios from 'axios';
 
-function PlaidLinkButton() {
+function PlaidLinkButton({onFinished}) {
   const [token, setToken] = useState(null);
+  const [paymentData, setPaymentData] = useState(null);
   // const [loading, setLoading] = useState(true);
 
   const onSuccess = useCallback(async (publicToken, metadata) => {
     console.log("onSuccess - calling exchange public token:", publicToken);
     console.log("onSuccess - calling exchange metadata:", metadata);
+    // // Set banking data
     // setLoading(true);
-    await fetch(`${HOST_NAME}/api/plaid/exchange_public_token`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ public_token: publicToken }),
-    });
+    // await fetch(`${HOST_NAME}/api/plaid/exchange_public_token`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ public_token: publicToken }),
+    // });
     // await getBalance();
+    setPaymentData(metadata);
+    toast.success("💸 Payment applied 💸")
+    setTimeout(onFinished, 5000);
   }, []);
   const onExit = useCallback(async (error, metadata) => {
     console.log("onExit - error:", error);
@@ -36,19 +44,16 @@ function PlaidLinkButton() {
 
   // Creates a Link token
   const createLinkToken = React.useCallback(async () => {
-    console.log('createLinkToken...')
     // For OAuth, use previously generated Link token
     // if (window.location.href.includes("?oauth_state_id=")) {
     //   const linkToken = localStorage.getItem('link_token');
     //   setToken(linkToken);
     //   console.log('createLinkToken running with existing linkToken:', linkToken);
     // } else {
-      const response = await fetch(`${HOST_NAME}/api/plaid/create_link_token`, {});
-      const data = await response.json();
-      console.log('createLinkToken data returned:', data);
-      setToken(data.accessToken);
-      localStorage.setItem("link_token", data.accessToken);
-      console.log('createLinkToken created linkToken DATA:', data.accessToken);
+      const response = await axios.get(`${HOST_NAME}/api/plaid/create_link_token`);
+      setToken(response.data);
+      localStorage.setItem("link_token", response.data);
+      console.log('setting token: ', response.data);
     // }
   }, [setToken]);
 
@@ -69,17 +74,27 @@ function PlaidLinkButton() {
     // if (isOauth && ready) {
     if (ready) {
       console.log('should be ready and then opening')
-      open();
+      // Can open when ready, or wait for button click
+      // open();
     }
   // }, [token, isOauth, ready, open]);
   }, [token, ready, open]);
 
-  return (
-    <button onClick={() => open()
-      } disabled={!ready}>
-      <strong>Link account</strong>
-    </button>
-  );
+  if(paymentData) {
+    console.log(paymentData);
+    return (
+      <div>Payment will process through your {paymentData.institution.name} account</div>
+    )
+  } else {
+    return (
+      <button className={` w-fit my-6 py-2 font-extrabold border-4 align-middle border-purple-700 rounded-xl px-2`}
+        onClick={() => open()}
+        disabled={!ready}
+      >
+        <strong>Select Payment Method</strong>
+      </button>
+    );
+  }
 }
 
 export default PlaidLinkButton;

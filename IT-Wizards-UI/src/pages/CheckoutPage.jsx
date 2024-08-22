@@ -24,7 +24,7 @@ const CheckoutPage = () => {
         <div className="container px-20 text-indigo-700">
           <div className=" bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
             {cart.itemsHeldInCart.map((item) => (
-              <div className="grid grid-flow-row justify-items-center items-center auto-rows-min grid-cols-2 border-b-4 border-green-400">
+              <div key={item.id} className="grid grid-flow-row justify-items-center items-center auto-rows-min grid-cols-2 border-b-4 border-green-400">
                 <div>
                   <img
                     className="items-center border-4 rounded-xl border-purple-700 size-56 justify-center "
@@ -103,22 +103,16 @@ const CheckoutPage = () => {
             <div className="px-20 my-6 pb-4 border-b-4 border-green-400 w-full">
               <AddressForm />
             </div>
-            <div className="ml-8">
-              <PlaidLinkButton />
-            </div>
-            <div className="flex justify-center ">
-              <button
-                onClick={() => {
+            <div className="flex justify-center">
+              <PlaidLinkButton 
+                onFinished={() => {
                   {
                     cart.clearCart();
                     navigate('/');
                     notifyOrderSubmitted();
                   }
                 }}
-                className="w-fit my-6 py-2 font-extrabold border-4 align-middle border-purple-700 rounded-xl px-2"
-              >
-                Confirm Purchase
-              </button>
+              />
             </div>
           </div>
         </div>

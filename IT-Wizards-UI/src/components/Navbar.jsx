@@ -143,8 +143,8 @@ const Navbar = () => {
                   <div className="">
                     <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
                       {cart.itemsHeldInCart.map((item) => (
-                        <>
-                          <div key={item.id}>
+                        <React.Fragment key={item.id}>
+                          <div>
                             <img
                               className="items-center justify-center "
                               src={cauldron}
@@ -179,7 +179,7 @@ const Navbar = () => {
                               Remove all from cart
                             </button>
                           </div>
-                        </>
+                        </React.Fragment>
                       ))}
                     </div>
 
