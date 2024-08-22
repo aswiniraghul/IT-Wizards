@@ -57,7 +57,7 @@ const CheckoutPage = () => {
           Your cart contents:
         </div>
         <div className="container px-20 text-indigo-700">
-          <div className=" bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
+          <form onSubmit={(e) => handleOnSubmit(e)} className="bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
             {cart.itemsHeldInCart.map((item) => (
               <div
                 key={item.id}
