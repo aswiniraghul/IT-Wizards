@@ -1,204 +1,85 @@
-import React from 'react';
-
-import {
-  PlaidLink,
-} from 'react-plaid-link';
-
-import axios from 'axios';
+import React, { useState, useEffect, useCallback } from "react";
+import { usePlaidLink } from "react-plaid-link";
 
 import { HOST_NAME } from '../env/config';
 
-class PlaidLinkButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { token: null };
-  }
-  async createLinkToken() {
-    // get a link_token from your server
-    // const response = await fetch(`${HOST_NAME}/createLinkToken`, { method: 'POST' });
-    const response = await axios.post(`${HOST_NAME}/create_link_token`);
-    // const { link_token } = await response.json();
-    const link_token = response.data;
-    return link_token;
-  }
+function PlaidLinkButton() {
+  const [token, setToken] = useState(null);
+  // const [loading, setLoading] = useState(true);
 
-  async componentDidMount() {
-    console.log('component did mount');
-    const token = await this.createLinkToken();
-    this.setState({ token: token.accessToken });
-    console.log('token: ', token);
-  }
+  const onSuccess = useCallback(async (publicToken, metadata) => {
+    console.log("onSuccess - calling exchange public token:", publicToken);
+    console.log("onSuccess - calling exchange metadata:", metadata);
+    // setLoading(true);
+    await fetch(`${HOST_NAME}/api/plaid/exchange_public_token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ public_token: publicToken }),
+    });
+    // await getBalance();
+  }, []);
+  const onExit = useCallback(async (error, metadata) => {
+    console.log("onExit - error:", error);
+    console.log("onExit - metadata:", metadata);
+    if (error != null && error.error_code === 'INVALID_LINK_TOKEN') {
+      console.log('Invalid link token, retry creating');
+      // generate new link token
+      createLinkToken();
+    }
+  }, []);
+  const onEvent = useCallback(async (eventName, metadata) => {
+    console.log("onEvent - eventName:", eventName);
+    console.log("onEvent - metadata:", metadata);
+  }, []);
 
-  onSuccess = (publicToken, metadata) => {
-    console.log('onSuccess');
-    // send public_token to your server
-    // https://plaid.com/docs/api/tokens/#token-exchange-flow
-    console.log(publicToken, metadata);
+  // Creates a Link token
+  const createLinkToken = React.useCallback(async () => {
+    console.log('createLinkToken...')
+    // For OAuth, use previously generated Link token
+    // if (window.location.href.includes("?oauth_state_id=")) {
+    //   const linkToken = localStorage.getItem('link_token');
+    //   setToken(linkToken);
+    //   console.log('createLinkToken running with existing linkToken:', linkToken);
+    // } else {
+      const response = await fetch(`${HOST_NAME}/api/plaid/create_link_token`, {});
+      const data = await response.json();
+      console.log('createLinkToken data returned:', data);
+      setToken(data.accessToken);
+      localStorage.setItem("link_token", data.accessToken);
+      console.log('createLinkToken created linkToken DATA:', data.accessToken);
+    // }
+  }, [setToken]);
+
+  const config = {
+    token,
+    onSuccess: onSuccess,
+    onExit: onExit,
+    onEvent: onEvent,
   };
 
-  onEvent = (eventName, metadata) => {
-    console.log('onEvent');
-    // log onEvent callbacks from Link
-    // https://plaid.com/docs/link/web/#onevent
-    console.log(eventName, metadata);
-  };
+  const { open, exit, ready } = usePlaidLink(config);
 
-  onExit = (error, metadata) => {
-    console.log('onExit');
-    // log onExit callbacks from Link, handle errors
-    // https://plaid.com/docs/link/web/#onexit
-    console.log(error, metadata);
-  };
+  useEffect(() => {
+    if (token == null) {
+      console.log('no token, go get one');
+      createLinkToken();
+    }
+    // if (isOauth && ready) {
+    if (ready) {
+      console.log('should be ready and then opening')
+      open();
+    }
+  // }, [token, isOauth, ready, open]);
+  }, [token, ready, open]);
 
-  render() {
-    return (
-      <PlaidLink
-        clientName="B.R.E.W.S"
-        env="sandbox"
-        product={['auth', 'transactions']}
-        clientId="669d27e8b7e14d001ac7b884"
-        secret="f292f639c530b860e14ad7e3606b34"
-        style={{ padding: '20px', fontSize: '16px', cursor: 'pointer' }}
-        token={this.state.token}
-        onSuccess={this.onSuccess}
-        onEvent={this.onEvent}
-        onExit={this.onExit}
-      >
-        Link your bank account
-      </PlaidLink>
-    );
-  }
+  return (
+    <button onClick={() => open()
+      } disabled={!ready}>
+      <strong>Link account</strong>
+    </button>
+  );
 }
 
 export default PlaidLinkButton;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // import React from 'react';
-// import React, { useCallback } from "react";
-// import {
-//   PlaidLink,
-//   usePlaidLink,
-// } from 'react-plaid-link';
-
-// import { HOST_NAME } from '../env/config';
-
-// const PlaidLinkButton = () => {
-//   const [linkToken, setLinkToken] = React.useState('');
-
-//   // The usePlaidLink hook manages Plaid Link creation
-//   // It does not return a destroy function;
-//   // instead, on unmount it automatically destroys the Link instance
-//   const config = {
-//     onSuccess: (public_token, metadata) => {
-//       console.log('public_token and metadata', public_token, metadata);
-//     },
-//     onExit: (err, metadata) => {
-//       console.log('err and metadata', err, metadata);
-//     },
-//     onEvent: (eventName, metadata) => {
-//       console.log('eventName and metadata', eventName, metadata);
-//     },
-//     token: 'GENERATED_LINK_TOKEN',
-//   };
-//   const { open, exit, ready } = usePlaidLink(config);
-
-//   // console.log('open', open);
-//   // console.log('exit', exit);
-//   // console.log('ready', ready);
-
-
-//   const handleOnSuccess = (public_token, metadata) => {
-//     console.log('onSuccess callback public_token', public_token);
-//     console.log('onSuccess callback metadata', metadata);
-//   }
-//   const handleOnExit = (error, metadata) => {
-//     console.log('onExit callback error', error);
-//     console.log('onExit callback metadata', metadata);
-//   }
-//   const handleOnEvent = (eventName, metadata) => {
-//       // Handle errors here
-//       console.error('Plaid Link Event:', eventName, metadata);
-//   };
-
-//   const onSuccess = useCallback(
-//     (public_token, metadata) => {
-//       console.log('onSuccess callback public_token', public_token);
-//       console.log('onSuccess callback metadata', metadata);
-//       // log and save metadata
-//       // exchange public token
-//         // might be better with plaid distinction
-//         // fetch(`${HOST_NAME}/plaid/exchange-public-token`, {
-//       fetch(`${HOST_NAME}/exchange-public-token`, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: {
-//           public_token,
-//         },
-//       }).then(response => response.text())
-//       .then(data => {
-//         console.log('Access Token:', data);
-//       });
-//     },
-//     [],
-//   );
-//   // const onExit = useCallback(
-//   //   (error, metadata) => {
-//   //     console.log('onExit callback error', error);
-//   //     console.log('onExit callback metadata', metadata);
-//   //     // log and save error and metadata
-//   //     // handle invalid link token
-//   //     if (error != null && error.error_code === 'INVALID_LINK_TOKEN') {
-//   //       // generate new link token
-//   //     }
-//   //     // to handle other error codes, see https://plaid.com/docs/errors/
-//   //   },
-//   //   [],
-//   // );
-//   // const onError = useCallback(
-//   //   (error, metadata) => {
-//   //     console.log('onExit callback error', error);
-//   //     console.log('onExit callback metadata', metadata);
-//   //     // log and save error and metadata
-//   //     // handle invalid link token
-//   //     if (error != null && error.error_code === 'INVALID_LINK_TOKEN') {
-//   //       // generate new link token
-//   //     }
-//   //     // to handle other error codes, see https://plaid.com/docs/errors/
-//   //   },
-//   //   [],
-//   // );
-
-//   return (
-//     <PlaidLink
-//       clientName="B.R.E.W.S"
-//       env="sandbox"
-//       product={['auth', 'transactions']}
-//       onSuccess={onSuccess}
-//       onExit={handleOnExit}
-//       onEvent={handleOnEvent}
-//     >
-//       Connect your bank account
-//     </PlaidLink>
-//   );
-// };
-
-// export default PlaidLinkButton;
