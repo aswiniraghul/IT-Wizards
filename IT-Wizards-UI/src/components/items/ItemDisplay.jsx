@@ -129,6 +129,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       console.error('Failed to fetch category data', error);
     }
   };
+  
   const fetchFavourites = async () => {
     try {
         const response = await axios.get(`${HOST_NAME}/api/favourites/list?userId=${userID}`, null);
@@ -139,6 +140,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
         console.error('Unable to favourite item:', error);
     }
   };
+  
   return (
     <section className="w-full border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">

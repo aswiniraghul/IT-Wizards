@@ -24,6 +24,7 @@ const ShippingForm = ({ onInputChange, userAddress }) => {
       </div>
 
       <div className="flex">
+
         <div className="mb-2 mr-10">
           <label className="block text-gray-700 mb-2">City</label>
           <input
@@ -47,6 +48,7 @@ const ShippingForm = ({ onInputChange, userAddress }) => {
             value={state}
             onChange={(e) => onInputChange(e)}
             required
+
           />
         </div>
 

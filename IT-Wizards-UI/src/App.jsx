@@ -22,6 +22,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import ContactUs from './components/ContactUs';
 import NotFoundPage from './pages/NotFoundPage';
 
+
 const App = () => {
 
   const router = createBrowserRouter(
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="*" element={<NotFoundPage />} />
+
       </Route>
     )
   );

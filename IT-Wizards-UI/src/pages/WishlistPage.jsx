@@ -18,7 +18,6 @@ const WishlistPage = () => {
 
   const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
 
-
   useEffect(() => {
     fetchUser();
   }, []);
