@@ -9,6 +9,7 @@ import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
 import FavouriteButton from '../FavoriteButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from '../LoadingSpinner';
 
 import axios from 'axios';
 import { HOST_NAME } from '../../env/config';
@@ -32,6 +33,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const [favourites, setFavourites] = useState([]);
   const [userID, setUserId] = useState();
   const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const userName = localStorage.getItem('user');
   const userRole = localStorage.getItem('userRole');
@@ -53,6 +55,8 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       setItems(data);
     } catch (error) {
       console.error('Failed to fetch data', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -145,62 +149,65 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
             </h2>
             <div className="container m-auto max-w-5xl py-12">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
-                <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
-                  {items.map((item) => {
-                    if (
-                      (searchTerm.trim() &&
-                        !item.name
-                          .toLowerCase()
-                          .includes(searchTerm.toLowerCase())) ||
-                      (categoryFilter.length &&
-                        (!item.itemCategory.name ||
-                          !categoryFilter.includes(item.itemCategory.name)))
-                    ) {
-                      return;
-                    } else {
-                      itemsArr.push(item);
-                    }
+                <div>
+                  {loading ? (
+                    <LoadingSpinner loading={loading} />
+                  ) : (
+                    <div className="grid grid-cols-1 mb-8 md:grid-cols-3 gap-6">
+                      {items.map((item) => {
+                        if (
+                          (searchTerm.trim() &&
+                            !item.name
+                              .toLowerCase()
+                              .includes(searchTerm.toLowerCase())) ||
+                          (categoryFilter.length &&
+                            (!item.itemCategory.name ||
+                              !categoryFilter.includes(item.itemCategory.name)))
+                        ) {
+                          return;
+                        } else {
+                          itemsArr.push(item);
+                        }
 
-                    return (
-                      <div key={item.id}>
-                        <div className="mb-2 ml-2 mr-2 z-0 relative hover:scale-105">
-                          <Link to={`/items/${item.id}`}>
-                            <img
-                              src={cauldron}
-                              className="size-72"
-                              alt={item.name}
-                            ></img>
-                            {userName !== null && userRole !== 'admin' && (
-                              <div
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  inWishlist(item.id)
-                                    ? removeFromWishlist(item.id)
-                                    : addToWishlist(item.id);
-                                }}
-                                className="absolute top-2 right-2 cursor-pointer text-3xl"
-                              >
-                                <FontAwesomeIcon
-                                  icon={
-                                    inWishlist(item.id)
-                                      ? filledHeart
-                                      : outlineHeart
-                                  }
-                                />
+                        return (
+                          <div key={item.id}>
+                            <div className="mb-2 ml-2 mr-2 z-0 relative hover:scale-105">
+                              <Link to={`/items/${item.id}`}>
+                                <img
+                                  src={cauldron}
+                                  className="size-72"
+                                  alt={item.name}
+                                ></img>
+                                {userName !== null && userRole !== 'admin' && (
+                                  <div
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      inWishlist(item.id)
+                                        ? removeFromWishlist(item.id)
+                                        : addToWishlist(item.id);
+                                    }}
+                                    className="absolute top-2 right-2 cursor-pointer text-3xl"
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={
+                                        inWishlist(item.id)
+                                          ? filledHeart
+                                          : outlineHeart
+                                      }
+                                    />
+                                  </div>
+                                )}
+                              </Link>
+                              <div className="flex items-center justify-center">
+                                {item.name}
                               </div>
-                            )}
-                          </Link>
-                          <div className="flex items-center justify-center">
-                            {item.name}
-                          </div>
-                          <div className="flex items-center justify-center">
-                            ${(Math.round(item.price * 100) / 100).toFixed(2)}
-                          </div>
-                          <div>
-                            {item.currentInventory < 1 ? (
-                              <div className="text-sm text-center text-red-600">
-                                Out of stock, check back soon!
+                              <div className="flex items-center justify-center">
+                                $
+                                {(Math.round(item.price * 100) / 100).toFixed(
+                                  2
+                                )}
                               </div>
+
                             ) : (
                               <div></div>
                             )}
@@ -229,30 +236,71 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                 >
                                   -
                                 </button>
-                              </div>
-                              <div></div>
+
                               <div>
-                                <button
-                                  className="flex bg-red-600 hover:bg-red-700 ml-3 mr-3  text-white text-sm font-bold py-2 px-4 rounded-full w-fit mt-3 mb-3 focus:outline-none focus:shadow-outline"
-                                  onClick={() => cart.deleteFromCart(item)}
-                                >
-                                  Remove all from cart
-                                </button>
+                                {item.currentInventory < 1 ? (
+                                  <div className="text-sm text-center text-red-600">
+                                    Out of stock, check back soon!
+                                  </div>
+                                ) : (
+                                  <div></div>
+                                )}
+
                               </div>
+                              {item.itemCategory?.name && (
+                                <div className="flex items-center justify-center">
+                                  <span className="text-green-500 item-category">
+                                    Category: {item.itemCategory.name}
+                                  </span>
+                                </div>
+                              )}
+                              {cart.getItemQuantity(item.id) > 0 ? (
+                                <div className="">
+                                  <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
+                                    In Cart: {cart.getItemQuantity(item.id)}
+                                    <button
+                                      onClick={() => cart.addOneToCart(item)}
+                                      className=" mx-2 align-bottom bg-green-500 text-slate-700 text-sm font-bold rounded-full w-8 h-min"
+                                    >
+                                      +
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        cart.removeOneFromCart(item)
+                                      }
+                                      className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-sm font-bold rounded-full w-8 h-min"
+                                    >
+                                      -
+                                    </button>
+                                  </div>
+                                  <div></div>
+                                  <div>
+                                    <button
+                                      className="flex bg-red-600 hover:bg-red-700 ml-3 mr-3  text-white text-sm font-bold py-2 px-4 rounded-full w-fit mt-3 mb-3 focus:outline-none focus:shadow-outline"
+                                      onClick={() => cart.deleteFromCart(item)}
+                                    >
+                                      Remove all from cart
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                              <div>
+                                  {userRole !== 'admin' ? (
+                                <button
+                                  onClick={() => cart.addOneToCart(item)}
+                                  className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
+                                  type="submit"
+                                >
+                                  Add to Cart
+                                </button>):('')
+                                    }
+                                  </div>)}
                             </div>
-                          ) : (
-                            <button
-                              onClick={() => cart.addOneToCart(item)}
-                              className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                              type="submit"
-                            >
-                              Add to Cart
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                   {itemsArr.length === 0 && (
                     <>
                       <div></div>

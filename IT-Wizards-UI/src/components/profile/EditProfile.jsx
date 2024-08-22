@@ -167,8 +167,8 @@ const EditProfile = () => {
               required
             />
           </div>
-          <div className="font-extrabold underline pb-3 pt-6">Address Info</div>
-          <AddressForm />
+          {/* <div className="font-extrabold underline pb-3 pt-6">Address Info</div>
+          <AddressForm /> */}
           <button type="submit" className="btn btn-primary mt-4" disabled={loading}>
             {loading ? "Saving..." : "Save Changes"}
           </button>
