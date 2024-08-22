@@ -207,36 +207,6 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   2
                                 )}
                               </div>
-
-                            ) : (
-                              <div></div>
-                            )}
-                          </div>
-                          {item.itemCategory?.name && (
-                            <div className="flex items-center justify-center">
-                              <span className="text-green-500 item-category">
-                                Category: {item.itemCategory.name}
-                              </span>
-                            </div>
-                          )}
-                          { userID && <FavouriteButton itemId={item.id} userId={userID} favourites={favourites} />}
-                          {cart.getItemQuantity(item.id) > 0 ? (
-                            <div className="">
-                              <div className="flex bg-indigo-600  text-white text-sm font-bold py-2 px-4 ml-3 mr-3 rounded-full w-fit  mt-5  focus:outline-none focus:shadow-outline">
-                                In Cart: {cart.getItemQuantity(item.id)}
-                                <button
-                                  onClick={() => cart.addOneToCart(item)}
-                                  className=" mx-2 align-bottom bg-green-500 text-slate-700 text-sm font-bold rounded-full w-8 h-min"
-                                >
-                                  +
-                                </button>
-                                <button
-                                  onClick={() => cart.removeOneFromCart(item)}
-                                  className="size-20 mx-2 align-bottom bg-red-500  text-slate-700 text-sm font-bold rounded-full w-8 h-min"
-                                >
-                                  -
-                                </button>
-
                               <div>
                                 {item.currentInventory < 1 ? (
                                   <div className="text-sm text-center text-red-600">
@@ -245,7 +215,6 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                 ) : (
                                   <div></div>
                                 )}
-
                               </div>
                               {item.itemCategory?.name && (
                                 <div className="flex items-center justify-center">
@@ -253,6 +222,13 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                     Category: {item.itemCategory.name}
                                   </span>
                                 </div>
+                              )}
+                              {userID && (
+                                <FavouriteButton
+                                  itemId={item.id}
+                                  userId={userID}
+                                  favourites={favourites}
+                                />
                               )}
                               {cart.getItemQuantity(item.id) > 0 ? (
                                 <div className="">
@@ -284,17 +260,20 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </div>
                                 </div>
                               ) : (
-                              <div>
+                                <div>
                                   {userRole !== 'admin' ? (
-                                <button
-                                  onClick={() => cart.addOneToCart(item)}
-                                  className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
-                                  type="submit"
-                                >
-                                  Add to Cart
-                                </button>):('')
-                                    }
-                                  </div>)}
+                                    <button
+                                      onClick={() => cart.addOneToCart(item)}
+                                      className="bg-indigo-600 hover:bg-indigo-700   text-white font-bold py-2 px-4 rounded-full w-full mt-6 hover:text-green-600 focus:outline-none focus:shadow-outline"
+                                      type="submit"
+                                    >
+                                      Add to Cart
+                                    </button>
+                                  ) : (
+                                    ''
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
                         );
