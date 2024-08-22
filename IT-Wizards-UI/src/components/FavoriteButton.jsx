@@ -1,40 +1,28 @@
 //attach to item disoplay 
-import { useEffect, useState } from 'react';
-import { getUser } from '../services/userService';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as outlineStar } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import { HOST_NAME } from '../env/config';
 
-const FavouriteButton = ({ itemId }) => {
-    const [isFavourited, setIsFavourited] = useState(false);
-    const [userId, setUserId] = useState(null);
-    const userName = localStorage.getItem('user');
+const FavouriteButton = ({ itemId, userId, favourites }) => {
+    const [isFavourited, setIsFavourited] = useState();
 
     useEffect(() => {
-        fetchUser();
-    }, []);
-
-    const fetchUser = async () => {
-        if (userName === null) {
-            return
-        } else {
-            try {
-                const data = await getUser(userName);
-                console.log(data.id);
-                setUserId(data.id);
-            } catch (error) {
-                console.error('Failed to fetch data', error);
-            }
+        if (favourites.length) {
+            setIsFavourited(favourites.some(fav => fav.id === itemId))
         }
-    };
+    }, [favourites]);
+
+    console.log(`item ID: ${itemId}, favourites: `, favourites);
 
     const toggleFavourite = async () => {
         try {
-            const response = await axios.post (`${HOST_NAME}/favourite/${itemId}`, null, {
+            const response = await axios.post(`${HOST_NAME}/api/favourites/${isFavourited ? 'remove' : 'add'}`, null, {
                 params: {
-                    userId: userId
+                    userId,
+                    itemId,
                 }
             });
             if(response.status === 200) {

@@ -1,6 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -34,11 +34,11 @@ public class Item extends AbstractEntity{
     @JoinColumn(name="item_category_id")
     private ItemCategory itemCategory;
 
-//    THIS IS THE PROBLEM! Favoriting works, but this map is off for the item
     @Setter
     @Getter
-    @ManyToMany(mappedBy = "items")
-    private Set<Favourite> usersWhoFavourited = new HashSet<>();
+    @ManyToMany(mappedBy = "favourites")
+    @JsonIgnore
+    private Set<User> favouritedByUsers = new HashSet<>();
 
     private Double price;
     @NotNull

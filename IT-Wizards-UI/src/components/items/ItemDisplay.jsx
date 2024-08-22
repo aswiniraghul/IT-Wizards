@@ -10,6 +10,9 @@ import FavouriteButton from '../FavoriteButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import axios from 'axios';
+import { HOST_NAME } from '../../env/config';
+
 import {
   addItemToWishlist,
   removeItemFromWishlist,
@@ -26,6 +29,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
   const cart = useContext(CartContext);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [favourites, setFavourites] = useState([]);
   const [userID, setUserId] = useState();
   const [wishlist, setWishlist] = useState([]);
 
@@ -40,6 +44,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
   useEffect(() => {
     if (userID) fetchWishlist();
+    if (userID) fetchFavourites();
   }, [userID]);
 
   const fetchItems = async () => {
@@ -120,6 +125,16 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       console.error('Failed to fetch category data', error);
     }
   };
+  const fetchFavourites = async () => {
+    try {
+        const response = await axios.get(`${HOST_NAME}/api/favourites/list?userId=${userID}`, null);
+        if(response.status === 200) {
+          setFavourites(response.data);
+        }
+    } catch (error) {
+        console.error('Unable to favourite item:', error);
+    }
+  };
   return (
     <section className="w-full border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
@@ -197,9 +212,8 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                               </span>
                             </div>
                           )}
-
-                          {userName !== null && userRole !== 'admin' && (
-                            <FavouriteButton itemId={item.id} />
+                          {userID !== null && userRole !== 'admin' && (
+                            <FavouriteButton itemId={item.id} userId={userID} favourites={favourites} />
                           )}
                           {cart.getItemQuantity(item.id) > 0 ? (
                             <div className="">

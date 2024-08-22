@@ -1,6 +1,5 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -61,14 +60,7 @@ public class User {
     @JoinTable(
             name = "user_favourite",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns =  @JoinColumn(name = "favourite_id")
+            inverseJoinColumns =  @JoinColumn(name = "item_id")
     )
-    @JsonIgnore // Prevent serialization of this property
-    private Set<Favourite> favourites = new HashSet<>();
-
-    public void addFavourite(Favourite favourite) {
-        favourites.add(favourite);
-        favourite.getUsers().add(this); // Bidirectional
-    }
-
+    private Set<Item> favourites = new HashSet<>();
 }
