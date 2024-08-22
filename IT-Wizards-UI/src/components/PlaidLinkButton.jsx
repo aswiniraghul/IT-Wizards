@@ -26,7 +26,7 @@ function PlaidLinkButton({onFinished}) {
     // await getBalance();
     setPaymentData(metadata);
     toast.success("💸 Payment applied 💸")
-    setTimeout(onFinished, 5000);
+    setTimeout(onFinished, 3000);
   }, []);
   const onExit = useCallback(async (error, metadata) => {
     console.log("onExit - error:", error);
