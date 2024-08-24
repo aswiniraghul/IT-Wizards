@@ -21,6 +21,7 @@ import WishlistPage from './pages/WishlistPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ContactUs from './components/ContactUs';
 import NotFoundPage from './pages/NotFoundPage';
+import OrderScreen from './pages/OrderScreen';
 
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/orders/:id" element={<OrderScreen />} />
 
       </Route>
     )
