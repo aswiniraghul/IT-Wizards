@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,10 +19,14 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
+    @Setter
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @Getter
     @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
 
@@ -47,4 +53,14 @@ public class User {
 
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
     private final List<Wishlist> wishlist = new ArrayList<>();
+
+    @Setter
+    @Getter
+    @ManyToMany
+    @JoinTable(
+            name = "user_favourite",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns =  @JoinColumn(name = "item_id")
+    )
+    private Set<Item> favourites = new HashSet<>();
 }

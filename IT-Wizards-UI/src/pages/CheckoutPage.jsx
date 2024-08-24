@@ -1,6 +1,5 @@
-
 import { useContext, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PlaidLinkButton from '../components/PlaidLinkButton';
 import { CartContext } from '../components/CartContext';
 import cauldron from '../assets/images/cauldron.png';
@@ -10,56 +9,46 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
-const BASEAPIURL = "http://localhost:8080";
-
 const CheckoutPage = () => {
-  const { userId } = useParams();
   const cart = useContext(CartContext);
   const navigate = useNavigate();
-  const [address, setAddress] = useState({
-    address: '',
-    city: '',
-    state: '',
-    zipcode: ''
-  });
+  const [paymentStatus, setPaymentStatus] = useState(false);
+    const [userAddress, setUserAddress] = useState({
+      address: '',
+      city: '',
+      state: '',
+      zipcode: '',
+    });
+    const { address, city, state, zipcode } = userAddress;
 
-  const addressChange = (updatedAddress) => {
-    setAddress(updatedAddress);
-  };
+    const userName = localStorage.getItem('user');
 
-  const submitOrder = async () => {
-    if (!userId || !address.address) {
-      toast.error('Missing information to complete order.');
-      return;
-    }
-    const order = {
-      user: {
-        id: userId
-      },
-      address: {
-        id: address.id,
-        address: address.address,
-        city: address.city,
-        state: address.state,
-        zipcode: address.zipcode
-      },
-      cartItems: cart.itemsHeldInCart.map(item => ({
-        id: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price
-      }))
+    const onInputChange = (e) => {
+      setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
+      console.log(userAddress);
     };
 
-  try {
-    await axios.post(`${BASEAPIURL}/orders`, order);
-    cart.clearCart();
-    navigate('/');
+    const handleOnSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        console.log(paymentStatus);
+        await axios.post(
+          `http://localhost:8080/addresses?userName=${userName}`,
+          {
+            ...userAddress,
+          }
+        );
+        notifyOrderSubmitted();
+        cart.clearCart();
+        setPaymentStatus(false);
+        return navigate('/');
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+
+  const notifyOrderSubmitted = () =>
     toast.success('Your order has successfully been submitted!');
-  } catch (error) {
-    toast.error('There was an error submitting your order.');
-  }
-};
 
   return (
     <div className="flex flex-row h-[calc(100vh-5rem)]">
@@ -68,16 +57,19 @@ const CheckoutPage = () => {
           Your cart contents:
         </div>
         <div className="container px-20 text-indigo-700">
-          <div className=" bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
+          <div className="bg-white  py-4 mb-4 shadow-md rounded-md border m-4 md:m-0">
             {cart.itemsHeldInCart.map((item) => (
-               <div key={item.id} className="grid grid-flow-row justify-items-center items-center auto-rows-min grid-cols-2 border-b-4 border-green-400">
-               <div>
-                 <img
-                   className="items-center border-4 rounded-xl border-purple-700 size-56 justify-center "
-                   src={cauldron}
-                 />
-               </div>
-               <div className="container mb-10 mt-10">
+              <div
+                key={item.id}
+                className="grid grid-flow-row justify-items-center items-center auto-rows-min grid-cols-2 border-b-4 border-green-400"
+              >
+                <div>
+                  <img
+                    className="items-center border-4 rounded-xl border-purple-700 size-56 justify-center "
+                    src={cauldron}
+                  />
+                </div>
+                <div className="container mb-10 mt-10" key={item.id}>
                   <h1 className="text-xl underline font-extrabold">
                     {item.name}
                   </h1>
@@ -114,47 +106,73 @@ const CheckoutPage = () => {
             <h1 className="container text-2xl w-1/4 text-center border-4 rounded-xl border-purple-700 mt-10 mb-10 font-bold">
               Your Total: ${cart.getTotalCost().toFixed(2)}
             </h1>
+            <div className="flex justify-center border-t-4 pt-4  border-green-400 mb-4">
+              <PlaidLinkButton
+                onFinished={() => {
+                  setPaymentStatus(true);
+                }}
+              />
+            </div>
+
             <h2 className="text-3xl container font-semibold border-t-4 pt-4  border-green-400 mb-4">
               Shipping Info
             </h2>
-            <div className="flex ml-20">
-              <div className=" mr-10">
-                <label className="block text-gray-700 font-bold mb-2">
-                  First Name
-                </label>
-                <input
-                  id="first_name"
-                  name="first_name"
-                  className="border rounded w-full py-2 px-3"
-                  rows="1"
-                  placeholder="First name"
-                  required
-                ></input>
+
+            <form onSubmit={(e) => handleOnSubmit(e)}>
+              <div className="flex ml-20">
+                <div className=" mr-10">
+                  <label className="block text-gray-700 font-bold mb-2">
+                    First Name
+                  </label>
+                  <input
+                    id="first_name"
+                    name="first_name"
+                    className="border rounded w-full py-2 px-3"
+                    rows="1"
+                    placeholder="First name"
+                    required
+                  ></input>
+                </div>
+
+                <div className=" ml-10">
+                  <label className="block text-gray-700 font-bold mb-2">
+                    Last Name
+                  </label>
+                  <input
+                    id="last_name"
+                    name="last_name"
+                    className="border rounded w-full py-2 px-3"
+                    rows="3"
+                    placeholder="Last Name"
+                    required
+                  ></input>
+                </div>
+              </div>
+              <div className="px-20 my-6 pb-4 border-b-4 border-green-400 w-full">
+                <AddressForm
+                  onInputChange={onInputChange}
+                  userAddress={userAddress}
+                />
               </div>
 
-              <div className=" ml-10">
-                <label className="block text-gray-700 font-bold mb-2">
-                  Last Name
-                </label>
-                <input
-                  id="last_name"
-                  name="last_name"
-                  className="border rounded w-full py-2 px-3"
-                  rows="3"
-                  placeholder="Last Name"
-                ></input>
+              <div className="flex justify-center">
+                {paymentStatus === false ? (
+                  <button
+                    disabled
+                    className="w-fit my-6 py-2 font-extrabold border-4 align-middle text-slate-400 border-slate-400 rounded-xl px-2"
+                  >
+                    Confirm Purchase
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="w-fit my-6 py-2 font-extrabold border-4 align-middle border-purple-700 rounded-xl px-2"
+                  >
+                    Confirm Purchase
+                  </button>
+                )}
               </div>
-            </div>
-            <div className="px-20 my-6 pb-4 border-b-4 border-green-400 w-full">
-              <AddressForm address={address} onAddressChange={addressChange}/>
-            </div>
-            <div className="ml-8">
-              <PlaidLinkButton />
-            </div>
-            <div className="flex justify-center ">
-              <button onClick={submitOrder} className="w-fit my-6 py-2 font-extrabold border-4 align-middle border-purple-700 rounded-xl px-2"
-              >Confirm Purchase</button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

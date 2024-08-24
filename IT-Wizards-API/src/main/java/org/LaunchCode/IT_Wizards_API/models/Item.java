@@ -1,16 +1,21 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
@@ -28,6 +33,12 @@ public class Item extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name="item_category_id")
     private ItemCategory itemCategory;
+
+    @Setter
+    @Getter
+    @ManyToMany(mappedBy = "favourites")
+    @JsonIgnore
+    private Set<User> favouritedByUsers = new HashSet<>();
 
     private Double price;
     @NotNull
