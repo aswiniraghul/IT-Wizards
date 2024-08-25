@@ -8,8 +8,8 @@ import java.util.List;
 public class Orders extends AbstractEntity{
 
     //Fields
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private final List<CartItem> cartItems = new ArrayList<>();
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+//    private final List<CartItem> cartItems = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -30,7 +30,7 @@ public class Orders extends AbstractEntity{
 
     //Getters and Setters
 
-    public List<CartItem> getCartItems() {return cartItems;}
+//    public List<CartItem> getCartItems() {return cartItems;}
 
     public User getUser() {return user;}
 

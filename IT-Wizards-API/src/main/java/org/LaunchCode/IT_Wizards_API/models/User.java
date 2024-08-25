@@ -45,8 +45,8 @@ public class User {
     @Column(name = "login_role", nullable = false)
     private String loginRole;
 
-    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
-    private final List<Cart> cart = new ArrayList<>();
+    @OneToOne(mappedBy ="user", cascade = CascadeType.ALL)
+    private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<Orders> orders = new ArrayList<>();

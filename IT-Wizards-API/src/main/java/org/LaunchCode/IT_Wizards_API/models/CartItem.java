@@ -17,9 +17,9 @@ public class CartItem extends AbstractEntity{
     @JoinColumn(name="cart_id")
     private Cart cart;
 
-    @ManyToOne
-    @JoinColumn(name="order_id")
-    private Orders order;
+//    @ManyToOne
+//    @JoinColumn(name="order_id")
+//    private Orders order;
 
     @ManyToOne
     @JoinColumn(name="item_id")
@@ -27,10 +27,10 @@ public class CartItem extends AbstractEntity{
 
     //Constructors
 
-    public CartItem(Integer quantity, Cart cart, Orders order, Item item) {
+    public CartItem(Integer quantity, Cart cart, Item item) {
         this.quantity = quantity;
         this.cart = cart;
-        this.order = order;
+//        this.order = order;
         this.item = item;
     }
 
@@ -46,9 +46,9 @@ public class CartItem extends AbstractEntity{
 
     public void setCart(Cart cart) {this.cart = cart;}
 
-    public Orders getOrder() {return order;}
-
-    public void setOrder(Orders order) {this.order = order;}
+//    public Orders getOrder() {return order;}
+//
+//    public void setOrder(Orders order) {this.order = order;}
 
     public Item getItem() {return item;}
 

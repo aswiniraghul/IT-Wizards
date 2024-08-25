@@ -11,7 +11,7 @@ public class Cart extends AbstractEntity{
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private final List<CartItem> cartItems = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="user_id")
       private User user;
 
