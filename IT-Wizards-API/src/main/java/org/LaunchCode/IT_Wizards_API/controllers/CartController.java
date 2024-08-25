@@ -35,4 +35,19 @@ public class CartController {
         return cartService.getCartByUserId(userId);
     }
 
+    @PutMapping("/items/{cartItemId}")
+    public CartItem updateCartItemQuantity(@PathVariable Long cartItemId, @RequestParam Integer quantity) {
+        if (quantity == null || quantity < 1) {
+            throw new IllegalArgumentException("Quantity must be a positive integer");
+        }
+        return cartService.updateCartItemQuantity(cartItemId, quantity);
+    }
+
+    // Delete cart item
+    @DeleteMapping("/items/{cartItemId}")
+    public void deleteCartItem(@PathVariable Long cartItemId) {
+        cartService.deleteCartItem(cartItemId);
+    }
+
+
 }

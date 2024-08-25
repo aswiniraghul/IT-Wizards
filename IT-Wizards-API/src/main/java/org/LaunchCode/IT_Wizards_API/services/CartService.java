@@ -50,4 +50,17 @@ public class CartService {
         return cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(id));
     }
 
+    public CartItem updateCartItemQuantity(Long cartItemId, Integer newQuantity) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+        cartItem.setQuantity(newQuantity);
+        return cartItemRepository.save(cartItem);
+    }
+
+    public void deleteCartItem(Long cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+        cartItemRepository.delete(cartItem);
+    }
+
 }
