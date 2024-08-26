@@ -45,6 +45,10 @@ public class CartService {
     public Cart getCartByUserId(Long userId) {
         return cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
     }
+    public List<CartItem> getAllCartItems(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
+        return cart.getCartItems();
+    }
 
 //    public List<CartItem> getAllCartItems() {
 //        return cartItemRepository.findAll();

@@ -40,6 +40,12 @@ public class CartController {
         return cartService.getCartByUserId(userId);
     }
 
+    @GetMapping("/{userId}/items")
+    public List<CartItem> getAllCartItems(@PathVariable Long userId) {
+        return cartService.getAllCartItems(userId);
+    }
+
+
     @PutMapping("/{userId}/updateItem/{cartItemId}")
     public CartItem updateCartItemQuantity(@PathVariable Long userId, @PathVariable Long cartItemId, @RequestParam Integer quantity) {
         if (quantity == null || quantity < 1) {
