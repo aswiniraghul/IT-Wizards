@@ -54,6 +54,7 @@ public class User {
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
     private final List<Wishlist> wishlist = new ArrayList<>();
 
+
     @Setter
     @Getter
     @ManyToMany

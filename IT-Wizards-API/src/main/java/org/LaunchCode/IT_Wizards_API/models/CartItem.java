@@ -1,9 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -13,6 +11,7 @@ public class CartItem extends AbstractEntity{
     //Fields
     private Integer quantity;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="cart_id")
     private Cart cart;
