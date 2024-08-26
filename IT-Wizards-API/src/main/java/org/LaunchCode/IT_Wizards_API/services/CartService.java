@@ -42,24 +42,36 @@ public class CartService {
         return cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
     }
 
-    public List<CartItem> getAllCartItems() {
-        return cartItemRepository.findAll();
-    }
+//    public List<CartItem> getAllCartItems() {
+//        return cartItemRepository.findAll();
+//    }
 
-    public CartItem getCartItemById(Long id) {
-        return cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(id));
-    }
+//    public CartItem getCartItemById(Long id) {
+//        return cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(id));
+//    }
 
-    public CartItem updateCartItemQuantity(Long cartItemId, Integer newQuantity) {
+    public CartItem updateCartItemQuantity(Long userId, Long cartItemId, Integer newQuantity) {
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+
+        if (!cartItem.getCart().equals(cart)) {
+            throw new IllegalArgumentException("CartItem does not belong to the user");
+        }
+
         cartItem.setQuantity(newQuantity);
         return cartItemRepository.save(cartItem);
     }
 
-    public void deleteCartItem(Long cartItemId) {
+    public void deleteCartItem(Long userId, Long cartItemId) {
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+
+        if (!cartItem.getCart().equals(cart)) {
+            throw new IllegalArgumentException("CartItem does not belong to the user");
+        }
+
         cartItemRepository.delete(cartItem);
     }
 

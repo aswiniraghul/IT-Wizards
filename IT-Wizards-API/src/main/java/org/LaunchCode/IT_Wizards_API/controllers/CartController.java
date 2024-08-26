@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/cart")
@@ -23,10 +24,14 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping()
-    public CartItem addItemToCart(@RequestParam Long userId, @RequestParam Long newItemId) {
+    public CartItem addItemToCart(@RequestBody Map<String, Long> requestBody) {
+        Long userId = requestBody.get("userId");
+        Long newItemId = requestBody.get("newItemId");
+
         if (userId == null || newItemId == null) {
             throw new IllegalArgumentException("userId and newItemId must be provided");
         }
+
         return cartService.addItemToCart(userId, newItemId);
     }
 
@@ -35,18 +40,17 @@ public class CartController {
         return cartService.getCartByUserId(userId);
     }
 
-    @PutMapping("/items/{cartItemId}")
-    public CartItem updateCartItemQuantity(@PathVariable Long cartItemId, @RequestParam Integer quantity) {
+    @PutMapping("/{userId}/updateItem/{cartItemId}")
+    public CartItem updateCartItemQuantity(@PathVariable Long userId, @PathVariable Long cartItemId, @RequestParam Integer quantity) {
         if (quantity == null || quantity < 1) {
             throw new IllegalArgumentException("Quantity must be a positive integer");
         }
-        return cartService.updateCartItemQuantity(cartItemId, quantity);
+        return cartService.updateCartItemQuantity(userId, cartItemId, quantity);
     }
 
-    // Delete cart item
-    @DeleteMapping("/items/{cartItemId}")
-    public void deleteCartItem(@PathVariable Long cartItemId) {
-        cartService.deleteCartItem(cartItemId);
+    @DeleteMapping("/{userId}/removeItem/{cartItemId}")
+    public void deleteCartItem(@PathVariable Long userId ,@PathVariable Long cartItemId) {
+        cartService.deleteCartItem(userId, cartItemId);
     }
 
 
