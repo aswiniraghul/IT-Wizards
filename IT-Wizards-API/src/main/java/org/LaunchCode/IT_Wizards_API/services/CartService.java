@@ -30,6 +30,7 @@ public class CartService {
     public CartItem addItemToCart(Long userId, Long newItemId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Cart cart;
+        CartItem cartItem;
        try {
             cart = cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
        } catch(Exception e) {
@@ -38,7 +39,13 @@ public class CartService {
         Item item = itemRepository.findById(newItemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item not found"));
         //TODO: Look if cartItem exists & if so up quantity by 1
-        CartItem cartItem = new CartItem(1, cart, item);
+        try {
+            cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId() ).orElseThrow(() -> new CartItemNotFoundException(userId));
+            cartItem.setQuantity(cartItem.getQuantity()+1);
+        } catch(Exception e) {
+             cartItem = new CartItem(1, cart, item);
+        }
+
         return cartItemRepository.save(cartItem);
     }
 

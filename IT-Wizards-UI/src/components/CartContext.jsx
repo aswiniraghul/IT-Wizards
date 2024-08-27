@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HOST_NAME } from '../env/config';
+import { addItemToCart} from '../services/cartService';
 
 
 export const CartContext = createContext({
@@ -125,7 +126,7 @@ export function CartProvider({ children }) {
   }
 
   const isLoggedIn = () => localStorage.getItem('user');
-
+  const getUserId = () => localStorage.getItem('userId');
   async function addOneToCart(item) {
     if (!isLoggedIn()) {
       notifyLoginRequired();
@@ -143,6 +144,8 @@ export function CartProvider({ children }) {
       console.log('Insufficient Inventory');
       return;
     } else {
+      addItemToCart(getUserId(), item.id)
+
       if (quantity === 0) {
         //item is not yet in cart
         setCartItems([
