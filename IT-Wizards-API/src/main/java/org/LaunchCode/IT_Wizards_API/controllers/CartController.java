@@ -11,6 +11,7 @@ import org.LaunchCode.IT_Wizards_API.models.Cart;
 import org.LaunchCode.IT_Wizards_API.repository.UserRepository;
 import org.LaunchCode.IT_Wizards_API.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,9 +54,17 @@ public class CartController {
 
 
     @DeleteMapping("/{userId}/removeItem/{cartItemId}")
-    public void deleteCartItem(@PathVariable Long userId ,@PathVariable Long cartItemId) {
+    public void deleteCartItem(@PathVariable Long userId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(userId, cartItemId);
     }
 
-
+    @DeleteMapping("/{userId}/clearItems")
+    public ResponseEntity<Void> clearCartItems(@PathVariable Long userId) {
+        try {
+            cartService.clearCartItems(userId);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } catch (CartNotFoundException e) {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
+    }
 }

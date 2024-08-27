@@ -1,5 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.services;
 
+import jakarta.transaction.Transactional;
 import org.LaunchCode.IT_Wizards_API.exceptions.CartItemNotFoundException;
 import org.LaunchCode.IT_Wizards_API.exceptions.CartNotFoundException;
 import org.LaunchCode.IT_Wizards_API.exceptions.OrdersNotFoundException;
@@ -83,5 +84,11 @@ public class CartService {
 
         cartItemRepository.delete(cartItem);
     }
+    @Transactional
+    public void clearCartItems(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new CartNotFoundException(userId));
 
+        cartItemRepository.deleteByCartId(cart.getId());
+    }
 }
