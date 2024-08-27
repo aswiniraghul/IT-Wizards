@@ -5,7 +5,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HOST_NAME } from '../env/config';
-import { addItemToCart} from '../services/cartService';
+import { 
+  addItemToCart,
+  removeOneItemFromCart,
+  deleteCartItem
+} from '../services/cartService';
 
 
 export const CartContext = createContext({
@@ -144,7 +148,7 @@ export function CartProvider({ children }) {
       console.log('Insufficient Inventory');
       return;
     } else {
-      addItemToCart(getUserId(), item.id)
+      await addItemToCart(getUserId(), item.id)
 
       if (quantity === 0) {
         //item is not yet in cart
@@ -180,8 +184,9 @@ export function CartProvider({ children }) {
     const quantity = getItemQuantity(item.id);
 
     if (quantity == 1) {
-      deleteFromCart(item);
+       deleteFromCart(item);
     } else {
+      removeOneItemFromCart(getUserId(), item.id);
       setCartItems(
         cartItems.map((cartItem) =>
           cartItem.id === item.id
@@ -194,6 +199,7 @@ export function CartProvider({ children }) {
   }
 
   function deleteFromCart(item) {
+    deleteCartItem(getUserId(), item.id);
     setCartItems((cartItems) =>
       cartItems.filter((currentItem) => {
         return currentItem.id != item.id;

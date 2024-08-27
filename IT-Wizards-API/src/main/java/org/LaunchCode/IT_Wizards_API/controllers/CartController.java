@@ -46,13 +46,9 @@ public class CartController {
     }
 
 
-    @PutMapping("/{userId}/updateItem/{cartItemId}")
-    public CartItem updateCartItemQuantity(@PathVariable Long userId, @PathVariable Long cartItemId, @RequestBody Map<String, Integer> requestBody) {
-        Integer quantity = requestBody.get("quantity");
-        if (quantity == null || quantity < 1) {
-            throw new IllegalArgumentException("Quantity must be a positive integer");
-        }
-        return cartService.updateCartItemQuantity(userId, cartItemId, quantity);
+    @PutMapping("/{userId}/removeOneItem/{cartItemId}")
+    public void removeOneItemFromCart(@PathVariable Long userId, @PathVariable Long cartItemId) {
+        cartService.removeOneItemFromCart(userId, cartItemId);
     }
 
 

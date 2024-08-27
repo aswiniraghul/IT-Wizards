@@ -57,31 +57,25 @@ public class CartService {
         return cart.getCartItems();
     }
 
-//    public List<CartItem> getAllCartItems() {
-//        return cartItemRepository.findAll();
-//    }
-
-//    public CartItem getCartItemById(Long id) {
-//        return cartItemRepository.findById(id).orElseThrow(() -> new CartItemNotFoundException(id));
-//    }
-
-    public CartItem updateCartItemQuantity(Long userId, Long cartItemId, Integer newQuantity) {
+    public void removeOneItemFromCart(Long userId, Long itemId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+        CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), itemId)
+                .orElseThrow(() -> new CartItemNotFoundException(itemId));
 
-        if (!cartItem.getCart().equals(cart)) {
-            throw new IllegalArgumentException("CartItem does not belong to the user");
+        int currentQuantity = cartItem.getQuantity();
+
+        if (currentQuantity > 1) {
+            cartItem.setQuantity(currentQuantity - 1);
+            cartItemRepository.save(cartItem);
+        } else {
+            cartItemRepository.delete(cartItem);
         }
-
-        cartItem.setQuantity(newQuantity);
-        return cartItemRepository.save(cartItem);
     }
 
-    public void deleteCartItem(Long userId, Long cartItemId) {
+    public void deleteCartItem(Long userId, Long itemId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new CartNotFoundException(userId));
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
+        CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), itemId)
+                .orElseThrow(() -> new CartItemNotFoundException(itemId));
 
         if (!cartItem.getCart().equals(cart)) {
             throw new IllegalArgumentException("CartItem does not belong to the user");

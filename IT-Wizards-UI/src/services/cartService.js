@@ -35,13 +35,9 @@ export const getAllCartItems = async (userId) => {
   }
 };
 
-export const updateCartItemQuantity = async (userId, cartItemId, quantity) => {
+export const removeOneItemFromCart = async (userId, cartItemId) => {
   try {
-    const response = await axios.put(
-      `${BASEAPIURL}/${userId}/updateItem/${cartItemId}`,
-        { quantity: quantity }
-    );
-    return response.data;
+    await axios.put(`${BASEAPIURL}/${userId}/removeOneItem/${cartItemId}`,);
   } catch (error) {
     console.error("There was an error updating the cart item quantity.", error);
     throw error;
