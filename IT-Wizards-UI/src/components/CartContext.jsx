@@ -1,10 +1,16 @@
 import { createContext, useEffect, useState } from 'react';
 import { getItems } from '../services/viewItemsService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HOST_NAME } from '../env/config';
+import { 
+  addItemToCart,
+  removeOneItemFromCart,
+  deleteCartItem
+} from '../services/cartService';
+
 
 export const CartContext = createContext({
   itemsHeldInCart: [],
@@ -20,6 +26,7 @@ export const CartContext = createContext({
 export const ItemDetails = () => {
   const { id } = useParams(id);
   const [item, setItems] = useState([]);
+
 
   useEffect(() => {
     fetchItems();
@@ -53,7 +60,8 @@ export function CartProvider({ children }) {
     price: '',
     currentInventory: '',
   });
-
+  
+  const notifyLoginRequired = () => toast.error('Please login to add items to cart. Redirecting to log in page.')
   const notifyAdd = () => toast.success('Item added to cart');
   const notifyIncrease = () => toast.info('Increased amount in cart');
   const notifyDecrease = () => toast.info('Decreased amount in cart');
@@ -121,7 +129,17 @@ export function CartProvider({ children }) {
     return quantity;
   }
 
+  const isLoggedIn = () => localStorage.getItem('user');
+  const getUserId = () => localStorage.getItem('userId');
   async function addOneToCart(item) {
+    if (!isLoggedIn()) {
+      notifyLoginRequired();
+      setTimeout(() => {
+        window.location.href = '/api/users/signin'; 
+      }, 4000);
+      return;
+    }
+
     const quantity = getItemQuantity(item.id);
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
@@ -130,6 +148,8 @@ export function CartProvider({ children }) {
       console.log('Insufficient Inventory');
       return;
     } else {
+      await addItemToCart(getUserId(), item.id)
+
       if (quantity === 0) {
         //item is not yet in cart
         setCartItems([
@@ -164,8 +184,9 @@ export function CartProvider({ children }) {
     const quantity = getItemQuantity(item.id);
 
     if (quantity == 1) {
-      deleteFromCart(item);
+       deleteFromCart(item);
     } else {
+      removeOneItemFromCart(getUserId(), item.id);
       setCartItems(
         cartItems.map((cartItem) =>
           cartItem.id === item.id
@@ -178,6 +199,7 @@ export function CartProvider({ children }) {
   }
 
   function deleteFromCart(item) {
+    deleteCartItem(getUserId(), item.id);
     setCartItems((cartItems) =>
       cartItems.filter((currentItem) => {
         return currentItem.id != item.id;

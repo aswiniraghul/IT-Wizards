@@ -43,6 +43,7 @@ const Login = ({ setAuthenticated }) => {
       const response = await axios.post(LOGIN_API, { userName, userPassword });
 
       localStorage.setItem("user", response.data.userName);
+      localStorage.setItem("userId", response.data.id);
       localStorage.setItem("userRole", response.data.loginRole);
 
       setLoading(false);

@@ -1,9 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -13,13 +11,14 @@ public class CartItem extends AbstractEntity{
     //Fields
     private Integer quantity;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="cart_id")
     private Cart cart;
 
-    @ManyToOne
-    @JoinColumn(name="order_id")
-    private Orders order;
+//    @ManyToOne
+//    @JoinColumn(name="order_id")
+//    private Orders order;
 
     @ManyToOne
     @JoinColumn(name="item_id")
@@ -27,10 +26,10 @@ public class CartItem extends AbstractEntity{
 
     //Constructors
 
-    public CartItem(Integer quantity, Cart cart, Orders order, Item item) {
+    public CartItem(Integer quantity, Cart cart, Item item) {
         this.quantity = quantity;
         this.cart = cart;
-        this.order = order;
+//        this.order = order;
         this.item = item;
     }
 
@@ -46,9 +45,9 @@ public class CartItem extends AbstractEntity{
 
     public void setCart(Cart cart) {this.cart = cart;}
 
-    public Orders getOrder() {return order;}
-
-    public void setOrder(Orders order) {this.order = order;}
+//    public Orders getOrder() {return order;}
+//
+//    public void setOrder(Orders order) {this.order = order;}
 
     public Item getItem() {return item;}
 

@@ -1,5 +1,6 @@
 package org.LaunchCode.IT_Wizards_API.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -8,10 +9,12 @@ import java.util.List;
 @Entity
 public class Cart extends AbstractEntity{
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private final List<CartItem> cartItems = new ArrayList<>();
 
-    @ManyToOne
+    @JsonIgnore
+    @OneToOne
     @JoinColumn(name="user_id")
       private User user;
 

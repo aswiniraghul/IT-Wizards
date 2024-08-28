@@ -33,11 +33,6 @@ public class AddressController {
         userAddress.setUser(user);
         return addressRepository.save(userAddress);
     }
-
-    @GetMapping()
-    List<Address> getAllAddresses() {
-        return addressRepository.findAll();
-    }
   
     @GetMapping("/{id}")
     Address getAddressById(@PathVariable Long id) {

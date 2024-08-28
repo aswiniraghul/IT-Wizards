@@ -22,6 +22,7 @@ const CheckoutPage = () => {
     const { address, city, state, zipcode } = userAddress;
 
     const userName = localStorage.getItem('user');
+    const userId = localStorage.getItem('userId');
 
     const onInputChange = (e) => {
       setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
@@ -40,6 +41,7 @@ const CheckoutPage = () => {
         );
         notifyOrderSubmitted();
         cart.clearCart();
+        await axios.delete(`http://localhost:8080/cart/${userId}/clearItems`);
         setPaymentStatus(false);
         return navigate('/');
       } catch (error) {
