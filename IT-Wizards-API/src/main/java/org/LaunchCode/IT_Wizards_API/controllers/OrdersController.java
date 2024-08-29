@@ -53,26 +53,4 @@ public class OrdersController {
         return ResponseEntity.ok(order);
     }
 
-//    @PostMapping("/{userId}/moveCartItems")
-//    public ResponseEntity<Void> moveCartItemsToOrder(@PathVariable Long userId, @RequestBody Long orderId) {
-//        try {
-//            Orders order = ordersService.findOrderById(orderId);
-//            ordersService.moveCartItemsToOrder(userId, order);
-//            return ResponseEntity.noContent().build(); // 204 No Content
-//        } catch (CartNotFoundException | UserNotFoundException e) {
-//            return ResponseEntity.notFound().build(); // 404 Not Found
-//        }
-//    }
-
-//    @DeleteMapping("/{userId}/clearCart")
-//    public ResponseEntity<Void> clearCartAfterPurchase(@PathVariable Long userId) {
-//        try {
-//            ordersService.clearCartAfterPurchase(userId);
-//            return ResponseEntity.noContent().build();
-//        } catch (CartNotFoundException e) {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-
 }

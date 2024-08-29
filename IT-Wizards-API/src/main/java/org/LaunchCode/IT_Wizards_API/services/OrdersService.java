@@ -70,6 +70,7 @@ public class OrdersService {
         List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
 
         order.getOrderItems().clear();
+        double totalPrice = 0.0;
 
         for (CartItem cartItem : cartItems) {
             OrderItems orderItem = new OrderItems();
@@ -79,7 +80,9 @@ public class OrdersService {
             orderItem.setPrice(cartItem.getItem().getPrice());
 
             order.getOrderItems().add(orderItem);
+            totalPrice += cartItem.getQuantity() * cartItem.getItem().getPrice();
         }
+        order.setTotalPrice(totalPrice);
         ordersRepository.save(order);
     }
 

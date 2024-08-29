@@ -24,6 +24,8 @@ public class Orders extends AbstractEntity{
     @JsonManagedReference
     private List<OrderItems> orderItems = new ArrayList<>();
 
+    private double totalPrice;
+
     //Constructors
 
     public Orders(User user, Address address) {
@@ -44,11 +46,11 @@ public class Orders extends AbstractEntity{
 
     public void setAddress(Address address) {this.address = address;}
 
-    public List<OrderItems> getOrderItems() {
-        return orderItems;
-    }
+    public List<OrderItems> getOrderItems() {return orderItems;}
 
-    public void setOrderItems(List<OrderItems> orderItems) {
-        this.orderItems = orderItems;
-    }
+    public void setOrderItems(List<OrderItems> orderItems) {this.orderItems = orderItems;}
+
+    public double getTotalPrice() {return totalPrice;}
+
+    public void setTotalPrice(double totalPrice) {this.totalPrice = totalPrice;}
 }
