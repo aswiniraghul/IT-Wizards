@@ -26,11 +26,14 @@ public class Orders extends AbstractEntity{
 
     private double totalPrice;
 
+    private Integer numberOfItems;
+
     //Constructors
 
     public Orders(User user, Address address) {
         this.user = user;
         this.address = address;
+        this.numberOfItems = 0;
     }
 
 
@@ -53,4 +56,8 @@ public class Orders extends AbstractEntity{
     public double getTotalPrice() {return totalPrice;}
 
     public void setTotalPrice(double totalPrice) {this.totalPrice = totalPrice;}
+
+    public Integer getNumberOfItems() {return numberOfItems;}
+
+    public void setNumberOfItems(Integer numberOfItems) {this.numberOfItems = numberOfItems;}
 }

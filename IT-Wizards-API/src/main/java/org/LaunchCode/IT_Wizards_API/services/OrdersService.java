@@ -71,6 +71,7 @@ public class OrdersService {
 
         order.getOrderItems().clear();
         double totalPrice = 0.0;
+        int totalItems = 0;
 
         for (CartItem cartItem : cartItems) {
             OrderItems orderItem = new OrderItems();
@@ -81,16 +82,10 @@ public class OrdersService {
 
             order.getOrderItems().add(orderItem);
             totalPrice += cartItem.getQuantity() * cartItem.getItem().getPrice();
+            totalItems += cartItem.getQuantity();
         }
         order.setTotalPrice(totalPrice);
+        order.setNumberOfItems(totalItems);
         ordersRepository.save(order);
     }
-
-//    @Transactional
-//    public void clearCartAfterPurchase(Long userId) {
-//        Cart cart = cartRepository.findByUserId(userId)
-//                .orElseThrow(() -> new CartNotFoundException(userId));
-//        cartItemRepository.deleteByCartId(cart.getId());
-//    }
-
 }
