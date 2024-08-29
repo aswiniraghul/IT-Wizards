@@ -6,11 +6,11 @@ import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 
+
 const OrderDetailScreen = () => {
     const [order, setOrder] = useState(null);
     const { userId, orderId } = useParams();
     const [loading, setLoading] = useState(true);
-    
 
     useEffect(() => {
         const fetchOrderDetails = async () => {

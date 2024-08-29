@@ -31,15 +31,11 @@ public class OrdersService {
         this.addressRepository = addressRepository;
     }
 
-    public Orders createOrder(Long userId, Address address) {
+    public Orders createOrder(Long userId, Long addressId) {
         User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException(userId));
-        Address savedAddress;
-        if (address.getId() != null) {
-            savedAddress = addressRepository.findById(address.getId())
-                    .orElseThrow(() -> new AddressNotFoundException(address.getId()));
-        } else {
-            savedAddress = addressRepository.save(address);
-        }
+        Address savedAddress = addressRepository.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException(addressId));
+
         Orders order = new Orders();
         order.setUser(user);
         order.setAddress(savedAddress);

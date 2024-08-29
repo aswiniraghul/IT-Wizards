@@ -6,6 +6,7 @@ import org.LaunchCode.IT_Wizards_API.exceptions.CartNotFoundException;
 import org.LaunchCode.IT_Wizards_API.exceptions.UserNotFoundException;
 import org.LaunchCode.IT_Wizards_API.models.Address;
 import org.LaunchCode.IT_Wizards_API.models.Orders;
+import org.LaunchCode.IT_Wizards_API.repository.AddressRepository;
 import org.LaunchCode.IT_Wizards_API.services.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,23 +14,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/orders")
 public class OrdersController {
 
     private final OrdersService ordersService;
+    private final AddressRepository addressRepository;
 
     @Autowired
-    public OrdersController(OrdersService ordersService) {
+    public OrdersController(OrdersService ordersService, AddressRepository addressRepository) {
         this.ordersService = ordersService;
+        this.addressRepository = addressRepository;
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<Orders> createOrder(@PathVariable Long userId, @RequestBody Address address) {
+    public ResponseEntity<Orders> createOrder(@PathVariable Long userId, @RequestBody Map<String, Long> request) {
+        Long addressId = request.get("addressId");
         try {
-
-            Orders order = ordersService.createOrder(userId, address);
+            Address address = addressRepository.findById(addressId)
+                    .orElseThrow(() -> new AddressNotFoundException(addressId));
+            Orders order = ordersService.createOrder(userId, addressId);
 
             ordersService.moveCartItemsToOrder(userId, order);
 

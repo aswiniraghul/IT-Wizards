@@ -3,9 +3,9 @@ import axios from "axios";
 
 const BASEAPIURL = "http://localhost:8080/orders";
 
-export const createOrder = async (userId, address) => {
+export const createOrder = async (userId, addressId) => {
     try {
-        const response = await axios.post(`${BASEAPIURL}/${userId}`, address);
+        const response = await axios.post(`${BASEAPIURL}/${userId}`, {addressId});
         return response.data;
     } catch (error) {
         if (error.response) {

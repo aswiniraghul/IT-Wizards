@@ -68,9 +68,6 @@ const OrderScreen = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Order ID
                 </th>
-                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Address
-                </th> */}
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Total Price
                 </th>
@@ -90,9 +87,6 @@ const OrderScreen = () => {
                             {order.id}
                         </Link>
                     </td>
-                    {/* <td className="px-6 py-4 whitespace-nowrap">
-                        {order.address}
-                    </td> */}
                     <td className="px-6 py-4 whitespace-nowrap">
                         ${order.totalPrice}
                     </td>
