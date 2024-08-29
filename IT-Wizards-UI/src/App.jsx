@@ -22,6 +22,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import ContactUs from './components/ContactUs';
 import NotFoundPage from './pages/NotFoundPage';
 import OrderScreen from './pages/OrderScreen';
+import AddImage from './pages/AddImage';
+import Image from './pages/Image';
 
 
 const App = () => {
@@ -52,6 +54,8 @@ const App = () => {
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/orders/:id" element={<OrderScreen />} />
+        <Route path="/images" element={<Image />} />
+        <Route path="/images/addImage" element={<AddImage />} />
 
       </Route>
     )
