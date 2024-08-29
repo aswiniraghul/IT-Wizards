@@ -64,7 +64,7 @@ const OrderDetailScreen = () => {
                                         {order.orderItems.map(item => (
                                             <tr key={item.id}>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    {item.name}
+                                                    {item.itemName}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     {item.quantity}

@@ -74,14 +74,17 @@ public class OrdersService {
         int totalItems = 0;
 
         for (CartItem cartItem : cartItems) {
+            Item item = cartItem.getItem();
+
             OrderItems orderItem = new OrderItems();
             orderItem.setOrder(order);
-            orderItem.setItem(cartItem.getItem());
+            orderItem.setItem(item);
+            orderItem.setItemName(item.getName());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setPrice(cartItem.getItem().getPrice());
 
             order.getOrderItems().add(orderItem);
-            totalPrice += cartItem.getQuantity() * cartItem.getItem().getPrice();
+            totalPrice += cartItem.getQuantity() * item.getPrice();
             totalItems += cartItem.getQuantity();
         }
         order.setTotalPrice(totalPrice);

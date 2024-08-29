@@ -18,6 +18,9 @@ public class OrderItems extends AbstractEntity {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @Column(name = "item_name")
+    private String itemName;
+
     private Integer quantity;
 
     private Double price;
@@ -30,6 +33,7 @@ public class OrderItems extends AbstractEntity {
         this.item = item;
         this.quantity = quantity;
         this.price = price;
+        this.itemName = item.getName();
     }
 
     // Getters and Setters
@@ -39,7 +43,13 @@ public class OrderItems extends AbstractEntity {
 
     public Item getItem() {return item;}
 
-    public void setItem(Item item) {this.item = item;}
+    public void setItem(Item item) {
+        this.item = item;
+        this.itemName = item.getName();}
+
+    public String getItemName() {return itemName;}
+
+    public void setItemName(String itemName) {this.itemName = itemName;}
 
     public Integer getQuantity() {return quantity;}
 
