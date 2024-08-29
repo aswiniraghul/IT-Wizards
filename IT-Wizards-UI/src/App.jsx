@@ -25,6 +25,7 @@ import OrderScreen from './pages/OrderScreen';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 
 
+
 const App = () => {
 
   const router = createBrowserRouter(
@@ -54,6 +55,7 @@ const App = () => {
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/orders/:id" element={<OrderScreen />} />
         <Route path="/orders/:userId/:orderId" element={<OrderDetailsPage />} />
+
 
       </Route>
     )

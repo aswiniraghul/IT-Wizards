@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { getItems } from '../services/viewItemsService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
