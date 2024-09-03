@@ -41,6 +41,7 @@ public class ClientController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
+
 //    // view All images
 //    @GetMapping("/viewAll")
 //    public List<Image> allImages(){
