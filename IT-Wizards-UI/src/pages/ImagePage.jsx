@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 import { getImages } from '../services/imageService';
-import { Buffer } from 'buffer';
 
 const ImagePage = () => {
-  const [images, setImages] = useState('');
+  const [imageList, setImageList] = useState([]);
 
   useEffect(() => {
     fetchImages();
-  });
+  }, []);
 
   const fetchImages = async () => {
     try {
       const data = await getImages();
       // console.log(data);
-      setImages(data);
-      console.log(images);
+      setImageList(data);
+      console.log(imageList);
     } catch (error) {
       console.error('Failed to fetch data', error);
     }
@@ -24,12 +23,7 @@ const ImagePage = () => {
     // }
   };
 
-  // const base64Flag = 'data:image/jpeg;base64,';
-  
-
-  // const image = new Blob(images, {type: 'image/jpeg'})
-
-  // const imageURL = URL.createObjectURL(image);
+  const imgBaseURL = 'http://localhost:8080/images/display'
 
   return (
     <div className="mt-5">
@@ -50,18 +44,18 @@ const ImagePage = () => {
           </thead>
 
           <tbody>
-            {/* {images.map((image) => ( */}
-            <tr>
+            {imageList.map((image, index) => (
+            <tr key={index}>
               <td>
                 <img
                   height="250px"
                   width="250px"
-                  // src={`data:image/jpeg;base64,charset=utf-8;${imageStr}`}
-                  src='http://localhost:8080/images/display?id=1'
+                  src={`${imgBaseURL}?id=${image}`}
+                  // src='http://localhost:8080/images/display?id=1'
                 ></img>
               </td>
             </tr>
-            {/* ))} */}
+            ))}
           </tbody>
         </table>
       </div>

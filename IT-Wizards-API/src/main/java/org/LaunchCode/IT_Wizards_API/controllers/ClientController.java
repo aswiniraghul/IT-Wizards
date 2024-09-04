@@ -1,17 +1,15 @@
 package org.LaunchCode.IT_Wizards_API.controllers;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.LaunchCode.IT_Wizards_API.models.Image;
 import org.LaunchCode.IT_Wizards_API.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 import java.sql.Blob;
@@ -25,12 +23,6 @@ public class ClientController {
     @Autowired
     private ImageService imageService;
 
-    @GetMapping("/ping")
-    @ResponseBody
-    public String hello_world(){
-        return "Hello World!";
-    }
-
     // display image
     @GetMapping("/display")
     public ResponseEntity<byte[]> displayImage(@RequestParam("id") long id) throws IOException, SQLException
@@ -41,35 +33,16 @@ public class ClientController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
-
-//    // view All images
-//    @GetMapping("/viewAll")
-//    public List<Image> allImages(){
-////        ModelAndView mv = new ModelAndView("index");
-//        //        mv.addObject("imageList", imageList);
-//        return imageService.viewAll();
-//    }
-//
-@GetMapping("/viewAll")
-public ResponseEntity<ArrayList<byte[]>> displayAllImages() throws SQLException {
-    List<Image> allImages = imageService.viewAll();
-    byte [] imageBytes = null;
-//    byte [] [] allImageBytes = null;
-    ArrayList<byte []> allImageBytes = new ArrayList<>();
-    for (int i = 0; i < allImages.size(); i++) {
-        imageBytes = allImages.get(i).getImage().getBytes(1, (int) allImages.get(i).getImage().length());
-        allImageBytes.add(imageBytes);
-    }
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(allImageBytes);
+@GetMapping("/imageList")
+public ArrayList<Long> imageList() {
+     List<Image> imageList;
+     imageList = imageService.viewAll();
+    ArrayList<Long> imageIdList = new ArrayList<>();
+    for (int i = 0; i < imageList.size(); i++){
+         imageIdList.add(imageList.get(i).getId());
+     }
+    return imageIdList;
 }
-
-
-
-//    // add image - get
-//    @GetMapping("/add")
-//    public ModelAndView addImage(){
-//        return new ModelAndView("addimage");
-//    }
 
     // add image - post
     @PostMapping("/add")

@@ -4,7 +4,7 @@ const BASEAPIURL = 'http://localhost:8080';
 
 export const getImages = async (id) => {
   try {
-      const response = await axios.get(`${BASEAPIURL}/images/display?id=1`); {
+      const response = await axios.get(`${BASEAPIURL}/images/imageList`); {
           console.log(response);
       }
     //   console.log(response.data);
