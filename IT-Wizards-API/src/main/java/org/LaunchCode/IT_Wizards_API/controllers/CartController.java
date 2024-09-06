@@ -65,6 +65,6 @@ public class CartController {
             return ResponseEntity.noContent().build();
         } catch (CartNotFoundException e) {
             return ResponseEntity.notFound().build();
-
+        }
     }
 }
