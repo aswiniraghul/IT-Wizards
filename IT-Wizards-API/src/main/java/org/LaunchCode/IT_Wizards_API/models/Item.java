@@ -26,6 +26,7 @@ public class Item extends AbstractEntity{
     @Size(max=30)
     @NotNull
     private String name;
+
     @Size(max=240)
     @NotNull
     private String description;
@@ -47,8 +48,9 @@ public class Item extends AbstractEntity{
     @OneToMany(mappedBy ="item", cascade = CascadeType.ALL)
     private final List<Wishlist> wishlists = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-//    private final List<CartItem> cartItems = new ArrayList<>();
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private final List<OrderItems> orderItems = new ArrayList<>();
 
     //Constructors;
     public Item(String name, String description, ItemCategory itemCategory, Double price, Double currentInventory) {
@@ -101,6 +103,8 @@ public class Item extends AbstractEntity{
     public void setCurrentInventory(Double currentInventory) {
         this.currentInventory = currentInventory;
     }
+
+    public List<OrderItems> getOrderItems() {return orderItems;}
 
     //Methods
     @Override

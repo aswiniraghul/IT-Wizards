@@ -62,9 +62,9 @@ public class CartController {
     public ResponseEntity<Void> clearCartItems(@PathVariable Long userId) {
         try {
             cartService.clearCartItems(userId);
-            return ResponseEntity.noContent().build(); // 204 No Content
+            return ResponseEntity.noContent().build();
         } catch (CartNotFoundException e) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.notFound().build();
         }
     }
 }
