@@ -2,12 +2,12 @@ import axios from 'axios';
 import { useState } from 'react';
 
 const AddImage = () => {
-  const [newImage, setNewImage] = useState()
+  // const [newImage, setNewImage] = useState()
   const formData = new FormData();
 
-    const onInputChange = (e) => {
-      setNewImage(e.target.value);
-    };
+    // const onInputChange = (e) => {
+    //   setNewImage(e.target.value);
+    // };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +39,7 @@ const AddImage = () => {
               aria-describedby="inputGroupFileAddon04"
               aria-label="Upload"
               required="required"
-              onChange={(e) => onInputChange(e)}
+              // onChange={(e) => onInputChange(e)}
             />
             <button className="btn btn-outline-secondary" type="submit">
               Submit

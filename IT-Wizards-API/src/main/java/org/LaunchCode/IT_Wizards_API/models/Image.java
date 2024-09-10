@@ -2,7 +2,9 @@ package org.LaunchCode.IT_Wizards_API.models;
 
 import jakarta.persistence.*;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "image_table")
@@ -12,7 +14,7 @@ public class Image {
     private long id;
     @Lob
     private Blob image;
-    private Date date = new Date();
+
     public long getId() {
         return id;
     }
@@ -25,7 +27,5 @@ public class Image {
     public void setImage(Blob image) {
         this.image = image;
     }
-    public Date getDate() {
-        return date;
-    }
+
 }

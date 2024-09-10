@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("images")
-public class ClientController {
+public class ImageController {
     @Autowired
     private ImageService imageService;
 

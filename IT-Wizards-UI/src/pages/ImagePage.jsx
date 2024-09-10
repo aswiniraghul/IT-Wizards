@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getImages } from '../services/imageService';
 
 const ImagePage = () => {
@@ -30,11 +31,11 @@ const ImagePage = () => {
       <h1 className="text-center">View Images</h1>
       <div className="container">
         <div className="my-3">
-          <a href="images/add">
+          <Link to="/images/add">
             <button type="button" className="btn btn-primary">
               Add Image
             </button>
-          </a>
+          </Link>
         </div>
         <table className="table border">
           <thead>

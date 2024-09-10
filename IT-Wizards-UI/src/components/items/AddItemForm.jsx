@@ -12,11 +12,31 @@ const AddItemForm = () => {
     price: '',
     currentInventory: '',
   });
-  const { name, description, itemCategory, price, currentInventory } = item;
+  const { name, description, itemCategory, price, currentInventory } =
+    item;
 
   const onInputChange = (e) => {
     setItem({ ...item, [e.target.name]: e.target.value });
   };
+
+  const formData = new FormData();
+
+  // const handleImageOnSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const file = document.getElementById('image').files[0];
+  //   formData.append('image', file);
+  //   setItem({ ...item, imageFile: formData });
+
+    // try {
+    //   await axios.post('http://localhost:8080/images/add', formData, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //   });
+    // } catch (error) {
+    //   console.log('error', error);
+    // }
+  // };
 
   const navigate = useNavigate();
 
@@ -28,8 +48,21 @@ const AddItemForm = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    const file = document.getElementById('image').files[0];
+    formData.append('imageFile', file);
+    
+    Object.entries(item).forEach(([k, v]) => formData.append(k, v));
+
     try {
-      await axios.post('http://localhost:8080/items', item);
+      await axios.post(
+        'http://localhost:8080/items/add',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+        }
+      );
       return navigate('/items');
     } catch (error) {
       console.log('error.response', error.response);
@@ -46,8 +79,10 @@ const AddItemForm = () => {
           ) {
             notifyDuplicateItem();
             return;
-          } else if
-            (responseErrors == `Could not find an item category with name ${item.itemCategory}`) {
+          } else if (
+            responseErrors ==
+            `Could not find an item category with name ${item.itemCategory}`
+          ) {
             if (
               window.confirm(
                 `Item Category does not exist. Create the Item Category first. Do you want to create the Item Category "${itemCategory}" now?`
@@ -71,15 +106,17 @@ const AddItemForm = () => {
     <section className="bg-purple-400">
       <div className="container m-auto max-w-3xl pt-20 pb-48">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
-          <form onSubmit={(e) => handleOnSubmit(e)}>
+          <form
+            onSubmit={(e) => {
+              handleOnSubmit(e);
+            }}
+          >
             <h2 className="text-3xl text-center font-semibold mb-6">
               Add Item
             </h2>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
-                Item Name
-              </label>
+              <label className="block text-gray-700 font-bold mb-2">Name</label>
               <input
                 id="name"
                 name="name"
@@ -90,6 +127,30 @@ const AddItemForm = () => {
                 value={name}
                 onChange={(e) => onInputChange(e)}
               ></input>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 font-bold mb-2">
+                Image
+              </label>
+
+              {/* encType="multipart/form-data" */}
+
+              <div className="input-group">
+                <input
+                  type="file"
+                  className="form-control"
+                  id="image"
+                  name="image"
+                  aria-describedby="inputGroupFileAddon04"
+                  aria-label="Upload"
+                  required
+                  // onChange={(e) => onInputChange(e)}
+                />
+                {/* <button className="btn btn-outline-secondary" type="submit">
+                    Submit
+                  </button> */}
+              </div>
             </div>
 
             <div className="mb-4">
