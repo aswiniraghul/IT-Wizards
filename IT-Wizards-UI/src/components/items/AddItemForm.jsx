@@ -21,23 +21,6 @@ const AddItemForm = () => {
 
   const formData = new FormData();
 
-  // const handleImageOnSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const file = document.getElementById('image').files[0];
-  //   formData.append('image', file);
-  //   setItem({ ...item, imageFile: formData });
-
-    // try {
-    //   await axios.post('http://localhost:8080/images/add', formData, {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   });
-    // } catch (error) {
-    //   console.log('error', error);
-    // }
-  // };
-
   const navigate = useNavigate();
 
   const notifyCategoryAdded = () =>
@@ -49,9 +32,9 @@ const AddItemForm = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     const file = document.getElementById('image').files[0];
-    formData.append('imageFile', file);
+    formData.set('imageFile', file);
     
-    Object.entries(item).forEach(([k, v]) => formData.append(k, v));
+    Object.entries(item).forEach(([k, v]) => formData.set(k, v));
 
     try {
       await axios.post(
@@ -66,6 +49,7 @@ const AddItemForm = () => {
       return navigate('/items');
     } catch (error) {
       console.log('error.response', error.response);
+      formData.entries().forEach((key, value)=> formData.delete(key, value));
       if (error.response) {
         if (error.response.status === 500 && error.response.data) {
           const responseErrors = error.response.data.message;
@@ -96,9 +80,10 @@ const AddItemForm = () => {
             } else {
               console.log('ItemCategory not added');
             }
+            return formData
           }
         }
-      }
+      } 
     }
   };
 

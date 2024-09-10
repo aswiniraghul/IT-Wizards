@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
 import { getItems, getItemCategoryList } from '../../services/viewItemsService';
-import cauldron from '../../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,6 +36,8 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
   const userName = localStorage.getItem('user');
   const userRole = localStorage.getItem('userRole');
+
+  const imgBaseURL = 'http://localhost:8080/images/display';
 
   useEffect(() => {
     fetchItems();
@@ -129,18 +130,21 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       console.error('Failed to fetch category data', error);
     }
   };
-  
+
   const fetchFavourites = async () => {
     try {
-        const response = await axios.get(`${HOST_NAME}/api/favourites/list?userId=${userID}`, null);
-        if(response.status === 200) {
-          setFavourites(response.data);
-        }
+      const response = await axios.get(
+        `${HOST_NAME}/api/favourites/list?userId=${userID}`,
+        null
+      );
+      if (response.status === 200) {
+        setFavourites(response.data);
+      }
     } catch (error) {
-        console.error('Unable to favourite item:', error);
+      console.error('Unable to favourite item:', error);
     }
   };
-  
+
   return (
     <section className="w-full border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
@@ -176,7 +180,9 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                             <div className="mb-2 ml-2 mr-2 z-0 relative hover:scale-105">
                               <Link to={`/items/${item.id}`}>
                                 <img
-                                  src={cauldron}
+                                  height="80px"
+                                  width="80px"
+                                  src={`${imgBaseURL}?id=${item.imageID}`}
                                   className="size-72"
                                   alt={item.name}
                                 ></img>
@@ -190,7 +196,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                     }}
                                     className="absolute top-2 right-2 cursor-pointer text-3xl"
                                   >
-                                    <FontAwesomeIcon
+                                    <FontAwesomeIcon color='red'
                                       icon={
                                         inWishlist(item.id)
                                           ? filledHeart

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { getItems } from '../services/viewItemsService';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,7 +35,9 @@ export const ItemDetails = () => {
   const fetchItems = async () => {
     try {
       const data = await getItems(id);
+      console.log(data);
       setItems(data);
+      console.log(item);
     } catch (error) {
       console.error('Failed to fetch data', error);
     }
@@ -59,6 +61,7 @@ export function CartProvider({ children }) {
     itemCategory: '',
     price: '',
     currentInventory: '',
+    imageID: '',
   });
   
   const notifyLoginRequired = () => toast.error('Please login to add items to cart. Redirecting to log in page.')
@@ -72,6 +75,7 @@ export function CartProvider({ children }) {
   const removeItemFromInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
+    console.log(itemDetails);
     if (itemDetails.currentInventory > 0) {
       setItemDetails((prevItemDetails) => ({
         ...prevItemDetails,
@@ -90,6 +94,7 @@ export function CartProvider({ children }) {
   const addItemBackToInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
+    console.log(itemDetails);
     setItemDetails((prevItemDetails) => ({
       ...prevItemDetails,
       currentInventory: itemDetails.currentInventory + 1,
@@ -160,6 +165,7 @@ export function CartProvider({ children }) {
             description: item.description,
             price: item.price,
             currentInventory: item.currentInventory,
+            imageID: item.imageID,
             quantity: 1,
           },
         ]);

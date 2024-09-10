@@ -13,41 +13,40 @@ const CheckoutPage = () => {
   const cart = useContext(CartContext);
   const navigate = useNavigate();
   const [paymentStatus, setPaymentStatus] = useState(false);
-    const [userAddress, setUserAddress] = useState({
-      address: '',
-      city: '',
-      state: '',
-      zipcode: '',
-    });
-    const { address, city, state, zipcode } = userAddress;
+  const [userAddress, setUserAddress] = useState({
+    address: '',
+    city: '',
+    state: '',
+    zipcode: '',
+  });
+  const { address, city, state, zipcode } = userAddress;
 
-    const userName = localStorage.getItem('user');
-    const userId = localStorage.getItem('userId');
+  const userName = localStorage.getItem('user');
+  const userId = localStorage.getItem('userId');
 
-    const onInputChange = (e) => {
-      setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
-      console.log(userAddress);
-    };
+  const imgBaseURL = 'http://localhost:8080/images/display';
 
-    const handleOnSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        console.log(paymentStatus);
-        await axios.post(
-          `http://localhost:8080/addresses?userName=${userName}`,
-          {
-            ...userAddress,
-          }
-        );
-        notifyOrderSubmitted();
-        cart.clearCart();
-        await axios.delete(`http://localhost:8080/cart/${userId}/clearItems`);
-        setPaymentStatus(false);
-        return navigate('/');
-      } catch (error) {
-        console.log('error', error);
-      }
-    };
+  const onInputChange = (e) => {
+    setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
+    console.log(userAddress);
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(paymentStatus);
+      await axios.post(`http://localhost:8080/addresses?userName=${userName}`, {
+        ...userAddress,
+      });
+      notifyOrderSubmitted();
+      cart.clearCart();
+      await axios.delete(`http://localhost:8080/cart/${userId}/clearItems`);
+      setPaymentStatus(false);
+      return navigate('/');
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
   const notifyOrderSubmitted = () =>
     toast.success('Your order has successfully been submitted!');
@@ -68,7 +67,9 @@ const CheckoutPage = () => {
                 <div>
                   <img
                     className="items-center border-4 rounded-xl border-purple-700 size-56 justify-center "
-                    src={cauldron}
+                    height="300px"
+                    width="300px"
+                    src={`${imgBaseURL}?id=${item.imageID}`}
                   />
                 </div>
                 <div className="container mb-10 mt-10" key={item.id}>

@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { getItemDetails } from '../../services/viewItemsService';
 import { useEffect, useState, useContext } from 'react';
-import cauldron from '../../assets/images/cauldron.png';
 import { CartContext } from '../CartContext';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../LoadingSpinner';
@@ -19,6 +18,8 @@ const ItemDetailsDisplay = (results) => {
   });
   const { name, description, itemCategory, price, currentInventory } = item;
   const itemQuantity = cart.getItemQuantity(item.id);
+
+  const imgBaseURL = 'http://localhost:8080/images/display';
 
   useEffect(() => {
     fetchItemDetails();
@@ -53,7 +54,9 @@ const ItemDetailsDisplay = (results) => {
                   <div className="grid grid-cols-2 border gap-6 ">
                     <div className="flex items-center justify-center">
                       <img
-                        src={cauldron}
+                        height="300px"
+                        width="300px"
+                        src={`${imgBaseURL}?id=${item.imageID}`}
                         className="max-w-xs flex items-center justify-center"
                       ></img>
                     </div>

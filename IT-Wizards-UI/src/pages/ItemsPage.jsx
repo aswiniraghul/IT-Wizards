@@ -8,6 +8,8 @@ const ItemsPage = () => {
   const [items, setItems] = useState([]);
   const [userRole, setUserRole] = useState('');
 
+  const imgBaseURL = 'http://localhost:8080/images/display';
+
   useEffect(() => {
     fetchItems();
     const storedRole = localStorage.getItem('userRole');
@@ -17,6 +19,7 @@ const ItemsPage = () => {
   const fetchItems = async () => {
     try {
       const data = await getItems();
+      console.log(data);
       setItems(data);
     } catch (error) {
       console.error('Failed to fetch data', error);
@@ -47,6 +50,7 @@ const ItemsPage = () => {
                   <thead>
                     <tr className="text-green-600">
                       <th>Name</th>
+                      <th>Image</th>
                       <th>Description</th>
                       <th>Category</th>
                       <th>Price</th>
@@ -60,12 +64,17 @@ const ItemsPage = () => {
                       return (
                         <tr key={item.id}>
                           <th>{item.name}</th>
+                          <img
+                            height="100px"
+                            width="100px"
+                            src={`${imgBaseURL}?id=${item.imageID}`}
+                          ></img>
                           <th>{item.description}</th>
                           <th>{item.itemCategory.name}</th>
                           <th>
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </th>
-                          <th className="flex items-center justify-center">
+                          <th className='text-center'>
                             {item.currentInventory}
                           </th>
                           <th>
