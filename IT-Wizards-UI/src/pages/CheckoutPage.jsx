@@ -8,6 +8,7 @@ import AddressForm from '../components/AddressForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { createOrder } from '../services/orderService';
 
 const CheckoutPage = () => {
   const cart = useContext(CartContext);
@@ -30,22 +31,27 @@ const CheckoutPage = () => {
     setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
   };
 
-  const handleOnSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log(paymentStatus);
-      await axios.post(`http://localhost:8080/addresses?userName=${userName}`, {
-        ...userAddress,
-      });
-      notifyOrderSubmitted();
-      cart.clearCart();
-      await axios.delete(`http://localhost:8080/cart/${userId}/clearItems`);
-      setPaymentStatus(false);
-      return navigate('/');
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
+    const handleOnSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        console.log(paymentStatus);
+        const addressResponse = await axios.post(
+          `http://localhost:8080/addresses?userName=${userName}`,
+          {
+            ...userAddress,
+          }
+        );
+        const addressId = addressResponse.data.id;
+        await createOrder(userId, addressId);
+        notifyOrderSubmitted();
+        cart.clearCart();
+        await axios.delete(`http://localhost:8080/cart/${userId}/clearItems`);
+        setPaymentStatus(false);
+        return navigate('/');
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
 
   const notifyOrderSubmitted = () =>
     toast.success('Your order has successfully been submitted!');

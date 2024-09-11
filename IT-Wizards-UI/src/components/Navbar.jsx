@@ -151,7 +151,7 @@ const Navbar = () => {
                       {cart.itemsHeldInCart.map((item) => (
                         <React.Fragment key={item.id}>
                           <div className='flex items-center justify-items-center'>
-                            <img 
+                            <img
                               height="150px"
                               width="150px"
                               src={`${imgBaseURL}?id=${item.imageID}`}

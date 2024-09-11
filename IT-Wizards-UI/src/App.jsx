@@ -22,6 +22,9 @@ import CheckoutPage from './pages/CheckoutPage';
 import ContactUs from './components/ContactUs';
 import NotFoundPage from './pages/NotFoundPage';
 import OrderScreen from './pages/OrderScreen';
+import OrderDetailsPage from './pages/OrderDetailsPage';
+
+
 
 const App = () => {
 
@@ -51,6 +54,9 @@ const App = () => {
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/orders/:id" element={<OrderScreen />} />
+        <Route path="/orders/:userId/:orderId" element={<OrderDetailsPage />} />
+
+
       </Route>
     )
   );

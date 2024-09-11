@@ -39,7 +39,7 @@ public class CartService {
         }
         Item item = itemRepository.findById(newItemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item not found"));
-        //TODO: Look if cartItem exists & if so up quantity by 1
+
         try {
             cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId() ).orElseThrow(() -> new CartItemNotFoundException(userId));
             cartItem.setQuantity(cartItem.getQuantity()+1);
