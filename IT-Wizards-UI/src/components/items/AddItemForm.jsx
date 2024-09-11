@@ -49,7 +49,6 @@ const AddItemForm = () => {
       return navigate('/items');
     } catch (error) {
       console.log('error.response', error.response);
-      formData.entries().forEach((key, value)=> formData.delete(key, value));
       if (error.response) {
         if (error.response.status === 500 && error.response.data) {
           const responseErrors = error.response.data.message;
@@ -118,9 +117,6 @@ const AddItemForm = () => {
               <label className="block text-gray-700 font-bold mb-2">
                 Image
               </label>
-
-              {/* encType="multipart/form-data" */}
-
               <div className="input-group">
                 <input
                   type="file"
@@ -130,11 +126,7 @@ const AddItemForm = () => {
                   aria-describedby="inputGroupFileAddon04"
                   aria-label="Upload"
                   required
-                  // onChange={(e) => onInputChange(e)}
                 />
-                {/* <button className="btn btn-outline-secondary" type="submit">
-                    Submit
-                  </button> */}
               </div>
             </div>
 

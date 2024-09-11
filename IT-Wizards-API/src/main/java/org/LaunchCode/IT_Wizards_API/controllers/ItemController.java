@@ -103,6 +103,7 @@ public class ItemController {
                     item.setItemCategory(editedItem.getItemCategory());
                     item.setPrice(editedItem.getPrice());
                     item.setCurrentInventory(editedItem.getCurrentInventory());
+                    item.setImageID(editedItem.getImageID());
                     return itemRepository.save(item);
                 }).orElseThrow(() -> new ItemNotFoundException(id));
     }

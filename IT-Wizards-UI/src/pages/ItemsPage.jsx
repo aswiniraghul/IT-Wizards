@@ -19,7 +19,6 @@ const ItemsPage = () => {
   const fetchItems = async () => {
     try {
       const data = await getItems();
-      console.log(data);
       setItems(data);
     } catch (error) {
       console.error('Failed to fetch data', error);
@@ -64,17 +63,19 @@ const ItemsPage = () => {
                       return (
                         <tr key={item.id}>
                           <th>{item.name}</th>
-                          <img
-                            height="100px"
-                            width="100px"
-                            src={`${imgBaseURL}?id=${item.imageID}`}
-                          ></img>
+                          <th>
+                            <img
+                              height="100px"
+                              width="100px"
+                              src={`${imgBaseURL}?id=${item.imageID}`}
+                            ></img>
+                          </th>
                           <th>{item.description}</th>
                           <th>{item.itemCategory.name}</th>
                           <th>
                             ${(Math.round(item.price * 100) / 100).toFixed(2)}
                           </th>
-                          <th className='text-center'>
+                          <th className="text-center">
                             {item.currentInventory}
                           </th>
                           <th>

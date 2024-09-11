@@ -15,6 +15,8 @@ const EditItemForm = () => {
   });
   const { name, description, itemCategory, price, currentInventory } = item;
 
+  const imgBaseURL = 'http://localhost:8080/images/display';
+
   const onInputChange = (e) => {
     setItem({ ...item, [e.target.name]: e.target.value });
   };
@@ -27,12 +29,12 @@ const EditItemForm = () => {
 
   const notifyCategoryAdded = () =>
     toast.success('Item Category added. You may now add this item.');
-  
-  const notifyItemEdited = () =>
-    toast.success('Item successfully edited.');
+
+  const notifyItemEdited = () => toast.success('Item successfully edited.');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       await axios.put(`http://localhost:8080/items/editItem/${id}`, item);
       console.log('item was edited');
@@ -92,6 +94,19 @@ const EditItemForm = () => {
                 disabled
                 value={name}
               ></input>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 font-bold mb-2">
+                Image
+              </label>
+              <div className="input-group">
+                <img
+                  src={`${imgBaseURL}?id=${item.imageID}`}
+                  className="items-center, py-2 px-2 border-4 border-green-400 size-36"
+                  alt={item.name}
+                ></img>
+              </div>
             </div>
 
             <div className="mb-4">

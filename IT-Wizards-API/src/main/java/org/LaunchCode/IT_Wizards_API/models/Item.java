@@ -65,7 +65,7 @@ public class Item extends AbstractEntity{
         this.currentInventory = currentInventory;
     }
 
-    public Item(String name, MultipartFile imageFile, String description, ItemCategory itemCategory, Double price, Double currentInventory, Long imageID) {
+    public Item(String name, String description, ItemCategory itemCategory, Double price, Double currentInventory, Long imageID) {
         this.name = name;
         this.description = description;
         this.itemCategory = itemCategory;

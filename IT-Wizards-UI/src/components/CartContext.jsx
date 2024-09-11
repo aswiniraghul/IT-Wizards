@@ -35,9 +35,7 @@ export const ItemDetails = () => {
   const fetchItems = async () => {
     try {
       const data = await getItems(id);
-      console.log(data);
       setItems(data);
-      console.log(item);
     } catch (error) {
       console.error('Failed to fetch data', error);
     }
@@ -75,7 +73,6 @@ export function CartProvider({ children }) {
   const removeItemFromInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
-    console.log(itemDetails);
     if (itemDetails.currentInventory > 0) {
       setItemDetails((prevItemDetails) => ({
         ...prevItemDetails,
@@ -94,7 +91,6 @@ export function CartProvider({ children }) {
   const addItemBackToInventory = async (item) => {
     const response = await axios.get(`${HOST_NAME}/items/${item.id}`);
     const itemDetails = response.data;
-    console.log(itemDetails);
     setItemDetails((prevItemDetails) => ({
       ...prevItemDetails,
       currentInventory: itemDetails.currentInventory + 1,

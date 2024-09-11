@@ -28,7 +28,6 @@ const CheckoutPage = () => {
 
   const onInputChange = (e) => {
     setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
-    console.log(userAddress);
   };
 
   const handleOnSubmit = async (e) => {

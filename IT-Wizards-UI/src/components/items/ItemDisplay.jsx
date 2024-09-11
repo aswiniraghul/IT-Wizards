@@ -9,6 +9,7 @@ import FavouriteButton from '../FavoriteButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../LoadingSpinner';
+import classes from '../../Fonts.module.css';
 
 import axios from 'axios';
 import { HOST_NAME } from '../../env/config';
@@ -150,10 +151,12 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       <section className="bg-purple-400">
         <div className="container bg-purple-400 py-12 pb-36 px-12">
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
-            <h2 className="text-5xl text-center font-bold underline mb-2">
-              Welcome to the Shop
+            <h2 className="text-7xl text-center font-bold underline text-green-500 mb-2">
+              <div className={classes.montez}>
+                Welcome to the Shop
+              </div>
             </h2>
-            <div className="container m-auto max-w-5xl py-12">
+            <div className="container m-auto max-w-5xl py-8">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div>
                   {loading ? (
@@ -177,13 +180,11 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
                         return (
                           <div key={item.id}>
-                            <div className="mb-2 ml-2 mr-2 z-0 relative hover:scale-105">
+                            <div className="my-4 mx-4 z-0 relative hover:scale-105">
                               <Link to={`/items/${item.id}`}>
                                 <img
-                                  height="80px"
-                                  width="80px"
                                   src={`${imgBaseURL}?id=${item.imageID}`}
-                                  className="size-72"
+                                  className="items-center, py-2 px-2 border-4 border-green-400 size-72"
                                   alt={item.name}
                                 ></img>
                                 {userName !== null && userRole !== 'admin' && (
@@ -196,7 +197,8 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                     }}
                                     className="absolute top-2 right-2 cursor-pointer text-3xl"
                                   >
-                                    <FontAwesomeIcon color='red'
+                                    <FontAwesomeIcon
+                                      color="red"
                                       icon={
                                         inWishlist(item.id)
                                           ? filledHeart
@@ -206,7 +208,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </div>
                                 )}
                               </Link>
-                              <div className="flex items-center justify-center">
+                              <div className="flex items-center justify-center mt-3 text-lg font-bold">
                                 {item.name}
                               </div>
                               <div className="flex items-center justify-center">
@@ -231,7 +233,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </span>
                                 </div>
                               )}
-                              {userID && (
+                              {userName !== null && userRole !== 'admin' && (
                                 <FavouriteButton
                                   itemId={item.id}
                                   userId={userID}

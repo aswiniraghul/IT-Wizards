@@ -45,15 +45,15 @@ public ArrayList<Long> imageList() {
 }
 
     // add image - post
-    @PostMapping("/add")
-    public String addImagePost(HttpServletRequest request,@RequestParam("image") MultipartFile file) throws IOException, SerialException, SQLException
-    {
-        byte[] bytes = file.getBytes();
-        Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-
-        Image image = new Image();
-        image.setImage(blob);
-        imageService.create(image);
-        return "redirect:/";
-    }
+//    @PostMapping("/add")
+//    public String addImagePost(HttpServletRequest request,@RequestParam("image") MultipartFile file) throws IOException, SerialException, SQLException
+//    {
+//        byte[] bytes = file.getBytes();
+//        Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+//
+//        Image image = new Image();
+//        image.setImage(blob);
+//        imageService.create(image);
+//        return "redirect:/";
+//    }
 }
