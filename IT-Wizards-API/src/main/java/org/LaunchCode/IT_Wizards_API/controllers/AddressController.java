@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/addresses")
-public class AddressController {
+public class    AddressController {
 
     @Autowired
     private AddressRepository addressRepository;

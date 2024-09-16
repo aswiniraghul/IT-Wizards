@@ -16,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Entity
@@ -45,6 +46,10 @@ public class Item extends AbstractEntity{
     @NotNull
     private Double currentInventory;
 
+//    @JoinColumn(name = "image_id")
+    @Column(name= "image_id")
+    private Long imageID;
+
     @OneToMany(mappedBy ="item", cascade = CascadeType.ALL)
     private final List<Wishlist> wishlists = new ArrayList<>();
 
@@ -59,6 +64,15 @@ public class Item extends AbstractEntity{
         this.itemCategory = itemCategory;
         this.price = price;
         this.currentInventory = currentInventory;
+    }
+
+    public Item(String name, String description, ItemCategory itemCategory, Double price, Double currentInventory, Long imageID) {
+        this.name = name;
+        this.description = description;
+        this.itemCategory = itemCategory;
+        this.price = price;
+        this.currentInventory = currentInventory;
+        this.imageID = imageID;
     }
 
     public Item(){}
@@ -102,6 +116,14 @@ public class Item extends AbstractEntity{
 
     public void setCurrentInventory(Double currentInventory) {
         this.currentInventory = currentInventory;
+    }
+
+    public Long getImageID() {
+        return imageID;
+    }
+
+    public void setImageID(Long imageID) {
+        this.imageID = imageID;
     }
 
     public List<OrderItems> getOrderItems() {return orderItems;}

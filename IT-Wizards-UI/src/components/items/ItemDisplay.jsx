@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
 import { getItems, getItemCategoryList } from '../../services/viewItemsService';
-import cauldron from '../../assets/images/cauldron.png';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../CartContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +9,7 @@ import FavouriteButton from '../FavoriteButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../LoadingSpinner';
+import classes from '../../Fonts.module.css';
 
 import axios from 'axios';
 import { HOST_NAME } from '../../env/config';
@@ -37,6 +37,8 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
   const userName = localStorage.getItem('user');
   const userRole = localStorage.getItem('userRole');
+
+  const imgBaseURL = 'http://localhost:8080/images/display';
 
   useEffect(() => {
     fetchItems();
@@ -129,27 +131,32 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
       console.error('Failed to fetch category data', error);
     }
   };
-  
+
   const fetchFavourites = async () => {
     try {
-        const response = await axios.get(`${HOST_NAME}/api/favourites/list?userId=${userID}`, null);
-        if(response.status === 200) {
-          setFavourites(response.data);
-        }
+      const response = await axios.get(
+        `${HOST_NAME}/api/favourites/list?userId=${userID}`,
+        null
+      );
+      if (response.status === 200) {
+        setFavourites(response.data);
+      }
     } catch (error) {
-        console.error('Unable to favourite item:', error);
+      console.error('Unable to favourite item:', error);
     }
   };
-  
+
   return (
     <section className="w-full border-b-4 border-black overflow-y-auto">
       <section className="bg-purple-400">
         <div className="container bg-purple-400 py-12 pb-36 px-12">
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
-            <h2 className="text-5xl text-center font-bold underline mb-2">
-              Welcome to the Shop
+            <h2 className="text-7xl text-center font-bold underline text-green-500 mb-2">
+              <div className={classes.montez}>
+                Welcome to the Shop
+              </div>
             </h2>
-            <div className="container m-auto max-w-5xl py-12">
+            <div className="container m-auto max-w-5xl py-8">
               <div className="table-fixed border-separate border-spacing-6 border text-left border-purple-600">
                 <div>
                   {loading ? (
@@ -173,11 +180,11 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
 
                         return (
                           <div key={item.id}>
-                            <div className="mb-2 ml-2 mr-2 z-0 relative hover:scale-105">
+                            <div className="my-4 mx-4 z-0 relative hover:scale-105">
                               <Link to={`/items/${item.id}`}>
                                 <img
-                                  src={cauldron}
-                                  className="size-72"
+                                  src={`${imgBaseURL}?id=${item.imageID}`}
+                                  className="items-center, py-2 px-2 border-4 border-green-400 size-72"
                                   alt={item.name}
                                 ></img>
                                 {userName !== null && userRole !== 'admin' && (
@@ -191,6 +198,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                     className="absolute top-2 right-2 cursor-pointer text-3xl"
                                   >
                                     <FontAwesomeIcon
+                                      color="red"
                                       icon={
                                         inWishlist(item.id)
                                           ? filledHeart
@@ -200,7 +208,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </div>
                                 )}
                               </Link>
-                              <div className="flex items-center justify-center">
+                              <div className="flex items-center justify-center mt-3 text-lg font-bold">
                                 {item.name}
                               </div>
                               <div className="flex items-center justify-center">
@@ -225,7 +233,7 @@ const ItemDisplay = ({ searchTerm, categoryFilter }) => {
                                   </span>
                                 </div>
                               )}
-                              {userID && (
+                              {userName !== null && userRole !== 'admin' && (
                                 <FavouriteButton
                                   itemId={item.id}
                                   userId={userID}
