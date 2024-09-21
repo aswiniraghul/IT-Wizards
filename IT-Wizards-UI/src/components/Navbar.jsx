@@ -29,23 +29,24 @@ const Navbar = () => {
 
   const userName = localStorage.getItem('user');
 
+  const imgBaseURL = 'http://localhost:8080/images/display';
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-    const fetchUser = async () => {
-      if (userName === null) {
-        return;
-      } else {
-        try {
-          const data = await getUser(userName);
-          setUserId(data.id);
-        } catch (error) {
-          console.error('Failed to fetch data', error);
-        }
+  const fetchUser = async () => {
+    if (userName === null) {
+      return;
+    } else {
+      try {
+        const data = await getUser(userName);
+        setUserId(data.id);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
       }
-    };
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -111,12 +112,12 @@ const Navbar = () => {
                 )}
                 {userRole === 'user' && (
                   <>
-                  <NavLink to={`/wishlist/${userId}`} className={linkClass}>
-                    Wishlist
-                  </NavLink>
-                  <NavLink to={`/orders/${userId}`} className={linkClass}>
-                    Orders
-                  </NavLink>
+                    <NavLink to={`/wishlist/${userId}`} className={linkClass}>
+                      Wishlist
+                    </NavLink>
+                    <NavLink to={`/orders/${userId}`} className={linkClass}>
+                      Orders
+                    </NavLink>
                   </>
                 )}
                 {userRole !== 'admin' && (
@@ -149,10 +150,11 @@ const Navbar = () => {
                     <div className="grid grid-flow-row auto-rows-min grid-cols-2 text-indigo-700">
                       {cart.itemsHeldInCart.map((item) => (
                         <React.Fragment key={item.id}>
-                          <div>
+                          <div className='flex items-center justify-items-center'>
                             <img
-                              className="items-center justify-center "
-                              src={cauldron}
+                              height="150px"
+                              width="150px"
+                              src={`${imgBaseURL}?id=${item.imageID}`}
                             />
                           </div>
                           <div className="items-center justify-center mb-10 mt-10">

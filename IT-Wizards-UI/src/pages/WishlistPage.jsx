@@ -16,7 +16,10 @@ const WishlistPage = () => {
 
   const userName = localStorage.getItem('user');
 
-  const notifyRemovedFromWishlist = () => toast.success('💫Successfully removed from wishlist!💫');
+  const imgBaseURL = 'http://localhost:8080/images/display';
+
+  const notifyRemovedFromWishlist = () =>
+    toast.success('💫Successfully removed from wishlist!💫');
 
   useEffect(() => {
     fetchUser();
@@ -26,11 +29,11 @@ const WishlistPage = () => {
     if (userID !== null) {
       fetchWishlist();
     }
-  }, [userID])
+  }, [userID]);
 
   const fetchUser = async () => {
     if (userName === null) {
-      return
+      return;
     } else {
       try {
         const data = await getUser(userName);
@@ -84,7 +87,11 @@ const WishlistPage = () => {
                       key={item.item.id}
                       className="mb-2 ml-2 mr-2 hover:scale-105"
                     >
-                      <img src={cauldron} className="size-72" alt="Item" />
+                      <img
+                        src={`${imgBaseURL}?id=${item.item.imageID}`}
+                        className="items-center, py-2 px-2 border-4 border-green-400 size-72"
+                        alt={item.name}
+                      />
                       <div className="flex items-center justify-center">
                         {item.item.name}
                       </div>

@@ -59,6 +59,7 @@ export function CartProvider({ children }) {
     itemCategory: '',
     price: '',
     currentInventory: '',
+    imageID: '',
   });
   
   const notifyLoginRequired = () => toast.error('Please login to add items to cart. Redirecting to log in page.')
@@ -160,6 +161,7 @@ export function CartProvider({ children }) {
             description: item.description,
             price: item.price,
             currentInventory: item.currentInventory,
+            imageID: item.imageID,
             quantity: 1,
           },
         ]);
