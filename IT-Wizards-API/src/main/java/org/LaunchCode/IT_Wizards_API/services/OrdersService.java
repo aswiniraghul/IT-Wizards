@@ -19,17 +19,19 @@ public class OrdersService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final CartService cartService;
 
     @Autowired
     public OrdersService(OrdersRepository orderRepository, OrderItemsRepository orderItemsRepository,
                         CartRepository cartRepository, CartItemRepository cartItemRepository,
-                         UserRepository userRepository, AddressRepository addressRepository) {
+                         UserRepository userRepository, AddressRepository addressRepository, CartService cartService) {
         this.ordersRepository = orderRepository;
         this.orderItemsRepository = orderItemsRepository;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
+        this.cartService = cartService;
     }
 
     public Orders createOrder(Long userId, Long addressId) {
@@ -87,6 +89,18 @@ public class OrdersService {
         order.setTotalPrice(totalPrice);
         order.setNumberOfItems(totalItems);
         ordersRepository.save(order);
+    }
+    public void reorderItems(Long userId, Long orderId) {
+        Orders order = ordersRepository.findByIdAndUserId(orderId, userId).orElseThrow(()-> new OrdersNotFoundException(orderId));
+
+        List<OrderItems> orderItems = order.getOrderItems();
+
+        for  (OrderItems orderItem : order.getOrderItems()) {
+            Long itemId = orderItem.getItem().getId();
+            int quantity = orderItem.getQuantity();
+
+            cartService.addItemToCartWithQuantity(userId, itemId, quantity);
+        }
     }
 }
 

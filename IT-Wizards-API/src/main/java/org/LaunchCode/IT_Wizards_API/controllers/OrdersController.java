@@ -1,16 +1,15 @@
 
 package org.LaunchCode.IT_Wizards_API.controllers;
 
-import org.LaunchCode.IT_Wizards_API.exceptions.AddressNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.CartItemNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.CartNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.UserNotFoundException;
+import org.LaunchCode.IT_Wizards_API.exceptions.*;
 import org.LaunchCode.IT_Wizards_API.models.Address;
 import org.LaunchCode.IT_Wizards_API.models.Orders;
+import org.LaunchCode.IT_Wizards_API.models.User;
 import org.LaunchCode.IT_Wizards_API.repository.AddressRepository;
 import org.LaunchCode.IT_Wizards_API.services.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,5 +59,16 @@ public class OrdersController {
         return ResponseEntity.ok(order);
     }
 
+    @PostMapping("/{userId}/reorder/{orderId}")
+    public ResponseEntity<Void> reorderItems(@PathVariable Long userId, @PathVariable Long orderId) {
+        try {
+            ordersService.reorderItems(userId, orderId);
+            return ResponseEntity.ok().build();
+        } catch (OrderNotFoundException | CartNotFoundException | UserNotFoundException e) {
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
 

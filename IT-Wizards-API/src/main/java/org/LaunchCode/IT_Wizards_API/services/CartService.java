@@ -1,10 +1,7 @@
 package org.LaunchCode.IT_Wizards_API.services;
 
 import jakarta.transaction.Transactional;
-import org.LaunchCode.IT_Wizards_API.exceptions.CartItemNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.CartNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.OrdersNotFoundException;
-import org.LaunchCode.IT_Wizards_API.exceptions.UserNotFoundException;
+import org.LaunchCode.IT_Wizards_API.exceptions.*;
 import org.LaunchCode.IT_Wizards_API.models.*;
 import org.LaunchCode.IT_Wizards_API.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,4 +88,23 @@ public class CartService {
 
         cartItemRepository.deleteByCartId(cart.getId());
     }
+    public void addItemToCartWithQuantity(Long userId, Long newItemId, int quantityToAdd) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        Cart cart = cartRepository.findByUserId(userId).orElse(new Cart(user));
+
+        Item item = itemRepository.findById(newItemId)
+                .orElseThrow(() -> new ItemNotFoundException(newItemId));
+
+        CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId())
+                .orElse(null);
+
+        if (cartItem != null) {
+            cartItem.setQuantity(cartItem.getQuantity() + quantityToAdd);
+        } else {
+            cartItem = new CartItem(quantityToAdd, cart, item);
+        }
+
+        cartItemRepository.save(cartItem);
+    }
+
 }
