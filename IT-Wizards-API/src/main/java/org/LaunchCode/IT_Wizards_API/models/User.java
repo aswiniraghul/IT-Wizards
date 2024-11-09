@@ -42,6 +42,18 @@ public class User {
     @Column(name = "mail_id")
     private String mailId;
 
+    @Column(name = "street_address")
+    private String streetAddress;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "state")
+    private String state;
+
+    @Column(name = "zipcode")
+    private String zipcode;
+
     @Column(name = "login_role", nullable = false)
     private String loginRole;
 

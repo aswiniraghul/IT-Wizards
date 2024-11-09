@@ -13,6 +13,10 @@ const Signup = ({ register }) => {
   const [mailId, setMailId] = useState('');
   const [userPassword, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipcode, setZipcode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -37,6 +41,14 @@ const Signup = ({ register }) => {
       setError('Passwords do not match.');
       return;
     }
+
+    if (register !== 'admin') {
+      if (!streetAddress || !city || !state || !zipcode) {
+        setError('Please fill in all fields.');
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       const response = await axios.post(SIGNUP_API, {
@@ -46,6 +58,12 @@ const Signup = ({ register }) => {
         mailId,
         userPassword,
         loginRole: register === 'admin' ? 'admin' : 'user',
+        ...(register !== 'admin' && {
+          streetAddress,
+          city,
+          state,
+          zipcode
+        })
       });
       setLoading(false);
       setFirstName('');
@@ -54,6 +72,10 @@ const Signup = ({ register }) => {
       setMailId('');
       setPassword('');
       setConfirmPassword('');
+      setStreetAddress('');
+      setCity('');
+      setState('');
+      setZipcode('');
       setError('');
       setModalType('success');
       setModalMessage(register === 'admin' ? 'Admin signed up successfully!!' : 'User signed up successfully!!');
@@ -61,12 +83,9 @@ const Signup = ({ register }) => {
     } catch (err) {
       setLoading(false);
       setError(err.response.data.message);
-      // setModalType('error');
-      // setModalMessage(err.response.data.message);
-      // setShowModal(true);
     }
   };
-    
+
   const handleCloseModal = () => {
     setShowModal(false);
     if (modalType === 'success') {
@@ -160,6 +179,62 @@ const Signup = ({ register }) => {
                 required
               />
             </div>
+            {register !== 'admin' && (
+              <>
+                <div className="form-group mb-3">
+                  <label htmlFor="streetAddress">Street Address</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="streetAddress"
+                    placeholder="Enter street address including Apt# or Unit#"
+                    value={streetAddress}
+                    onChange={(e) => setStreetAddress(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="row mb-3">
+                  <div className="col">
+                    <label htmlFor="city">City</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="city"
+                      placeholder="Enter city"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col">
+                    <label htmlFor="state">State</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="state"
+                      placeholder="Enter state"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col">
+                    <label htmlFor="zipcode">Zipcode</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="zipcode"
+                      placeholder="Enter zipcode"
+                      value={zipcode}
+                      onChange={(e) => setZipcode(e.target.value)}
+                      required
+                      pattern="\d{5}"
+                      title="Please enter a 5 digit numeric value"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             <button
               type="submit"
               className="btn btn-primary btn-block"
