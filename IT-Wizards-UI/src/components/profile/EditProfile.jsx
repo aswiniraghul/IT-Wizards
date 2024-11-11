@@ -14,11 +14,16 @@ const EditProfile = () => {
     userName: "",
     mailId: "",
     userPassword: "",
+    streetAddress: "",
+    city: "",
+    state: "",
+    zipcode: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +32,8 @@ const EditProfile = () => {
         const userId = localStorage.getItem("user");
         const response = await axios.get(`${USERS_API}/${userId}`);
         setUserData(response.data);
+        const role = localStorage.getItem("userRole");
+        setIsAdmin(role === 'admin');
       } catch (error) {
         setError("Failed to fetch user data. Please try again.");
       }
@@ -36,6 +43,14 @@ const EditProfile = () => {
   }, []);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      [name]: value,
+    }));
+  };
+
+  const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
       ...prevUserData,
@@ -73,6 +88,7 @@ const EditProfile = () => {
       const userId = localStorage.getItem("user");
       await axios.delete(`${USERS_API}/${userId}`);
       localStorage.removeItem("user");
+      localStorage.removeItem("role");
       setLoading(false);
       setSuccess("Profile deleted successfully.");
       navigate("/");
@@ -85,7 +101,6 @@ const EditProfile = () => {
 
   return (
     <>
-    
       <div className="container mt-4">
         <h2 className="edit-profile-heading">Edit Profile</h2>
         {error && <div className="alert alert-danger">{error}</div>}
@@ -167,8 +182,20 @@ const EditProfile = () => {
               required
             />
           </div>
-          {/* <div className="font-extrabold underline pb-3 pt-6">Address Info</div>
-          <AddressForm /> */}
+          {!isAdmin && (
+            <>
+          <div className="font-extrabold underline pb-3 pt-6">Address Info</div>
+          <AddressForm 
+            addressData={{
+              streetAddress: userData.streetAddress,
+              city: userData.city,
+              state: userData.state,
+              zipcode: userData.zipcode
+            }}
+            onAddressChange={handleAddressChange}
+          />
+          </>
+          )}
           <button type="submit" className="btn btn-primary mt-4" disabled={loading}>
             {loading ? "Saving..." : "Save Changes"}
           </button>

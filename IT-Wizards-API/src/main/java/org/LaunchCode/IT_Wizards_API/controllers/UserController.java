@@ -120,6 +120,11 @@ public class UserController {
                 existingUser.setMailId(updatedUser.getMailId());
                 existingUser.setLoginRole(updatedUser.getLoginRole());
 
+                existingUser.setStreetAddress(updatedUser.getStreetAddress());
+                existingUser.setCity(updatedUser.getCity());
+                existingUser.setState(updatedUser.getState());
+                existingUser.setZipcode(updatedUser.getZipcode());
+
                 userRepository.save(existingUser);
                 return new ResponseEntity<>(new Response("User updated successfully"), HttpStatus.OK);
             } else {
